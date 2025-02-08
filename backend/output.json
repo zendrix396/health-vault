@@ -2284,5 +2284,2291 @@
         "Causes": "Eye Strain          ",
         "Disease": "Muscle Strain  ",
         "Medicine": "Eye Exercises"
+    },
+    {
+        "Name": "John Doe",
+        "DateOfBirth": "15-05-1980",
+        "Gender": "Male",
+        "Symptoms": "Fever, Cough",
+        "Causes": "Viral Infection",
+        "Disease": "Common Cold",
+        "Medicine": "Ibuprofen, Rest"
+    },
+    {
+        "Name": "Jane Smith",
+        "DateOfBirth": "08-10-1992",
+        "Gender": "Female",
+        "Symptoms": "Headache, Fatigue",
+        "Causes": "Stress",
+        "Disease": "Migraine",
+        "Medicine": "Sumatriptan"
+    },
+    {
+        "Name": "Michael Lee",
+        "DateOfBirth": "20-02-1975",
+        "Gender": "Male",
+        "Symptoms": "Shortness of breath",
+        "Causes": "Pollution",
+        "Disease": "Asthma",
+        "Medicine": "Albuterol Inhaler"
+    },
+    {
+        "Name": "Emily Chen",
+        "DateOfBirth": "11-03-1988",
+        "Gender": "Female",
+        "Symptoms": "Nausea, Vomiting",
+        "Causes": "Food Poisoning",
+        "Disease": "Gastroenteritis",
+        "Medicine": "Oral Rehydration"
+    },
+    {
+        "Name": "Alex Wong",
+        "DateOfBirth": "06-12-2001",
+        "Gender": "Male",
+        "Symptoms": "Sore Throat",
+        "Causes": "Bacterial Infection",
+        "Disease": "Strep Throat",
+        "Medicine": "Penicillin"
+    },
+    {
+        "Name": "Sarah Kim",
+        "DateOfBirth": "25-03-1972",
+        "Gender": "Female",
+        "Symptoms": "Joint Pain, Fatigue",
+        "Causes": "Rheumatoid Arthritis",
+        "Disease": "Arthritis",
+        "Medicine": "NSAIDs"
+    },
+    {
+        "Name": "David Wu",
+        "DateOfBirth": "18-09-1995",
+        "Gender": "Male",
+        "Symptoms": "Chest Pain, Dizziness",
+        "Causes": "High Blood Pressure",
+        "Disease": "Hypertension",
+        "Medicine": "Amlodipine"
+    },
+    {
+        "Name": "Olivia Tan",
+        "DateOfBirth": "07-08-1987",
+        "Gender": "Female",
+        "Symptoms": "Itching, Redness",
+        "Causes": "Allergies",
+        "Disease": "Allergic Reaction",
+        "Medicine": "Antihistamine"
+    },
+    {
+        "Name": "Chris Ng",
+        "DateOfBirth": "12-01-1983",
+        "Gender": "Male",
+        "Symptoms": "Abdominal Pain, Bloating",
+        "Causes": "Poor Diet",
+        "Disease": "Indigestion",
+        "Medicine": "Antacids"
+    },
+    {
+        "Name": "Samantha Liu",
+        "DateOfBirth": "30-04-1998",
+        "Gender": "Female",
+        "Symptoms": "Fatigue, Sadness",
+        "Causes": "Depression",
+        "Disease": "Major Depressive",
+        "Medicine": "Sertraline"
+    },
+    {
+        "Name": "Kevin Yeo",
+        "DateOfBirth": "22-10-1978",
+        "Gender": "Male",
+        "Symptoms": "Fever, Muscle Aches",
+        "Causes": "Viral Infection",
+        "Disease": "Influenza",
+        "Medicine": "Acetaminophen"
+    },
+    {
+        "Name": "Grace Lim",
+        "DateOfBirth": "14-01-2005",
+        "Gender": "Female",
+        "Symptoms": "Cough, Sneezing",
+        "Causes": "Cold Weather",
+        "Disease": "Common Cold",
+        "Medicine": "Honey, Rest"
+    },
+    {
+        "Name": "Daniel Oh",
+        "DateOfBirth": "19-07-1990",
+        "Gender": "Male",
+        "Symptoms": "Nausea, Dizziness",
+        "Causes": "Motion Sickness",
+        "Disease": "Motion Sickness",
+        "Medicine": "Dimenhydrinate"
+    },
+    {
+        "Name": "Linda Goh",
+        "DateOfBirth": "09-08-1982",
+        "Gender": "Female",
+        "Symptoms": "Shortness of breath",
+        "Causes": "Smoking",
+        "Disease": "Chronic Bronchitis",
+        "Medicine": "Inhalers"
+    },
+    {
+        "Name": "Ryan Tan",
+        "DateOfBirth": "06-02-1971",
+        "Gender": "Male",
+        "Symptoms": "Headache, Blurred Vision",
+        "Causes": "Migraine Triggers",
+        "Disease": "Migraine",
+        "Medicine": "Beta-blockers"
+    },
+    {
+        "Name": "Ella Chu",
+        "DateOfBirth": "03-12-1999",
+        "Gender": "Female",
+        "Symptoms": "Stomach Pain, Diarrhea",
+        "Causes": "Spicy Food",
+        "Disease": "Gastritis",
+        "Medicine": "Antacids, Rest"
+    },
+    {
+        "Name": "Peter Ho",
+        "DateOfBirth": "25-04-1986",
+        "Gender": "Male",
+        "Symptoms": "Joint Pain, Swelling",
+        "Causes": "Autoimmune Response",
+        "Disease": "Rheumatoid Arthritis",
+        "Medicine": "NSAIDs"
+    },
+    {
+        "Name": "Hannah Wong",
+        "DateOfBirth": "12-09-2002",
+        "Gender": "Female",
+        "Symptoms": "Fever, Sore Throat",
+        "Causes": "Viral Infection",
+        "Disease": "Tonsillitis",
+        "Medicine": "Fluids, Rest"
+    },
+    {
+        "Name": "Jack Tan",
+        "DateOfBirth": "08-07-1979",
+        "Gender": "Male",
+        "Symptoms": "Back Pain, Numbness",
+        "Causes": "Herniated Disc",
+        "Disease": "Sciatica",
+        "Medicine": "Pain Relievers"
+    },
+    {
+        "Name": "Michelle Lam",
+        "DateOfBirth": "17-11-1993",
+        "Gender": "Female",
+        "Symptoms": "Nausea, Vomiting",
+        "Causes": "Pregnancy",
+        "Disease": "Morning Sickness",
+        "Medicine": "Ginger, Vitamin B6"
+    },
+    {
+        "Name": "William Low",
+        "DateOfBirth": "28-05-1989",
+        "Gender": "Male",
+        "Symptoms": "Fatigue, Weakness",
+        "Causes": "Anemia",
+        "Disease": "Iron Deficiency",
+        "Medicine": "Iron Supplements"
+    },
+    {
+        "Name": "Sophia Teo",
+        "DateOfBirth": "02-03-2000",
+        "Gender": "Female",
+        "Symptoms": "Anxiety, Rapid Heartbeat",
+        "Causes": "Stress",
+        "Disease": "Panic Disorder",
+        "Medicine": "Cognitive Therapy"
+    },
+    {
+        "Name": "Andrew Ng",
+        "DateOfBirth": "16-07-1974",
+        "Gender": "Male",
+        "Symptoms": "Shortness of breath",
+        "Causes": "Obesity",
+        "Disease": "Sleep Apnea",
+        "Medicine": "CPAP Machine"
+    },
+    {
+        "Name": "Karen Tan",
+        "DateOfBirth": "30-09-1984",
+        "Gender": "Female",
+        "Symptoms": "Skin Rash, Itching",
+        "Causes": "Allergies",
+        "Disease": "Dermatitis",
+        "Medicine": "Topical Steroids"
+    },
+    {
+        "Name": "Eric Koh",
+        "DateOfBirth": "01-08-1997",
+        "Gender": "Male",
+        "Symptoms": "Cough, Fever",
+        "Causes": "Viral Infection",
+        "Disease": "Respiratory infection",
+        "Medicine": "Antivirals, Rest"
+    },
+    {
+        "Name": "Amy Lim",
+        "DateOfBirth": "03-05-1981",
+        "Gender": "Female",
+        "Symptoms": "Joint Pain, Fatigue",
+        "Causes": "Osteoarthritis",
+        "Disease": "Arthritis",
+        "Medicine": "Pain Relievers"
+    },
+    {
+        "Name": "Jason Lee",
+        "DateOfBirth": "06-11-2003",
+        "Gender": "Male",
+        "Symptoms": "Dizziness, Fatigue",
+        "Causes": "Dehydration",
+        "Disease": "Heat Exhaustion",
+        "Medicine": "Hydration, Rest"
+    },
+    {
+        "Name": "Natalie Tan",
+        "DateOfBirth": "19-10-1987",
+        "Gender": "Female",
+        "Symptoms": "Headache, Sensitivity",
+        "Causes": "Tension",
+        "Disease": "Tension Headache",
+        "Medicine": "Relaxation, NSAIDs"
+    },
+    {
+        "Name": "Oscar Neo",
+        "DateOfBirth": "09-02-1994",
+        "Gender": "Male",
+        "Symptoms": "Abdominal Pain, Bloating O",
+        "Causes": "vereating",
+        "Disease": "Indigestion",
+        "Medicine": "Antacids"
+    },
+    {
+        "Name": "Sophie Goh",
+        "DateOfBirth": "14-12-2001",
+        "Gender": "Female",
+        "Symptoms": "Nausea, Cramps",
+        "Causes": "Menstrual Cycle",
+        "Disease": "Menstrual Cramps",
+        "Medicine": "Pain Relievers"
+    },
+    {
+        "Name": "Vincent Teo",
+        "DateOfBirth": "26-08-1977",
+        "Gender": "Male",
+        "Symptoms": "Chest Pain, Shortness of breath",
+        "Causes": "Heart Disease",
+        "Disease": "Coronary ArteryDisease",
+        "Medicine": "Nitroglycerin"
+    },
+    {
+        "Name": "Isabella Koh",
+        "DateOfBirth": "04-08-1996",
+        "Gender": "Female",
+        "Symptoms": "Fatigue, Difficulty breathing",
+        "Causes": "Hypothyroidism",
+        "Disease": "Thyroid Disorder",
+        "Medicine": "Levothyroxine"
+    },
+    {
+        "Name": "Ethan Lim",
+        "DateOfBirth": "30-11-1980",
+        "Gender": "Male",
+        "Symptoms": "Fever, Chills",
+        "Causes": "Infection",
+        "Disease": "Pneumonia",
+        "Medicine": "Antibiotics, Rest"
+    },
+    {
+        "Name": "Emma Tan",
+        "DateOfBirth": "07-03-1991",
+        "Gender": "Female",
+        "Symptoms": "Cough, Shortness of breath",
+        "Causes": "COVID-19 Exposure",
+        "Disease": "COVID-19",
+        "Medicine": "Isolation, Fluids"
+    },
+    {
+        "Name": "Grace Ng",
+        "DateOfBirth": "16-09-1988",
+        "Gender": "Female",
+        "Symptoms": "Itching, Redness",
+        "Causes": "Allergies",
+        "Disease": "Allergic Reaction",
+        "Medicine": "Antihistamine"
+    },
+    {
+        "Name": "Ryan Koh",
+        "DateOfBirth": "18-02-1975",
+        "Gender": "Male",
+        "Symptoms": "Muscle Pain, Fatigue",
+        "Causes": "Overexertion",
+        "Disease": "Muscle Strain",
+        "Medicine": "Rest, Pain Relievers"
+    },
+    {
+        "Name": "Sophia Tan",
+        "DateOfBirth": "21-05-2004",
+        "Gender": "Female",
+        "Symptoms": "Nausea, Vomiting",
+        "Causes": "Food Poisoning",
+        "Disease": "Gastroenteritis",
+        "Medicine": "Oral Rehydration"
+    },
+    {
+        "Name": "David Lim",
+        "DateOfBirth": "10-05-1999",
+        "Gender": "Male",
+        "Symptoms": "Headache, Blurred Vision",
+        "Causes": "Eye Strain",
+        "Disease": "Vision Fatigue",
+        "Medicine": "Rest, Eye Exercises"
+    },
+    {
+        "Name": "Oliver Wang",
+        "DateOfBirth": "14-08-1986",
+        "Gender": "Male",
+        "Symptoms": "Stomach Pain, Diarrhea",
+        "Causes": "Food Poisoning",
+        "Disease": "Gastroenteritis",
+        "Medicine": "Fluids, Bland Diet"
+    },
+    {
+        "Name": "Ava Yeo",
+        "DateOfBirth": "25-01-1973",
+        "Gender": "Female",
+        "Symptoms": "Back Pain, Numbness",
+        "Causes": "Sciatica",
+        "Disease": "Herniated Disc",
+        "Medicine": "Pain Relievers, PT"
+    },
+    {
+        "Name": "Lucas Tan",
+        "DateOfBirth": "09-09-2000",
+        "Gender": "Male",
+        "Symptoms": "Fever, Sore Throat",
+        "Causes": "Viral Infection",
+        "Disease": "Tonsillitis",
+        "Medicine": "Fluids, Rest"
+    },
+    {
+        "Name": "Grace Lee",
+        "DateOfBirth": "12-07-1992",
+        "Gender": "Female",
+        "Symptoms": "Fatigue, Weakness",
+        "Causes": "Chronic Fatigue Syndrome",
+        "Disease": "Chronic Fatigue Syndrome",
+        "Medicine": "Rest, Lifestyle"
+    },
+    {
+        "Name": "Sophie Neo",
+        "DateOfBirth": "28-06-1983",
+        "Gender": "Female",
+        "Symptoms": "Anxiety, Palpitations",
+        "Causes": "Stress",
+        "Disease": "Anxiety Disorder",
+        "Medicine": "Therapy, Medication"
+    },
+    {
+        "Name": "Evan Teo",
+        "DateOfBirth": "17-03-2002",
+        "Gender": "Male",
+        "Symptoms": "Chest Pain, Shortness of breath",
+        "Causes": "Physical Exertion",
+        "Disease": "Muscle Overuse",
+        "Medicine": "Rest, Stretching"
+    },
+    {
+        "Name": "Lily Lim",
+        "DateOfBirth": "26-04-1989",
+        "Gender": "Female",
+        "Symptoms": "Joint Pain, Swelling",
+        "Causes": "Rheumatoid Arthritis",
+        "Disease": "Arthritis",
+        "Medicine": "NSAIDs"
+    },
+    {
+        "Name": "Leo Goh",
+        "DateOfBirth": "13-07-1998",
+        "Gender": "Male",
+        "Symptoms": "Nausea, Dizziness",
+        "Causes": "Motion Sickness",
+        "Disease": "Motion Sickness",
+        "Medicine": "Dimenhydrinate"
+    },
+    {
+        "Name": "John Doe",
+        "DateOfBirth": "15-05-1980",
+        "Gender": "Male",
+        "Symptoms": "Fever, Cough",
+        "Causes": "Viral Infection",
+        "Disease": "Common Cold",
+        "Medicine": "Ibuprofen, Rest"
+    },
+    {
+        "Name": "Jane Smith",
+        "DateOfBirth": "08-10-1992",
+        "Gender": "Female",
+        "Symptoms": "Headache, Fatigue",
+        "Causes": "Stress",
+        "Disease": "Migraine",
+        "Medicine": "Sumatriptan"
+    },
+    {
+        "Name": "Michael Lee",
+        "DateOfBirth": "20-02-1975",
+        "Gender": "Male",
+        "Symptoms": "Shortness of breath",
+        "Causes": "Pollution",
+        "Disease": "Asthma",
+        "Medicine": "Albuterol Inhaler"
+    },
+    {
+        "Name": "Emily Chen",
+        "DateOfBirth": "11-03-1988",
+        "Gender": "Female",
+        "Symptoms": "Nausea, Vomiting",
+        "Causes": "Food Poisoning",
+        "Disease": "Gastroenteritis",
+        "Medicine": "Oral Rehydration"
+    },
+    {
+        "Name": "Alex Wong",
+        "DateOfBirth": "06-12-2001",
+        "Gender": "Male",
+        "Symptoms": "Sore Throat",
+        "Causes": "Bacterial Infection",
+        "Disease": "Strep Throat",
+        "Medicine": "Penicillin"
+    },
+    {
+        "Name": "Sarah Kim",
+        "DateOfBirth": "25-03-1972",
+        "Gender": "Female",
+        "Symptoms": "Joint Pain, Fatigue",
+        "Causes": "Rheumatoid Arthriti",
+        "Disease": "s  Arthritis",
+        "Medicine": "NSAIDs"
+    },
+    {
+        "Name": "David Wu",
+        "DateOfBirth": "18-09-1995",
+        "Gender": "Male",
+        "Symptoms": "Chest Pain, Dizziness",
+        "Causes": "High Blood Pressure",
+        "Disease": "Hypertension",
+        "Medicine": "Amlodipine"
+    },
+    {
+        "Name": "Olivia Tan",
+        "DateOfBirth": "07-08-1987",
+        "Gender": "Female",
+        "Symptoms": "Itching, Redness",
+        "Causes": "Allergies",
+        "Disease": "Allergic Reaction",
+        "Medicine": "Antihistamine"
+    },
+    {
+        "Name": "Chris Ng",
+        "DateOfBirth": "12-01-1983",
+        "Gender": "Male",
+        "Symptoms": "Abdominal Pain, Bloating",
+        "Causes": "Poor Diet",
+        "Disease": "Indigestion",
+        "Medicine": "Antacids"
+    },
+    {
+        "Name": "Samantha Liu",
+        "DateOfBirth": "30-04-1998",
+        "Gender": "Female",
+        "Symptoms": "Fatigue, Sadness",
+        "Causes": "Depression",
+        "Disease": "Major Depressive Disorder",
+        "Medicine": "Sertraline"
+    },
+    {
+        "Name": "Evan Teo",
+        "DateOfBirth": "17-03-2002",
+        "Gender": "Male",
+        "Symptoms": "Chest Pain, Shortness of breath",
+        "Causes": "Physical Exertion",
+        "Disease": "Muscle Overuse",
+        "Medicine": "Rest, Stretching"
+    },
+    {
+        "Name": "Lily Lim",
+        "DateOfBirth": "26-04-1989",
+        "Gender": "Female",
+        "Symptoms": "Joint Pain, Swelling",
+        "Causes": "Rheumatoid Arthritis",
+        "Disease": "Arthritis",
+        "Medicine": "NSAIDs"
+    },
+    {
+        "Name": "Leo Goh",
+        "DateOfBirth": "13-07-1998",
+        "Gender": "Male",
+        "Symptoms": "Nausea, Dizziness",
+        "Causes": "Motion Sickness",
+        "Disease": "Motion Sickness",
+        "Medicine": "Dimenhydrinate"
+    },
+    {
+        "Name": "Sophia Koh",
+        "DateOfBirth": "29-11-1976",
+        "Gender": "Female",
+        "Symptoms": "Fatigue, Weakness",
+        "Causes": "Chronic Fatigue Syndrome",
+        "Disease": "Chronic Fatigue Syndrome",
+        "Medicine": "Rest, Lifestyle"
+    },
+    {
+        "Name": "Isaac Tan",
+        "DateOfBirth": "18-02-1999",
+        "Gender": "Male",
+        "Symptoms": "Fever, Chills",
+        "Causes": "Infection",
+        "Disease": "Pneumonia",
+        "Medicine": "Antibiotics, Rest"
+    },
+    {
+        "Name": "Emma Lim",
+        "DateOfBirth": "07-03-1991",
+        "Gender": "Female",
+        "Symptoms": "Cough, Shortness of breat",
+        "Causes": "h  COVID-19 Exposure",
+        "Disease": "COVID-19",
+        "Medicine": "Isolation, Fluids"
+    },
+    {
+        "Name": "Grace Neo",
+        "DateOfBirth": "16-09-1988",
+        "Gender": "Female",
+        "Symptoms": "Itching, Redness",
+        "Causes": "Allergies",
+        "Disease": "Allergic Reacti",
+        "Medicine": "on   Antihistamine"
+    },
+    {
+        "Name": "Ryan Koh",
+        "DateOfBirth": "18-02-1975",
+        "Gender": "Male",
+        "Symptoms": "Muscle Pain, Fatigue",
+        "Causes": "Overexertion",
+        "Disease": "Muscle Strain",
+        "Medicine": "Rest, Pain Relievers"
+    },
+    {
+        "Name": "Sophia Tan",
+        "DateOfBirth": "21-05-2004",
+        "Gender": "Female",
+        "Symptoms": "Nausea, Vomiting",
+        "Causes": "Food Poisoning",
+        "Disease": "Gastroenteritis",
+        "Medicine": "Oral Rehydration"
+    },
+    {
+        "Name": "David Lim",
+        "DateOfBirth": "10-05-1999",
+        "Gender": "Male",
+        "Symptoms": "Headache, Blurred Vision",
+        "Causes": "Eye Strain",
+        "Disease": "Vision Fatigue",
+        "Medicine": "Rest, Eye Exercises"
+    },
+    {
+        "Name": "Oliver Wang",
+        "DateOfBirth": "14-08-1986",
+        "Gender": "Male",
+        "Symptoms": "Stomach Pain, Diarrhea",
+        "Causes": "Food Poisoning",
+        "Disease": "Gastroenteritis",
+        "Medicine": "Fluids, Bland Diet"
+    },
+    {
+        "Name": "Ava Yeo",
+        "DateOfBirth": "25-01-1973",
+        "Gender": "Female",
+        "Symptoms": "Back Pain, Numbness",
+        "Causes": "Sciatica",
+        "Disease": "Herniated Disc",
+        "Medicine": "Pain Relievers, PT"
+    },
+    {
+        "Name": "Lucas Tan",
+        "DateOfBirth": "09-09-2000",
+        "Gender": "Male",
+        "Symptoms": "Fever, Sore Throat",
+        "Causes": "Viral Infection",
+        "Disease": "Tonsillitis",
+        "Medicine": "Fluids, Rest"
+    },
+    {
+        "Name": "Grace Lee",
+        "DateOfBirth": "12-07-1992",
+        "Gender": "Female",
+        "Symptoms": "Fatigue, Weakness",
+        "Causes": "Chronic Fatigue Syndrome",
+        "Disease": "Chronic Fatigue Syndrome",
+        "Medicine": "Rest, Lifestyle"
+    },
+    {
+        "Name": "Sophie Neo",
+        "DateOfBirth": "28-06-1983",
+        "Gender": "Female",
+        "Symptoms": "Anxiety, Palpitations",
+        "Causes": "Stress",
+        "Disease": "Anxiety Disorder",
+        "Medicine": "Therapy, Medication"
+    },
+    {
+        "Name": "Evan Teo",
+        "DateOfBirth": "17-03-2002",
+        "Gender": "Male",
+        "Symptoms": "Chest Pain, Shortness",
+        "Causes": "Physical Exertion",
+        "Disease": "Muscle Overuse",
+        "Medicine": "Rest, Stretching"
+    },
+    {
+        "Name": null,
+        "DateOfBirth": null,
+        "Gender": null,
+        "Symptoms": "of breath",
+        "Causes": null,
+        "Disease": null,
+        "Medicine": null
+    },
+    {
+        "Name": "Lily Lim",
+        "DateOfBirth": "26-04-1989",
+        "Gender": "Female",
+        "Symptoms": "Joint Pain, Swelling",
+        "Causes": "Rheumatoid Arthritis",
+        "Disease": "Arthritis",
+        "Medicine": "NSAIDs"
+    },
+    {
+        "Name": "Leo Goh",
+        "DateOfBirth": "13-07-1998",
+        "Gender": "Male",
+        "Symptoms": "Nausea, Dizziness",
+        "Causes": "Motion Sickness",
+        "Disease": "Motion Sickness",
+        "Medicine": "Dimenhydrinate"
+    },
+    {
+        "Name": "Sophia Koh",
+        "DateOfBirth": "29-11-1976",
+        "Gender": "Female",
+        "Symptoms": "Fatigue, Weakness",
+        "Causes": "Chronic Fatigue Syndrome",
+        "Disease": "Chronic Fatigue",
+        "Medicine": "Rest, Lifestyle"
+    },
+    {
+        "Name": null,
+        "DateOfBirth": null,
+        "Gender": null,
+        "Symptoms": null,
+        "Causes": null,
+        "Disease": "Syndrome",
+        "Medicine": null
+    },
+    {
+        "Name": "Isaac Tan",
+        "DateOfBirth": "18-02-1999",
+        "Gender": "Male",
+        "Symptoms": "Fever, Chills",
+        "Causes": "Infection",
+        "Disease": "Pneumonia",
+        "Medicine": "Antibiotics, Rest"
+    },
+    {
+        "Name": "Emma Lim",
+        "DateOfBirth": "07-03-1991",
+        "Gender": "Female",
+        "Symptoms": "Cough, Shortness of breat",
+        "Causes": "h  COVID-19 Exposure",
+        "Disease": "COVID-19",
+        "Medicine": "Isolation, Fluids"
+    },
+    {
+        "Name": "Grace Neo",
+        "DateOfBirth": "16-09-1988",
+        "Gender": "Female",
+        "Symptoms": "Itching, Redness",
+        "Causes": "Allergies",
+        "Disease": "Allergic Reacti",
+        "Medicine": "on   Antihistamine"
+    },
+    {
+        "Name": "Ryan Koh",
+        "DateOfBirth": "18-02-1975",
+        "Gender": "Male",
+        "Symptoms": "Muscle Pain, Fatigue",
+        "Causes": "Overexertion",
+        "Disease": "Muscle Strain",
+        "Medicine": "Rest, Pain Relievers"
+    },
+    {
+        "Name": "Sophia Tan",
+        "DateOfBirth": "21-05-2004",
+        "Gender": "Female",
+        "Symptoms": "Nausea, Vomiting",
+        "Causes": "Food Poisoning",
+        "Disease": "Gastroenteritis",
+        "Medicine": "Oral Rehydration"
+    },
+    {
+        "Name": "David Lim",
+        "DateOfBirth": "10-05-1999",
+        "Gender": "Male",
+        "Symptoms": "Headache, Blurred Vision",
+        "Causes": "Eye Strain",
+        "Disease": "Vision Fatigue",
+        "Medicine": "Rest, Eye Exercises"
+    },
+    {
+        "Name": "Oliver Wang",
+        "DateOfBirth": "14-08-1986",
+        "Gender": "Male",
+        "Symptoms": "Stomach Pain, Diarrhea",
+        "Causes": "Food Poisoning",
+        "Disease": "Gastroenteritis",
+        "Medicine": "Fluids, Bland Diet"
+    },
+    {
+        "Name": "Ava Yeo",
+        "DateOfBirth": "25-01-1973",
+        "Gender": "Female",
+        "Symptoms": "Back Pain, Numbness",
+        "Causes": "Sciatica",
+        "Disease": "Herniated Disc",
+        "Medicine": "Pain Relievers, PT"
+    },
+    {
+        "Name": "Lucas Tan",
+        "DateOfBirth": "09-09-2000",
+        "Gender": "Male",
+        "Symptoms": "Fever, Sore Throat",
+        "Causes": "Viral Infection",
+        "Disease": "Tonsillitis",
+        "Medicine": "Fluids, Rest"
+    },
+    {
+        "Name": "Grace Lee",
+        "DateOfBirth": "12-07-1992",
+        "Gender": "Female",
+        "Symptoms": "Fatigue, Weakness",
+        "Causes": "Chronic Fatigue Syndrome",
+        "Disease": "Chronic Fatigue Syndrome",
+        "Medicine": "Rest, Lifestyle"
+    },
+    {
+        "Name": "Sophie Neo",
+        "DateOfBirth": "28-06-1983",
+        "Gender": "Female",
+        "Symptoms": "Anxiety, Palpitations",
+        "Causes": "Stress",
+        "Disease": "Anxiety Disorder",
+        "Medicine": "Therapy, Medication"
+    },
+    {
+        "Name": "Evan Teo",
+        "DateOfBirth": "17-03-2002",
+        "Gender": "Male",
+        "Symptoms": "Chest Pain, Shortness of breath",
+        "Causes": "Physical Exertion",
+        "Disease": "Muscle Overuse",
+        "Medicine": "Rest, Stretching"
+    },
+    {
+        "Name": "Lily Lim",
+        "DateOfBirth": "26-04-1989",
+        "Gender": "Female",
+        "Symptoms": "Joint Pain, Swelling",
+        "Causes": "Rheumatoid Arthritis",
+        "Disease": "Arthritis",
+        "Medicine": "NSAIDs"
+    },
+    {
+        "Name": "Leo Goh",
+        "DateOfBirth": "13-07-1998",
+        "Gender": "Male",
+        "Symptoms": "Nausea, Dizziness",
+        "Causes": "Motion Sickness",
+        "Disease": "Motion Sickness",
+        "Medicine": "Dimenhydrinate"
+    },
+    {
+        "Name": "Sophia Koh",
+        "DateOfBirth": "29-11-1976",
+        "Gender": "Female",
+        "Symptoms": "Fatigue, Weakness",
+        "Causes": "Chronic Fatigue Syndrome",
+        "Disease": "Chronic Fatigue Syndrome",
+        "Medicine": "Rest, Lifestyle"
+    },
+    {
+        "Name": "Isabella Goh",
+        "DateOfBirth": "14-03-1984",
+        "Gender": "Female",
+        "Symptoms": "Abdominal Pain, Bloating",
+        "Causes": "Overeating",
+        "Disease": "Indigestion",
+        "Medicine": "Antacids"
+    },
+    {
+        "Name": "Jackson Tan",
+        "DateOfBirth": "22-09-1997",
+        "Gender": "Male",
+        "Symptoms": "Fatigue, Weakness",
+        "Causes": "Anemia",
+        "Disease": "Iron Deficiency",
+        "Medicine": "Iron Supplements"
+    },
+    {
+        "Name": "Sophie Lim",
+        "DateOfBirth": "06-05-2000",
+        "Gender": "Female",
+        "Symptoms": "Anxiety, Rapid Heartbeat",
+        "Causes": "Stress",
+        "Disease": "Panic Disorder",
+        "Medicine": "Cognitive Therapy"
+    },
+    {
+        "Name": "Ethan Teo",
+        "DateOfBirth": "08-03-1978",
+        "Gender": "Male",
+        "Symptoms": "Shortness of breath",
+        "Causes": "Obesity",
+        "Disease": "Sleep Apnea",
+        "Medicine": "CPAP Machine"
+    },
+    {
+        "Name": "Linda Neo",
+        "DateOfBirth": "28-04-1989",
+        "Gender": "Female",
+        "Symptoms": "Skin Rash, Itching",
+        "Causes": "Allergies",
+        "Disease": "Dermatitis",
+        "Medicine": "Topical Steroids"
+    },
+    {
+        "Name": "Alex Koh",
+        "DateOfBirth": "12-11-1995",
+        "Gender": "Male",
+        "Symptoms": "Cough, Fever",
+        "Causes": "Viral Infection",
+        "Disease": "RespiratoryInfection",
+        "Medicine": "Antivirals, Rest"
+    },
+    {
+        "Name": "Amy Tan",
+        "DateOfBirth": "15-03-1981",
+        "Gender": "Female",
+        "Symptoms": "Joint Pain, Fatigue",
+        "Causes": "Osteoarthritis",
+        "Disease": "Arthritis",
+        "Medicine": "Pain Relievers"
+    },
+    {
+        "Name": "Jason Goh",
+        "DateOfBirth": "29-07-2003",
+        "Gender": "Male",
+        "Symptoms": "Dizziness, Fatigue",
+        "Causes": "Dehydration",
+        "Disease": "Heat Exhaustion",
+        "Medicine": "Hydration, Rest"
+    },
+    {
+        "Name": "Natalie Lim",
+        "DateOfBirth": "19-10-1987",
+        "Gender": "Female",
+        "Symptoms": "Headache, Sensitivity",
+        "Causes": "Tension",
+        "Disease": "Tension Headache",
+        "Medicine": "Relaxation, NSAIDs"
+    },
+    {
+        "Name": "Oscar Lee",
+        "DateOfBirth": "09-09-1994",
+        "Gender": "Male",
+        "Symptoms": "Abdominal Pain, Bloating",
+        "Causes": "Overeating",
+        "Disease": "Indigestion",
+        "Medicine": "Antacids"
+    },
+    {
+        "Name": "Sophie Yeo",
+        "DateOfBirth": "12-02-2001",
+        "Gender": "Female",
+        "Symptoms": "Nausea, Cramps",
+        "Causes": "Menstrual Cycle",
+        "Disease": "Menstrual Cramps",
+        "Medicine": "Pain Relievers"
+    },
+    {
+        "Name": "Vincent Tan",
+        "DateOfBirth": "26-08-1977",
+        "Gender": "Male",
+        "Symptoms": "Chest Pain, Shortness of breath",
+        "Causes": "Heart Disease",
+        "Disease": "Coronary Artery",
+        "Medicine": "Nitroglycerin,Aspirin"
+    },
+    {
+        "Name": "Isabella Koh",
+        "DateOfBirth": "04-08-1996",
+        "Gender": "Female",
+        "Symptoms": "Fatigue, Difficulty breathing",
+        "Causes": "Hypothyroidism",
+        "Disease": "Thyroid Disorder",
+        "Medicine": "Levothyroxine"
+    },
+    {
+        "Name": "Ethan Lim",
+        "DateOfBirth": "30-11-1980",
+        "Gender": "Male",
+        "Symptoms": "Fever, Chills",
+        "Causes": "Infection",
+        "Disease": "Pneumonia",
+        "Medicine": "Antibiotics, Rest"
+    },
+    {
+        "Name": "Emma Tan",
+        "DateOfBirth": "07-03-1991",
+        "Gender": "Femal",
+        "Symptoms": "Cough, Shortness of brea",
+        "Causes": "th  COVID-19 Exposure",
+        "Disease": "COVID-19",
+        "Medicine": "Isolation, Fluids"
+    },
+    {
+        "Name": "Grace Ng",
+        "DateOfBirth": "16-09-1988",
+        "Gender": "Femal",
+        "Symptoms": "e Itching, Redness",
+        "Causes": "Allergies",
+        "Disease": "Allergic Reaction",
+        "Medicine": "Antihistamine"
+    },
+    {
+        "Name": "Ryan Koh",
+        "DateOfBirth": "18-02-1975",
+        "Gender": "Male",
+        "Symptoms": "Muscle Pain, Fatigue",
+        "Causes": "Overexertion",
+        "Disease": "Muscle Strain",
+        "Medicine": "Rest, Pain Relievers"
+    },
+    {
+        "Name": "Sophia Tan",
+        "DateOfBirth": "21-05-2004",
+        "Gender": "Femal",
+        "Symptoms": "Nausea, Vomiting",
+        "Causes": "Food Poisoning",
+        "Disease": "Gastroenteritis",
+        "Medicine": "Oral Rehydration"
+    },
+    {
+        "Name": "David Lim",
+        "DateOfBirth": "10-05-1999",
+        "Gender": "Male",
+        "Symptoms": "Headache, Blurred Vision",
+        "Causes": "Eye Strain",
+        "Disease": "Vision Fatigue",
+        "Medicine": "Rest, Eye Exercises"
+    },
+    {
+        "Name": "Oliver Wang",
+        "DateOfBirth": "14-08-1986",
+        "Gender": "Male",
+        "Symptoms": "Stomach Pain, Diarrhea",
+        "Causes": "Food Poisoning",
+        "Disease": "Gastroenteritis",
+        "Medicine": "Fluids, Bland Diet"
+    },
+    {
+        "Name": "Ava Yeo",
+        "DateOfBirth": "25-01-1973",
+        "Gender": "Femal",
+        "Symptoms": "Back Pain, Numbness",
+        "Causes": "Sciatica",
+        "Disease": "Herniated Disc",
+        "Medicine": "Pain Relievers, PT"
+    },
+    {
+        "Name": "Lucas Tan",
+        "DateOfBirth": "09-09-2000",
+        "Gender": "Male",
+        "Symptoms": "Fever, Sore Throat",
+        "Causes": "Viral Infection",
+        "Disease": "Tonsillitis",
+        "Medicine": "Fluids, Rest"
+    },
+    {
+        "Name": "Grace Lee",
+        "DateOfBirth": "12-07-1992",
+        "Gender": "Femal",
+        "Symptoms": "Fatigue, Weakness",
+        "Causes": "Chronic Fatigue Syndrome",
+        "Disease": "Chronic Fatigue Syndrome",
+        "Medicine": "Rest, Lifestyle"
+    },
+    {
+        "Name": "Sophie Neo",
+        "DateOfBirth": "28-06-1983",
+        "Gender": "Femal",
+        "Symptoms": "Anxiety, Palpitations",
+        "Causes": "Stress",
+        "Disease": "Anxiety Disorder",
+        "Medicine": "Therapy, Medication"
+    },
+    {
+        "Name": "Evan Teo",
+        "DateOfBirth": "17-03-2002",
+        "Gender": "Male",
+        "Symptoms": "Chest Pain, Shortness",
+        "Causes": "Physical Exertion",
+        "Disease": "Muscle Overuse",
+        "Medicine": "Rest, Stretching"
+    },
+    {
+        "Name": null,
+        "DateOfBirth": null,
+        "Gender": null,
+        "Symptoms": "of breath",
+        "Causes": null,
+        "Disease": null,
+        "Medicine": null
+    },
+    {
+        "Name": "Lily Lim",
+        "DateOfBirth": "26-04-1989",
+        "Gender": "Femal",
+        "Symptoms": "e Joint Pain, Swelling",
+        "Causes": "Rheumatoid Arthrit",
+        "Disease": "is  Arthritis",
+        "Medicine": "NSAIDs"
+    },
+    {
+        "Name": "Leo Goh",
+        "DateOfBirth": "13-07-1998",
+        "Gender": "Male",
+        "Symptoms": "Nausea, Dizziness",
+        "Causes": "Motion Sickness",
+        "Disease": "Motion Sickness",
+        "Medicine": "Dimenhydrinate"
+    },
+    {
+        "Name": "Sophia Koh",
+        "DateOfBirth": "29-11-1976",
+        "Gender": "Femal",
+        "Symptoms": "e Fatigue, Weakness",
+        "Causes": "Chronic Fatigue",
+        "Disease": "Chronic Fatigue",
+        "Medicine": "Rest, Lifestyle"
+    },
+    {
+        "Name": null,
+        "DateOfBirth": null,
+        "Gender": null,
+        "Symptoms": null,
+        "Causes": "Syndrome",
+        "Disease": "Syndrome",
+        "Medicine": null
+    },
+    {
+        "Name": "Isaac Tan",
+        "DateOfBirth": "18-02-1999",
+        "Gender": "Male",
+        "Symptoms": "Fever, Chills",
+        "Causes": "Infection",
+        "Disease": "Pneumonia",
+        "Medicine": "Antibiotics, Rest"
+    },
+    {
+        "Name": "Emma Lim",
+        "DateOfBirth": "07-03-1991",
+        "Gender": "Femal",
+        "Symptoms": "e Cough, Shortness of brea",
+        "Causes": "th  COVID-19 Exposure",
+        "Disease": "COVID-19",
+        "Medicine": "Isolation, Fluids"
+    },
+    {
+        "Name": "Grace Neo",
+        "DateOfBirth": "16-09-1988",
+        "Gender": "Femal",
+        "Symptoms": "e Itching, Redness",
+        "Causes": "Allergies",
+        "Disease": "Allergic Reaction",
+        "Medicine": "Antihistamine"
+    },
+    {
+        "Name": "Ryan Koh",
+        "DateOfBirth": "18-02-1975",
+        "Gender": "Male",
+        "Symptoms": "Muscle Pain, Fatigue",
+        "Causes": "Overexertion",
+        "Disease": "Muscle Strain",
+        "Medicine": "Rest, Pain Relievers"
+    },
+    {
+        "Name": "Sophia Tan",
+        "DateOfBirth": "21-05-2004",
+        "Gender": "Femal",
+        "Symptoms": "e Nausea, Vomiting",
+        "Causes": "Food Poisoning",
+        "Disease": "Gastroenteritis",
+        "Medicine": "Oral Rehydration"
+    },
+    {
+        "Name": "David Lim",
+        "DateOfBirth": "10-05-1999",
+        "Gender": "Male",
+        "Symptoms": "Headache, Blurred Vision",
+        "Causes": "Eye Strain",
+        "Disease": "Vision Fatigue",
+        "Medicine": "Rest, Eye Exercises"
+    },
+    {
+        "Name": "Oliver Wang",
+        "DateOfBirth": "14-08-1986",
+        "Gender": "Male",
+        "Symptoms": "Stomach Pain, Diarrhea",
+        "Causes": "Food Poisoning",
+        "Disease": "Gastroenteritis",
+        "Medicine": "Fluids, Bland Diet"
+    },
+    {
+        "Name": "Ava Yeo",
+        "DateOfBirth": "25-01-1973",
+        "Gender": "Femal",
+        "Symptoms": "e Back Pain, Numbness",
+        "Causes": "Sciatica",
+        "Disease": "Herniated Disc",
+        "Medicine": "Pain Relievers, PT"
+    },
+    {
+        "Name": "Lucas Tan",
+        "DateOfBirth": "09-09-2000",
+        "Gender": "Male",
+        "Symptoms": "Fever, Sore Throat",
+        "Causes": "Viral Infection",
+        "Disease": "Tonsillitis",
+        "Medicine": "Fluids, Rest"
+    },
+    {
+        "Name": "Grace Lee",
+        "DateOfBirth": "12-07-1992",
+        "Gender": "Femal",
+        "Symptoms": "e Fatigue, Weakness",
+        "Causes": "Chronic Fatigue",
+        "Disease": "Chronic Fatigue",
+        "Medicine": "Rest, Lifestyle"
+    },
+    {
+        "Name": null,
+        "DateOfBirth": null,
+        "Gender": null,
+        "Symptoms": null,
+        "Causes": "Syndrome",
+        "Disease": "Syndrome",
+        "Medicine": null
+    },
+    {
+        "Name": "Sophie Neo",
+        "DateOfBirth": "28-06-1983",
+        "Gender": "Femal",
+        "Symptoms": "e Anxiety, Palpitations",
+        "Causes": "Stress",
+        "Disease": "Anxiety Disorder",
+        "Medicine": "Therapy, Medication"
+    },
+    {
+        "Name": "Evan Teo",
+        "DateOfBirth": "17-03-2002",
+        "Gender": "Male",
+        "Symptoms": "Chest Pain, Shortness",
+        "Causes": "Physical Exertion",
+        "Disease": "Muscle Overuse",
+        "Medicine": "Rest, Stretching"
+    },
+    {
+        "Name": null,
+        "DateOfBirth": null,
+        "Gender": null,
+        "Symptoms": "of breath",
+        "Causes": null,
+        "Disease": null,
+        "Medicine": null
+    },
+    {
+        "Name": "Lily Lim",
+        "DateOfBirth": "26-04-1989",
+        "Gender": "Femal",
+        "Symptoms": "e Joint Pain, Swelling",
+        "Causes": "Rheumatoid Arthritis",
+        "Disease": "Arthritis",
+        "Medicine": "NSAIDs"
+    },
+    {
+        "Name": "Leo Goh",
+        "DateOfBirth": "13-07-1998",
+        "Gender": "Male",
+        "Symptoms": "Nausea, Dizziness",
+        "Causes": "Motion Sickness",
+        "Disease": "Motion Sickness",
+        "Medicine": "Dimenhydrinate"
+    },
+    {
+        "Name": "Sophia Koh",
+        "DateOfBirth": "29-11-1976",
+        "Gender": "Femal",
+        "Symptoms": "e Fatigue, Weakness",
+        "Causes": "Chronic Fatigue Syndrome",
+        "Disease": "Chronic Fatigue Syndrome",
+        "Medicine": "Rest, Lifestyle"
+    },
+    {
+        "Name": "Isaac Tan",
+        "DateOfBirth": "18-02-1999",
+        "Gender": "Male",
+        "Symptoms": "Fever, Chills",
+        "Causes": "Infection",
+        "Disease": "Pneumonia",
+        "Medicine": "Antibiotics, Rest"
+    },
+    {
+        "Name": "Emma Wong",
+        "DateOfBirth": "04-10-1995",
+        "Gender": "Female",
+        "Symptoms": "Sore Throat, Cough",
+        "Causes": "Bacterial Infection",
+        "Disease": "Strep Throat",
+        "Medicine": "Penicillin"
+    },
+    {
+        "Name": "Daniel Neo",
+        "DateOfBirth": "28-11-1987",
+        "Gender": "Male",
+        "Symptoms": "Fatigue, Weakness",
+        "Causes": "Anemia",
+        "Disease": "Iron Deficiency",
+        "Medicine": "Iron Supplements"
+    },
+    {
+        "Name": "Olivia Teo",
+        "DateOfBirth": "06-03-2000",
+        "Gender": "Female",
+        "Symptoms": "Anxiety, Rapid Heartbeat",
+        "Causes": "Stress",
+        "Disease": "Panic Disorder",
+        "Medicine": "Cognitive Therapy"
+    },
+    {
+        "Name": "Jack Tan",
+        "DateOfBirth": "15-09-1978",
+        "Gender": "Male",
+        "Symptoms": "Shortness of breath",
+        "Causes": "Obesity",
+        "Disease": "Sleep Apnea",
+        "Medicine": "CPAP Machine"
+    },
+    {
+        "Name": "Sophia Goh",
+        "DateOfBirth": "07-12-1992",
+        "Gender": "Female",
+        "Symptoms": "Skin Rash, Itching",
+        "Causes": "Allergies",
+        "Disease": "Dermatitis",
+        "Medicine": "Topical Steroids"
+    },
+    {
+        "Name": "Ryan Lim",
+        "DateOfBirth": "01-07-2003",
+        "Gender": "Male",
+        "Symptoms": "Cough, Fever",
+        "Causes": "Viral Infection",
+        "Disease": "Respiratory Infection",
+        "Medicine": "Antivirals, Rest"
+    },
+    {
+        "Name": "Emily Koh",
+        "DateOfBirth": "19-05-1984",
+        "Gender": "Female",
+        "Symptoms": "Joint Pain, Fatigue",
+        "Causes": "Rheumatoid Arthritis",
+        "Disease": "Arthritis",
+        "Medicine": "NSAIDs"
+    },
+    {
+        "Name": "Aiden Neo",
+        "DateOfBirth": "22-08-1997",
+        "Gender": "Male",
+        "Symptoms": "Dizziness, Fatigue",
+        "Causes": "Dehydration",
+        "Disease": "Heat Exhaustion",
+        "Medicine": "Hydration, Rest"
+    },
+    {
+        "Name": "Nora Tan",
+        "DateOfBirth": "01-10-1989",
+        "Gender": "Female",
+        "Symptoms": "Headache, Sensitivity",
+        "Causes": "Tension",
+        "Disease": "Tension Headache",
+        "Medicine": "Relaxation, NSAIDs"
+    },
+    {
+        "Name": "Eli Goh",
+        "DateOfBirth": "12-09-1994",
+        "Gender": "Male",
+        "Symptoms": "Abdominal Pain, Bloating",
+        "Causes": "Overeating",
+        "Disease": "Indigestion",
+        "Medicine": "Antacids"
+    },
+    {
+        "Name": "Emma Lim",
+        "DateOfBirth": "03-02-2001",
+        "Gender": "Female",
+        "Symptoms": "Nausea, Cramps",
+        "Causes": "Menstrual Cycle",
+        "Disease": "Menstrual Cramps",
+        "Medicine": "Pain Relievers"
+    },
+    {
+        "Name": "Benjamin Tan",
+        "DateOfBirth": "26-07-1976",
+        "Gender": "Male",
+        "Symptoms": "Chest Pain, Shortness of breath",
+        "Causes": "Heart Disease",
+        "Disease": "Coronary Artery Disease",
+        "Medicine": "Nitroglycerin,Aspirin"
+    },
+    {
+        "Name": "Mia Neo",
+        "DateOfBirth": "18-10-1995",
+        "Gender": "Female",
+        "Symptoms": "Fatigue, Difficulty breathing",
+        "Causes": "Hypothyroidism",
+        "Disease": "Thyroid Disorder",
+        "Medicine": "Levothyroxine"
+    },
+    {
+        "Name": "Noah Koh",
+        "DateOfBirth": "15-03-1980",
+        "Gender": "Male",
+        "Symptoms": "Fever, Chills",
+        "Causes": "Infection",
+        "Disease": "Pneumonia",
+        "Medicine": "Antibiotics, Rest"
+    },
+    {
+        "Name": "Ava Lim",
+        "DateOfBirth": "07-11-1993",
+        "Gender": "Female",
+        "Symptoms": "Cough, Shortness of breath",
+        "Causes": "COVID-19 Exposure",
+        "Disease": "COVID-19",
+        "Medicine": "Isolation, Fluids"
+    },
+    {
+        "Name": "Liam Goh",
+        "DateOfBirth": "16-09-1987",
+        "Gender": "Male",
+        "Symptoms": "Itching, Redness",
+        "Causes": "Allergies",
+        "Disease": "Allergic Reaction",
+        "Medicine": "Antihistamine"
+    },
+    {
+        "Name": "Sophie Tan",
+        "DateOfBirth": "18-02-1975",
+        "Gender": "Female",
+        "Symptoms": "Muscle Pain, Fatigue",
+        "Causes": "Overexertion",
+        "Disease": "Muscle Strain",
+        "Medicine": "Rest, Pain Relievers"
+    },
+    {
+        "Name": "Noah Lim",
+        "DateOfBirth": "21-05-2005",
+        "Gender": "Male",
+        "Symptoms": "Nausea, Vomiting",
+        "Causes": "Food Poisoning",
+        "Disease": "Gastroenteritis",
+        "Medicine": "Oral Rehydration"
+    },
+    {
+        "Name": "Ella Wong",
+        "DateOfBirth": "10-05-1999",
+        "Gender": "Female",
+        "Symptoms": "Headache, Blurred Vision",
+        "Causes": "Eye Strain",
+        "Disease": "Vision Fatigue",
+        "Medicine": "Rest, Eye Exercises"
+    },
+    {
+        "Name": "Lucas Neo",
+        "DateOfBirth": "14-08-1986",
+        "Gender": "Male",
+        "Symptoms": "Stomach Pain, Diarrhea",
+        "Causes": "Food Poisoning",
+        "Disease": "Gastroenteritis",
+        "Medicine": "Fluids, Bland Diet"
+    },
+    {
+        "Name": "Grace Koh",
+        "DateOfBirth": "25-01-1971",
+        "Gender": "Female",
+        "Symptoms": "Back Pain, Numbness",
+        "Causes": "Sciatica",
+        "Disease": "Herniated Disc",
+        "Medicine": "Pain Relievers, PT"
+    },
+    {
+        "Name": "Aiden Tan",
+        "DateOfBirth": "09-09-2002",
+        "Gender": "Male",
+        "Symptoms": "Fever, Sore Throat",
+        "Causes": "Viral Infection",
+        "Disease": "Tonsillitis",
+        "Medicine": "Fluids, Rest"
+    },
+    {
+        "Name": "Emma Lee",
+        "DateOfBirth": "12-07-1994",
+        "Gender": "Female",
+        "Symptoms": "Fatigue, Weakness",
+        "Causes": "Chronic Fatigue Syndrome",
+        "Disease": "Chronic Fatigue Syndrome",
+        "Medicine": "Rest, Lifestyle"
+    },
+    {
+        "Name": "Sophia Teo",
+        "DateOfBirth": "28-06-1985",
+        "Gender": "Female",
+        "Symptoms": "Anxiety, Palpitations",
+        "Causes": "Stress",
+        "Disease": "Anxiety Disorder",
+        "Medicine": "Therapy, Medication"
+    },
+    {
+        "Name": "Evan Lim",
+        "DateOfBirth": "17-03-2003",
+        "Gender": "Male",
+        "Symptoms": "Chest Pain, Shortness of breath",
+        "Causes": "Physical Exertion",
+        "Disease": "Muscle Overuse",
+        "Medicine": "Rest, Stretching"
+    },
+    {
+        "Name": "Lily Tan",
+        "DateOfBirth": "26-04-1990",
+        "Gender": "Female",
+        "Symptoms": "Joint Pain, Swelling",
+        "Causes": "Rheumatoid Arthritis",
+        "Disease": "Arthritis",
+        "Medicine": "NSAIDs"
+    },
+    {
+        "Name": "Leo Lim",
+        "DateOfBirth": "13-07-1999",
+        "Gender": "Male",
+        "Symptoms": "Nausea, Dizziness",
+        "Causes": "Motion Sickness",
+        "Disease": "Motion Sickness",
+        "Medicine": "Dimenhydrinate"
+    },
+    {
+        "Name": "Sophia Koh",
+        "DateOfBirth": "29-11-1977",
+        "Gender": "Female",
+        "Symptoms": "Fatigue, Weakness",
+        "Causes": "Chronic Fatigue Syndrome",
+        "Disease": "Chronic Fatigue Syndrome",
+        "Medicine": "Rest, Lifestyle"
+    },
+    {
+        "Name": "Isaac Goh",
+        "DateOfBirth": "18-02-1998",
+        "Gender": "Male",
+        "Symptoms": "Fever, Chills",
+        "Causes": "Infection",
+        "Disease": "Pneumonia",
+        "Medicine": "Antibiotics, Rest"
+    },
+    {
+        "Name": "Emma Tan",
+        "DateOfBirth": "07-03-1992",
+        "Gender": "Female",
+        "Symptoms": "Cough, Shortness of breath",
+        "Causes": "COVID-19 Exposure",
+        "Disease": "COVID-19",
+        "Medicine": "Isolation, Fluids"
+    },
+    {
+        "Name": "Grace Neo",
+        "DateOfBirth": "16-09-1989",
+        "Gender": "Female",
+        "Symptoms": "Itching, Redness",
+        "Causes": "Allergies",
+        "Disease": "Allergic Reaction",
+        "Medicine": "Antihistamine"
+    },
+    {
+        "Name": "Ryan Koh",
+        "DateOfBirth": "18-02-1978",
+        "Gender": "Male",
+        "Symptoms": "Muscle Pain, Fatigue",
+        "Causes": "Overexertion",
+        "Disease": "Muscle Strain",
+        "Medicine": "Rest, Pain Relievers"
+    },
+    {
+        "Name": "Sophia Tan",
+        "DateOfBirth": "21-05-2005",
+        "Gender": "Female",
+        "Symptoms": "Nausea, Vomiting",
+        "Causes": "Food Poisoning",
+        "Disease": "Gastroenteritis",
+        "Medicine": "Oral Rehydration"
+    },
+    {
+        "Name": "David Lim",
+        "DateOfBirth": "10-05-1998",
+        "Gender": "Male",
+        "Symptoms": "Headache, Blurred Vision",
+        "Causes": "Eye Strain",
+        "Disease": "Vision Fatigue",
+        "Medicine": "Rest, Eye Exercises"
+    },
+    {
+        "Name": "Oliver Wang",
+        "DateOfBirth": "14-08-1984",
+        "Gender": "Male",
+        "Symptoms": "Stomach Pain, Diarrhea",
+        "Causes": "Food Poisoning",
+        "Disease": "Gastroenteritis",
+        "Medicine": "Fluids, Bland Diet"
+    },
+    {
+        "Name": "Ava Yeo",
+        "DateOfBirth": "25-01-1972",
+        "Gender": "Female",
+        "Symptoms": "Back Pain, Numbness",
+        "Causes": "Sciatica",
+        "Disease": "Herniated Disc",
+        "Medicine": "Pain Relievers, PT"
+    },
+    {
+        "Name": "Lucas Tan",
+        "DateOfBirth": "09-09-1999",
+        "Gender": "Male",
+        "Symptoms": "Fever, Sore Throat",
+        "Causes": "Viral Infection",
+        "Disease": "Tonsillitis",
+        "Medicine": "Fluids, Rest"
+    },
+    {
+        "Name": "Grace Lee",
+        "DateOfBirth": "12-07-1991",
+        "Gender": "Female",
+        "Symptoms": "Fatigue, Weakness",
+        "Causes": "Chronic Fatigue Syndrome",
+        "Disease": "Chronic Fatigue Syndrome",
+        "Medicine": "Rest, Lifestyle"
+    },
+    {
+        "Name": "Sophie Neo",
+        "DateOfBirth": "28-06-1984",
+        "Gender": "Female",
+        "Symptoms": "Anxiety, Palpitations",
+        "Causes": "Stress",
+        "Disease": "Anxiety Disorder",
+        "Medicine": "Therapy, Medication"
+    },
+    {
+        "Name": "Evan Teo",
+        "DateOfBirth": "17-03-2001",
+        "Gender": "Male",
+        "Symptoms": "Chest Pain, Shortness of breath",
+        "Causes": "Physical Exertion",
+        "Disease": "Muscle Overuse",
+        "Medicine": "Rest, Stretching"
+    },
+    {
+        "Name": "Lily Lim",
+        "DateOfBirth": "26-04-1995",
+        "Gender": "Female",
+        "Symptoms": "Joint Pain, Swelling",
+        "Causes": "Rheumatoid Arthritis",
+        "Disease": "Arthritis",
+        "Medicine": "NSAIDs"
+    },
+    {
+        "Name": "Leo Goh",
+        "DateOfBirth": "13-07-1990",
+        "Gender": "Male",
+        "Symptoms": "Nausea, Dizziness",
+        "Causes": "Motion Sickness",
+        "Disease": "Motion Sickness",
+        "Medicine": "Dimenhydrinate"
+    },
+    {
+        "Name": "Sophia Koh",
+        "DateOfBirth": "29-11-1979",
+        "Gender": "Female",
+        "Symptoms": "Fatigue, Weakness",
+        "Causes": "Chronic Fatigue",
+        "Disease": "Chronic Fatigue",
+        "Medicine": "Rest, Lifestyle"
+    },
+    {
+        "Name": null,
+        "DateOfBirth": null,
+        "Gender": null,
+        "Symptoms": null,
+        "Causes": "Syndrome",
+        "Disease": "Syndrome",
+        "Medicine": null
+    },
+    {
+        "Name": "Isaac Tan",
+        "DateOfBirth": "18-02-2000",
+        "Gender": "Male",
+        "Symptoms": "Fever, Chills",
+        "Causes": "Infection",
+        "Disease": "Pneumonia",
+        "Medicine": "Antibiotics, Rest"
+    },
+    {
+        "Name": "Emma Wong",
+        "DateOfBirth": "04-10-1995",
+        "Gender": "Female",
+        "Symptoms": "Sore Throat, Cough",
+        "Causes": "Bacterial Infection",
+        "Disease": "Strep Throat",
+        "Medicine": "Penicillin"
+    },
+    {
+        "Name": "Daniel Neo",
+        "DateOfBirth": "28-11-1987",
+        "Gender": "Male",
+        "Symptoms": "Fatigue, Weakness",
+        "Causes": "Anemia",
+        "Disease": "Iron Deficiency",
+        "Medicine": "Iron Supplements"
+    },
+    {
+        "Name": "Olivia Teo",
+        "DateOfBirth": "06-03-2000",
+        "Gender": "Female",
+        "Symptoms": "Anxiety, Rapid Heartbeat",
+        "Causes": "Stress",
+        "Disease": "Panic Disorder",
+        "Medicine": "Cognitive Therapy"
+    },
+    {
+        "Name": "Jack Tan",
+        "DateOfBirth": "15-09-1978",
+        "Gender": "Male",
+        "Symptoms": "Shortness of breath",
+        "Causes": "Obesity",
+        "Disease": "Sleep Apnea",
+        "Medicine": "CPAP Machine"
+    },
+    {
+        "Name": "Sophia Goh",
+        "DateOfBirth": "07-12-1992",
+        "Gender": "Female",
+        "Symptoms": "Skin Rash, Itching",
+        "Causes": "Allergies",
+        "Disease": "Dermatitis",
+        "Medicine": "Topical Steroids"
+    },
+    {
+        "Name": "Ryan Lim",
+        "DateOfBirth": "01-07-2003",
+        "Gender": "Male",
+        "Symptoms": "Cough, Fever",
+        "Causes": "Viral Infection",
+        "Disease": "Respiratory",
+        "Medicine": "Antivirals, Rest"
+    },
+    {
+        "Name": null,
+        "DateOfBirth": null,
+        "Gender": null,
+        "Symptoms": null,
+        "Causes": null,
+        "Disease": "Infection",
+        "Medicine": null
+    },
+    {
+        "Name": "Emily Koh",
+        "DateOfBirth": "19-05-1984",
+        "Gender": "Female",
+        "Symptoms": "Joint Pain, Fatigue",
+        "Causes": "Rheumatoid Arthritis",
+        "Disease": "Arthritis",
+        "Medicine": "NSAIDs"
+    },
+    {
+        "Name": "Aiden Neo",
+        "DateOfBirth": "22-08-1997",
+        "Gender": "Male",
+        "Symptoms": "Dizziness, Fatigue",
+        "Causes": "Dehydration",
+        "Disease": "Heat Exhaustion",
+        "Medicine": "Hydration, Rest"
+    },
+    {
+        "Name": "Nora Tan",
+        "DateOfBirth": "01-10-1989",
+        "Gender": "Female",
+        "Symptoms": "Headache, Sensitivity",
+        "Causes": "Tension",
+        "Disease": "Tension Headache",
+        "Medicine": "Relaxation, NSAIDs"
+    },
+    {
+        "Name": "Eli Goh",
+        "DateOfBirth": "12-09-1994",
+        "Gender": "Male",
+        "Symptoms": "Abdominal Pain, Bloating",
+        "Causes": "Overeating",
+        "Disease": "Indigestion",
+        "Medicine": "Antacids"
+    },
+    {
+        "Name": "Emma Lim",
+        "DateOfBirth": "03-02-2001",
+        "Gender": "Female",
+        "Symptoms": "Nausea, Cramps",
+        "Causes": "Menstrual Cycle",
+        "Disease": "Menstrual Cramps",
+        "Medicine": "Pain Relievers"
+    },
+    {
+        "Name": "Benjamin Tan",
+        "DateOfBirth": "26-07-1976",
+        "Gender": "Male",
+        "Symptoms": "Chest Pain, Shortness",
+        "Causes": "Heart Disease",
+        "Disease": "Coronary Artery",
+        "Medicine": "Nitroglycerin"
+    },
+    {
+        "Name": null,
+        "DateOfBirth": null,
+        "Gender": null,
+        "Symptoms": "of breath",
+        "Causes": null,
+        "Disease": "Disease",
+        "Medicine": "Aspirin"
+    },
+    {
+        "Name": "Mia Neo",
+        "DateOfBirth": "18-10-1995",
+        "Gender": "Female",
+        "Symptoms": "Fatigue, Difficulty",
+        "Causes": "Hypothyroidism",
+        "Disease": "Thyroid Disorder",
+        "Medicine": "Levothyroxine"
+    },
+    {
+        "Name": null,
+        "DateOfBirth": null,
+        "Gender": "br",
+        "Symptoms": "eathing",
+        "Causes": null,
+        "Disease": null,
+        "Medicine": null
+    },
+    {
+        "Name": "Noah Koh",
+        "DateOfBirth": "15-03-1980",
+        "Gender": "Male",
+        "Symptoms": "Fever, Chills",
+        "Causes": "Infection",
+        "Disease": "Pneumonia",
+        "Medicine": "Antibiotics, Rest"
+    },
+    {
+        "Name": "Ava Lim",
+        "DateOfBirth": "07-11-1993",
+        "Gender": "Female",
+        "Symptoms": "Cough, Shortness of breat",
+        "Causes": "h COVID-19 Exposure",
+        "Disease": "COVID-19",
+        "Medicine": "Isolation, Fluids"
+    },
+    {
+        "Name": "Liam Goh",
+        "DateOfBirth": "16-09-1987",
+        "Gender": "Male",
+        "Symptoms": "Itching, Redness",
+        "Causes": "Allergies",
+        "Disease": "Allergic Reaction",
+        "Medicine": "Antihistamine"
+    },
+    {
+        "Name": "Sophie Tan",
+        "DateOfBirth": "18-02-1975",
+        "Gender": "Female",
+        "Symptoms": "Muscle Pain, Fatigue",
+        "Causes": "Overexertion",
+        "Disease": "Muscle Strain",
+        "Medicine": "Rest, Pain Relievers"
+    },
+    {
+        "Name": "Noah Lim",
+        "DateOfBirth": "21-05-2005",
+        "Gender": "Male",
+        "Symptoms": "Nausea, Vomiting",
+        "Causes": "Food Poisoning",
+        "Disease": "Gastroenteritis",
+        "Medicine": "Oral Rehydration"
+    },
+    {
+        "Name": "Ella Wong",
+        "DateOfBirth": "10-05-1999",
+        "Gender": "Female",
+        "Symptoms": "Headache, Blurred Vision",
+        "Causes": "Eye Strain",
+        "Disease": "Vision Fatigue",
+        "Medicine": "Rest, Eye Exercises"
+    },
+    {
+        "Name": "Lucas Neo",
+        "DateOfBirth": "14-08-1986",
+        "Gender": "Male",
+        "Symptoms": "Stomach Pain, Diarrhea",
+        "Causes": "Food Poisoning",
+        "Disease": "Gastroenteritis",
+        "Medicine": "Fluids, Bland Diet"
+    },
+    {
+        "Name": "Grace Koh",
+        "DateOfBirth": "25-01-1971",
+        "Gender": "Female",
+        "Symptoms": "Back Pain, Numbness",
+        "Causes": "Sciatica",
+        "Disease": "Herniated Disc",
+        "Medicine": "Pain Relievers, PT"
+    },
+    {
+        "Name": "Aiden Tan",
+        "DateOfBirth": "09-09-2002",
+        "Gender": "Male",
+        "Symptoms": "Fever, Sore Throat",
+        "Causes": "Viral Infection",
+        "Disease": "Tonsillitis",
+        "Medicine": "Fluids, Rest"
+    },
+    {
+        "Name": "Emma Lee",
+        "DateOfBirth": "12-07-1994",
+        "Gender": "Female",
+        "Symptoms": "Fatigue, Weakness",
+        "Causes": "Chronic Fatigue",
+        "Disease": "Chronic Fatigue",
+        "Medicine": "Rest, Lifestyle"
+    },
+    {
+        "Name": null,
+        "DateOfBirth": null,
+        "Gender": null,
+        "Symptoms": null,
+        "Causes": "Syndrome",
+        "Disease": "Syndrome",
+        "Medicine": null
+    },
+    {
+        "Name": "Sophia Teo",
+        "DateOfBirth": "28-06-1985",
+        "Gender": "Female",
+        "Symptoms": "Anxiety, Palpitations",
+        "Causes": "Stress",
+        "Disease": "Anxiety Disorder",
+        "Medicine": "Therapy, Medication"
+    },
+    {
+        "Name": "Evan Lim",
+        "DateOfBirth": "17-03-2003",
+        "Gender": "Male",
+        "Symptoms": "Chest Pain, Shortness",
+        "Causes": "Physical Exertion",
+        "Disease": "Muscle Overuse",
+        "Medicine": "Rest, Stretching"
+    },
+    {
+        "Name": null,
+        "DateOfBirth": null,
+        "Gender": null,
+        "Symptoms": "of breath",
+        "Causes": null,
+        "Disease": null,
+        "Medicine": null
+    },
+    {
+        "Name": "Lily Tan",
+        "DateOfBirth": "26-04-1990",
+        "Gender": "Female",
+        "Symptoms": "Joint Pain, Swelling",
+        "Causes": "Rheumatoid Arthritis",
+        "Disease": "Arthritis",
+        "Medicine": "NSAIDs"
+    },
+    {
+        "Name": "Leo Lim",
+        "DateOfBirth": "13-07-1999",
+        "Gender": "Male",
+        "Symptoms": "Nausea, Dizziness",
+        "Causes": "Motion Sickness",
+        "Disease": "Motion Sickness",
+        "Medicine": "Dimenhydrinate"
+    },
+    {
+        "Name": "Sophia Koh",
+        "DateOfBirth": "29-11-1977",
+        "Gender": "Female",
+        "Symptoms": "Fatigue, Weakness",
+        "Causes": "Chronic Fatigue Syndrome",
+        "Disease": "Chronic Fatigue Syndrome",
+        "Medicine": "Rest, Lifestyle"
+    },
+    {
+        "Name": "Isaac Goh",
+        "DateOfBirth": "18-02-1998",
+        "Gender": "Male",
+        "Symptoms": "Fever, Chills",
+        "Causes": "Infection",
+        "Disease": "Pneumonia",
+        "Medicine": "Antibiotics, Rest"
+    },
+    {
+        "Name": "Emma Tan",
+        "DateOfBirth": "07-03-1992",
+        "Gender": "Female",
+        "Symptoms": "Cough, Shortness of breath",
+        "Causes": "COVID-19 Exposure",
+        "Disease": "COVID-19",
+        "Medicine": "Isolation, Fluids"
+    },
+    {
+        "Name": "Grace Neo",
+        "DateOfBirth": "16-09-1989",
+        "Gender": "Female",
+        "Symptoms": "Itching, Redness",
+        "Causes": "Allergies",
+        "Disease": "Allergic Reaction",
+        "Medicine": "Antihistamine"
+    },
+    {
+        "Name": "Ryan Koh",
+        "DateOfBirth": "18-02-1978",
+        "Gender": "Male",
+        "Symptoms": "Muscle Pain, Fatigue",
+        "Causes": "Overexertion",
+        "Disease": "Muscle Strain",
+        "Medicine": "Rest, Pain Relievers"
+    },
+    {
+        "Name": "Sophia Tan",
+        "DateOfBirth": "21-05-2005",
+        "Gender": "Female",
+        "Symptoms": "Nausea, Vomiting",
+        "Causes": "Food Poisoning",
+        "Disease": "Gastroenteritis",
+        "Medicine": "Oral Rehydration"
+    },
+    {
+        "Name": "David Lim",
+        "DateOfBirth": "10-05-1998",
+        "Gender": "Male",
+        "Symptoms": "Headache, Blurred Vision",
+        "Causes": "Eye Strain",
+        "Disease": "Vision Fatigue",
+        "Medicine": "Rest, Eye Exercises"
+    },
+    {
+        "Name": "Oliver Wang",
+        "DateOfBirth": "14-08-1984",
+        "Gender": "Male",
+        "Symptoms": "Stomach Pain, Diarrhea",
+        "Causes": "Food Poisoning",
+        "Disease": "Gastroenteritis",
+        "Medicine": "Fluids, Bland Diet"
+    },
+    {
+        "Name": "Ava Yeo",
+        "DateOfBirth": "25-01-1972",
+        "Gender": "Female",
+        "Symptoms": "Back Pain, Numbness",
+        "Causes": "Sciatica",
+        "Disease": "Herniated Disc",
+        "Medicine": "Pain Relievers, PT"
+    },
+    {
+        "Name": "Lucas Tan",
+        "DateOfBirth": "09-09-1999",
+        "Gender": "Male",
+        "Symptoms": "Fever, Sore Throat",
+        "Causes": "Viral Infection",
+        "Disease": "Tonsillitis",
+        "Medicine": "Fluids, Rest"
+    },
+    {
+        "Name": "Grace Lee",
+        "DateOfBirth": "12-07-1991",
+        "Gender": "Female",
+        "Symptoms": "Fatigue, Weakness",
+        "Causes": "Chronic Fatigue Syndrome",
+        "Disease": "Chronic Fatigue Syndrome",
+        "Medicine": "Rest, Lifestyle"
+    },
+    {
+        "Name": "Sophie Neo",
+        "DateOfBirth": "28-06-1984",
+        "Gender": "Female",
+        "Symptoms": "Anxiety, Palpitations",
+        "Causes": "Stress",
+        "Disease": "Anxiety Disorder",
+        "Medicine": "Therapy, Medication"
+    },
+    {
+        "Name": "Evan Teo",
+        "DateOfBirth": "17-03-2001",
+        "Gender": "Male",
+        "Symptoms": "Chest Pain, Shortness of breath",
+        "Causes": "Physical Exertion",
+        "Disease": "Muscle Overuse",
+        "Medicine": "Rest, Stretching"
+    },
+    {
+        "Name": "Lily Lim",
+        "DateOfBirth": "26-04-1995",
+        "Gender": "Female",
+        "Symptoms": "Joint Pain, Swelling",
+        "Causes": "Rheumatoid Arthritis",
+        "Disease": "Arthritis",
+        "Medicine": "NSAIDs"
+    },
+    {
+        "Name": "Leo Goh",
+        "DateOfBirth": "13-07-1990",
+        "Gender": "Male",
+        "Symptoms": "Nausea, Dizziness",
+        "Causes": "Motion Sickness",
+        "Disease": "Motion Sickness",
+        "Medicine": "Dimenhydrinate"
+    },
+    {
+        "Name": "Sophia Koh",
+        "DateOfBirth": "29-11-1979",
+        "Gender": "Female",
+        "Symptoms": "Fatigue, Weakness",
+        "Causes": "Chronic FatigueSyndrome",
+        "Disease": "Chronic Fatigue Syndrome",
+        "Medicine": "Rest, Lifestyle"
+    },
+    {
+        "Name": "Isaac Tan",
+        "DateOfBirth": "18-02-2000",
+        "Gender": "Male",
+        "Symptoms": "Fever, Chills",
+        "Causes": "Infection",
+        "Disease": "Pneumonia",
+        "Medicine": "Antibiotics, Rest"
+    },
+    {
+        "Name": "Emma Wong",
+        "DateOfBirth": "04-10-1995",
+        "Gender": "Female",
+        "Symptoms": "Sore Throat, Cough",
+        "Causes": "Bacterial Infection",
+        "Disease": "Strep Throat",
+        "Medicine": "Penicillin"
+    },
+    {
+        "Name": "Daniel Neo",
+        "DateOfBirth": "28-11-1987",
+        "Gender": "Male",
+        "Symptoms": "Fatigue, Weakness",
+        "Causes": "Anemia",
+        "Disease": "Iron Deficiency",
+        "Medicine": "Iron Supplements"
+    },
+    {
+        "Name": "Olivia Teo",
+        "DateOfBirth": "06-03-2000",
+        "Gender": "Female",
+        "Symptoms": "Anxiety, Rapid Heartbeat",
+        "Causes": "Stress",
+        "Disease": "Panic Disorder",
+        "Medicine": "Cognitive Therapy"
+    },
+    {
+        "Name": "Jack Tan",
+        "DateOfBirth": "15-09-1978",
+        "Gender": "Male",
+        "Symptoms": "Shortness of breath",
+        "Causes": "Obesity",
+        "Disease": "Sleep Apnea",
+        "Medicine": "CPAP Machine"
+    },
+    {
+        "Name": "Sophia Goh",
+        "DateOfBirth": "07-12-1992",
+        "Gender": "Female",
+        "Symptoms": "Skin Rash, Itching",
+        "Causes": "Allergies",
+        "Disease": "Dermatitis",
+        "Medicine": "Topical Steroids"
+    },
+    {
+        "Name": "Ryan Lim",
+        "DateOfBirth": "01-07-2003",
+        "Gender": "Male",
+        "Symptoms": "Cough, Fever",
+        "Causes": "Viral Infection",
+        "Disease": "Respiratory     AntiInfection",
+        "Medicine": "virals, Rest"
+    },
+    {
+        "Name": "Emily Koh",
+        "DateOfBirth": "19-05-1984",
+        "Gender": "Female",
+        "Symptoms": "Joint Pain, Fatigue",
+        "Causes": "Rheumatoid Arthritis",
+        "Disease": "Arthritis",
+        "Medicine": "NSAIDs"
+    },
+    {
+        "Name": "Aiden Neo",
+        "DateOfBirth": "22-08-1997",
+        "Gender": "Male",
+        "Symptoms": "Dizziness, Fatigue",
+        "Causes": "Dehydration",
+        "Disease": "Heat Exhaustion Hydr",
+        "Medicine": "ation, Rest"
+    },
+    {
+        "Name": "Nora Tan",
+        "DateOfBirth": "01-10-1989",
+        "Gender": "Female",
+        "Symptoms": "Headache, Sensitivity",
+        "Causes": "Tension",
+        "Disease": "Tension Headache Rel",
+        "Medicine": "axation, NSAIDs"
+    },
+    {
+        "Name": "Eli Goh",
+        "DateOfBirth": "12-09-1994",
+        "Gender": "Male",
+        "Symptoms": "Abdominal Pain, Bloating",
+        "Causes": "Overeating",
+        "Disease": "Indigestion     Anta",
+        "Medicine": "cids"
+    },
+    {
+        "Name": "Emma Lim",
+        "DateOfBirth": "03-02-2001",
+        "Gender": "Female",
+        "Symptoms": "Nausea, Cramps",
+        "Causes": "Menstrual Cycle",
+        "Disease": "Menstrual Cramps Pai",
+        "Medicine": "n Relievers"
+    },
+    {
+        "Name": "Benjamin Tan",
+        "DateOfBirth": "26-07-1976",
+        "Gender": "Male",
+        "Symptoms": "Chest Pain, Shortnessof breath",
+        "Causes": "Heart Disease",
+        "Disease": "Coronary Artery Disease",
+        "Medicine": "Nitroglycerin,Aspirin"
+    },
+    {
+        "Name": null,
+        "DateOfBirth": null,
+        "Gender": null,
+        "Symptoms": null,
+        "Causes": null,
+        "Disease": "",
+        "Medicine": null
+    },
+    {
+        "Name": "Mia Neo",
+        "DateOfBirth": "18-10-1995",
+        "Gender": "Female",
+        "Symptoms": "Fatigue, Difficulty breathing",
+        "Causes": "Hypothyroidism",
+        "Disease": "Disease",
+        "Medicine": "Levothyroxine"
+    },
+    {
+        "Name": "Noah Koh",
+        "DateOfBirth": "15-03-1980",
+        "Gender": "Male",
+        "Symptoms": "Fever, Chills",
+        "Causes": "Infection",
+        "Disease": "Pheumonia",
+        "Medicine": "Antibiotics, Rest"
+    },
+    {
+        "Name": "Ava Lim",
+        "DateOfBirth": "07-11-1993",
+        "Gender": "Female",
+        "Symptoms": "Cough, Shortness of breath",
+        "Causes": "COVID-19 Exposure",
+        "Disease": "COVID-19",
+        "Medicine": "Isolation, Fluids"
+    },
+    {
+        "Name": "Liam Goh",
+        "DateOfBirth": "16-09-1987",
+        "Gender": "Male",
+        "Symptoms": "Itching, Redness",
+        "Causes": "Allergies",
+        "Disease": "Allergic Reaction An",
+        "Medicine": "tihistamine"
+    },
+    {
+        "Name": "Sophie Tan",
+        "DateOfBirth": "18-02-1975",
+        "Gender": "Female",
+        "Symptoms": "Muscle Pain, Fatigue",
+        "Causes": "Overexertion",
+        "Disease": "Muscle Strain",
+        "Medicine": "Rest, Pain Relievers"
+    },
+    {
+        "Name": "Noah Lim",
+        "DateOfBirth": "21-05-2005",
+        "Gender": "Male",
+        "Symptoms": "Nausea, Vomiting",
+        "Causes": "Food Poisoning",
+        "Disease": "Muscle Strain",
+        "Medicine": "Rehydration"
+    },
+    {
+        "Name": "Ella Wong",
+        "DateOfBirth": "10-05-1999",
+        "Gender": "Female",
+        "Symptoms": "Headache, Blurred Vision",
+        "Causes": "Eye Strain",
+        "Disease": "Muscle Strain",
+        "Medicine": "Eye Exercises"
     }
 ]

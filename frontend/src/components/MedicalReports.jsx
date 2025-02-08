@@ -1,29 +1,128 @@
 import { useState } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   FaHeartbeat,
   FaClipboardList,
   FaBookMedical,
   FaCheckCircle,
+  FaFileUpload,
+  FaSpinner,
+  FaTimesCircle,
+  FaFileAlt,
+  FaArrowRight
 } from "react-icons/fa";
 
-const ReportSection = ({ title, icon, children, color }) => (
+const GlassCard = ({ children, className = "" }) => (
+  <div className={`backdrop-blur-lg bg-black/40 rounded-xl shadow-lg ${className}`}>
+    {children}
+  </div>
+);
+
+const BlurryBackground = () => (
+  <div className="fixed inset-0 -z-10 overflow-hidden">
+    <div className="absolute inset-0 bg-gradient-to-br from-gray-950 via-gray-900 to-black"></div>
+    <motion.div
+      animate={{
+        scale: [1, 1.2, 1],
+        rotate: [0, 180, 360],
+        x: [0, 100, 0],
+        y: [0, -50, 0],
+      }}
+      transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+      className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full bg-blue-500/10 blur-[100px]"
+    />
+    <motion.div
+      animate={{
+        scale: [1.2, 1, 1.2],
+        rotate: [0, -180, -360],
+        x: [0, -100, 0],
+        y: [0, 50, 0],
+      }}
+      transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
+      className="absolute top-1/3 right-1/4 w-96 h-96 rounded-full bg-purple-500/10 blur-[100px]"
+    />
+  </div>
+);
+
+const ReportSection = ({ title, icon, children }) => (
   <motion.div
-    className={`min-h-screen snap-start p-8 ${color}`}
+    className="min-h-screen snap-start p-8"
     initial={{ opacity: 0, y: 50 }}
     whileInView={{ opacity: 1, y: 0 }}
     viewport={{ once: true }}
   >
-    <div className="max-w-4xl mx-auto">
+    <GlassCard className="p-6">
       <div className="flex items-center mb-6">
         {icon}
-        <h2 className="text-3xl font-bold ml-4">{title}</h2>
+        <h2 className="text-2xl font-bold ml-4 text-white">{title}</h2>
       </div>
       {children}
-    </div>
+    </GlassCard>
   </motion.div>
 );
 
+const FileUploadSection = ({ onFileUpload, loading, error, uploadedFile }) => (
+  <GlassCard className="p-6 mb-8">
+    <div className="relative">
+      <input
+        type="file"
+        accept=".pdf"
+        onChange={onFileUpload}
+        className="hidden"
+        id="file-upload"
+      />
+      <label
+        htmlFor="file-upload"
+        className="flex flex-col items-center justify-center p-8 border-2 border-dashed border-gray-600 rounded-lg cursor-pointer
+                 hover:border-blue-500 transition-colors duration-300"
+      >
+        <FaFileUpload className="text-4xl text-blue-400 mb-4" />
+        <span className="text-gray-300 text-lg mb-2">
+          Drop your medical report here or click to browse
+        </span>
+        <span className="text-gray-500 text-sm">Supports PDF files only</span>
+      </label>
+    </div>
+
+    <AnimatePresence>
+      {error && (
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0 }}
+          className="mt-4 p-4 bg-red-500/20 border border-red-500/50 rounded-lg flex items-center text-red-400"
+        >
+          <FaTimesCircle className="mr-2" />
+          {error}
+        </motion.div>
+      )}
+
+      {loading && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="mt-4 p-4 bg-blue-500/20 border border-blue-500/50 rounded-lg flex items-center justify-center text-blue-400"
+        >
+          <FaSpinner className="animate-spin mr-2" />
+          Processing your document...
+        </motion.div>
+      )}
+
+      {uploadedFile && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="mt-4 p-4 bg-green-500/20 border border-green-500/50 rounded-lg flex items-center text-green-400"
+        >
+          <FaFileAlt className="mr-2" />
+          Successfully uploaded: {uploadedFile}
+        </motion.div>
+      )}
+    </AnimatePresence>
+  </GlassCard>
+);
 const MedicalReport = ({ analysis }) => {
   const analysisData = typeof analysis === 'string' ? JSON.parse(analysis) : analysis;
 
@@ -31,35 +130,35 @@ const MedicalReport = ({ analysis }) => {
     <div className="snap-y snap-mandatory h-screen overflow-y-scroll">
       <ReportSection
         title="Summary"
-        icon={<FaClipboardList className="text-4xl text-blue-500" />}
-        color="bg-blue-50"
+        icon={<FaClipboardList className="text-3xl text-blue-400" />}
       >
-        <motion.p
-          className="text-xl leading-relaxed"
+        <motion.div
+          className="bg-blue-500/10 border border-blue-500/20 rounded-lg p-6"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.2 }}
         >
-          {analysisData.summary}
-        </motion.p>
+          <p className="text-lg leading-relaxed text-gray-300">
+            {analysisData.summary}
+          </p>
+        </motion.div>
       </ReportSection>
 
       <ReportSection
         title="Key Findings"
-        icon={<FaHeartbeat className="text-4xl text-red-500" />}
-        color="bg-red-50"
+        icon={<FaHeartbeat className="text-3xl text-red-400" />}
       >
         <div className="space-y-4">
           {analysisData.findings.map((finding, index) => (
             <motion.div
               key={index}
-              className="flex items-start p-4 bg-white rounded-lg shadow"
+              className="flex items-start p-4 bg-red-500/10 border border-red-500/20 rounded-lg"
               initial={{ x: -50, opacity: 0 }}
               whileInView={{ x: 0, opacity: 1 }}
               transition={{ delay: index * 0.1 }}
             >
               <span className="text-2xl mr-4">{finding.emoji}</span>
-              <p className="text-lg">{finding.text}</p>
+              <p className="text-gray-300">{finding.text}</p>
             </motion.div>
           ))}
         </div>
@@ -67,20 +166,20 @@ const MedicalReport = ({ analysis }) => {
 
       <ReportSection
         title="Medical Terms"
-        icon={<FaBookMedical className="text-4xl text-green-500" />}
-        color="bg-green-50"
+        icon={<FaBookMedical className="text-3xl text-green-400" />}
       >
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {analysisData.terms.map((term, index) => (
             <motion.div
               key={index}
-              className="p-4 bg-white rounded-lg shadow"
+              className="p-4 bg-green-500/10 border border-green-500/20 rounded-lg"
               initial={{ scale: 0.9, opacity: 0 }}
               whileInView={{ scale: 1, opacity: 1 }}
               transition={{ delay: index * 0.1 }}
+              whileHover={{ scale: 1.02 }}
             >
-              <h3 className="font-bold text-lg">{term.term}</h3>
-              <p className="text-gray-600">{term.explanation}</p>
+              <h3 className="font-bold text-lg text-green-400 mb-2">{term.term}</h3>
+              <p className="text-gray-300">{term.explanation}</p>
             </motion.div>
           ))}
         </div>
@@ -88,24 +187,24 @@ const MedicalReport = ({ analysis }) => {
 
       <ReportSection
         title="Recommendations"
-        icon={<FaCheckCircle className="text-4xl text-purple-500" />}
-        color="bg-purple-50"
+        icon={<FaCheckCircle className="text-3xl text-purple-400" />}
       >
         <div className="space-y-4">
           {analysisData.recommendations.map((rec, index) => (
             <motion.div
               key={index}
-              className="flex items-center p-4 bg-white rounded-lg shadow"
+              className="flex items-start p-4 bg-purple-500/10 border border-purple-500/20 rounded-lg"
               initial={{ y: 50, opacity: 0 }}
               whileInView={{ y: 0, opacity: 1 }}
               transition={{ delay: index * 0.1 }}
+              whileHover={{ scale: 1.02 }}
             >
-              <div className="flex-shrink-0 w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mr-4">
+              <div className="flex-shrink-0 w-12 h-12 bg-purple-500/20 rounded-full flex items-center justify-center mr-4">
                 <span className="text-2xl">{rec.emoji}</span>
               </div>
               <div>
-                <h4 className="font-bold">{rec.title}</h4>
-                <p className="text-gray-600">{rec.description}</p>
+                <h4 className="font-bold text-purple-400 mb-1">{rec.title}</h4>
+                <p className="text-gray-300">{rec.description}</p>
               </div>
             </motion.div>
           ))}
@@ -166,38 +265,35 @@ const MedicalReports = () => {
   };
 
   return (
-    <div className="max-w-3xl mx-auto p-6">
-      <div className="mb-8">
-        <label className="block mb-2">
-          <span className="text-gray-700">Upload Medical Report (PDF)</span>
-          <input
-            type="file"
-            accept=".pdf"
-            onChange={handleFileUpload}
-            className="mt-1 block w-full p-2 border rounded"
+    <div className="min-h-screen text-white relative snap-y snap-mandatory h-screen overflow-y-scroll scroll-styled">
+      <BlurryBackground />
+      
+      <div className="max-w-4xl mx-auto p-6">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="space-y-6"
+        >
+          <FileUploadSection
+            onFileUpload={handleFileUpload}
+            loading={loading}
+            error={error}
+            uploadedFile={uploadedFile}
           />
-        </label>
+
+          <AnimatePresence>
+            {pdfText && analysis && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+              >
+                <MedicalReport analysis={analysis} />
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </motion.div>
       </div>
-
-      {error && (
-        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
-          <span className="block sm:inline">{error}</span>
-        </div>
-      )}
-
-      {loading && (
-        <div className="text-center py-4">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto"></div>
-        </div>
-      )}
-
-      {uploadedFile && (
-        <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4">
-          <span className="block sm:inline">Successfully uploaded: {uploadedFile}</span>
-        </div>
-      )}
-
-      {pdfText && analysis && <MedicalReport analysis={analysis} />}
     </div>
   );
 };

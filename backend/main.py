@@ -8,7 +8,8 @@ from llm import query_claude
 import re, json
 from medical_recommender import AdvancedMedicalPredictor
 from medical_predictor import MedicalPredictor, load_training_data
-
+from data_cleaner import clean_excel_data, update_json_data
+import pandas as pd
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
@@ -27,7 +28,7 @@ app.add_middleware(
 async def analyze_medical_text(text):
     system_prompt = """You are a medical report analyzer. Analyze the given medical report text and provide a JSON response in this format:
     {
-        "summary": "Very detailed summary in layman terms",
+        "summary": "Very detailed information in layman terms bullet points, about 3 paragraphs 250 words",
         "findings": [
             {"emoji": "emoji", "text": "detailed finding"}
         ],
@@ -134,6 +135,34 @@ async def predict_medical(data: dict):
             },
             "error": str(e)
         }
+
+@app.post("/upload-excel")
+async def upload_excel(file: UploadFile):
+    try:
+        if not file.filename.endswith(('.xlsx', '.xls')):
+            raise HTTPException(status_code=400, detail="Only Excel files are accepted")
+        
+        # Read the Excel file
+        contents = await file.read()
+        with open(f"uploads/{file.filename}", "wb") as f:
+            f.write(contents)
+        
+        df = pd.read_excel(f"uploads/{file.filename}")
+        
+        # Clean the data
+        cleaned_data = clean_excel_data(df)
+        
+        # Update the JSON file
+        records_added = update_json_data(cleaned_data)
+        
+        return {
+            "message": "Excel file processed successfully",
+            "records_added": records_added,
+            "filename": file.filename
+        }
+        
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 @app.post("/upload")
 async def upload_report(file_upload: UploadFile):
     try:
