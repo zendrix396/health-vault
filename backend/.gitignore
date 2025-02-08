@@ -12,6 +12,7 @@ docker
 *.dev.js
 
 # Clewd
+config.js
 cookies.json
 cookies.js
 cookies.ini
