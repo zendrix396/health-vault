@@ -1,7 +1,8 @@
 # MediAI - Medical Report Analysis & Prediction System
 
 ## Live Demo (frontend)
-[HealthVault](https://healthhackverse.netlify.app)
+[MediAI Website](https://healthhackverse.netlify.app)
+[Demo Video](https://youtu.be/_UvV3BKg62E)
 
 ## Overview
 MediAI is an advanced medical analysis system that combines machine learning, natural language processing, and data analytics to provide medical report analysis and disease/medicine predictions. The system uses ensemble learning methods and Claude AI for comprehensive medical insights.
