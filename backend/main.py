@@ -6,6 +6,9 @@ import io
 import logging
 from llm import query_claude
 import re, json
+from medical_recommender import AdvancedMedicalPredictor
+from medical_predictor import MedicalPredictor, load_training_data
+
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
@@ -61,6 +64,76 @@ async def analyze_medical_text(text):
     except Exception as e:
         logger.error(f"Error in LLM analysis: {str(e)}")
         return str(e)
+@app.post("/predict-medical")
+async def predict_medical(data: dict):
+    try:
+        # Advanced predictor
+        predictor2 = AdvancedMedicalPredictor('output.json')
+        
+        # Convert age to int before passing to predictor
+        age = int(data.get('age')) if data.get('age') else 0
+        
+        advanced_prediction = predictor2.predict_single(
+            age=age,
+            gender=data.get('gender'),
+            symptoms=data.get('symptoms'),
+            cause=data.get('cause')
+        )
+        
+        # Basic predictor
+        training_data = load_training_data('output.json')
+        predictor = MedicalPredictor()
+        predictor.train(training_data)
+        
+        diseases, medicines = predictor.predict(
+            age,
+            data.get('gender'),
+            data.get('symptoms'),
+            data.get('cause')
+        )
+
+        # Format the response
+        response = {
+            "advanced_prediction": {
+                "disease": {
+                    "name": advanced_prediction.get('disease', {}).get('name', 'Unknown'),
+                    "confidence": round(float(advanced_prediction.get('disease', {}).get('confidence', 0)), 2)
+                },
+                "medicine": {
+                    "name": advanced_prediction.get('medicine', {}).get('name', 'Unknown'),
+                    "confidence": round(float(advanced_prediction.get('medicine', {}).get('confidence', 0)), 2)
+                }
+            },
+            "basic_prediction": {
+                "diseases": [{"name": name, "confidence": round(float(conf), 2)} for name, conf in diseases],
+                "medicines": [{"name": name, "confidence": round(float(conf), 2)} for name, conf in medicines]
+            },
+            "model_metrics": {
+                "disease_accuracy": 64.71,
+                "medicine_accuracy": 74.51
+            }
+        }
+        
+        return response
+        
+    except Exception as e:
+        logger.error(f"Error in medical prediction: {str(e)}")
+        # Return a structured error response instead of raising an exception
+        return {
+            "advanced_prediction": {
+                "disease": {"name": "Error", "confidence": 0},
+                "medicine": {"name": "Error", "confidence": 0}
+            },
+            "basic_prediction": {
+                "diseases": [],
+                "medicines": []
+            },
+            "model_metrics": {
+                "disease_accuracy": 0,
+                "medicine_accuracy": 0
+            },
+            "error": str(e)
+        }
 @app.post("/upload")
 async def upload_report(file_upload: UploadFile):
     try:
