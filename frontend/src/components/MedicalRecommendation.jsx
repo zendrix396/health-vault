@@ -130,7 +130,7 @@ const MedicalRecommendation = () => {
     setError(null);
 
     try {
-      const response = await fetch('http://localhost:8000/predict-medical', {
+      const response = await fetch('https://health-vault-3lre.onrender.com/predict-medical', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -174,7 +174,7 @@ const MedicalRecommendation = () => {
     setExcelError(null);
 
     try {
-      const response = await fetch("http://localhost:8000/upload-excel", {
+      const response = await fetch("https://health-vault-3lre.onrender.com/upload-excel", {
         method: "POST",
         body: formData,
       });
