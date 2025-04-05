@@ -9,7 +9,8 @@ import {
   FaSpinner,
   FaTimesCircle,
   FaFileAlt,
-  FaArrowRight
+  FaArrowRight,
+  FaImage
 } from "react-icons/fa";
 
 const GlassCard = ({ children, className = "" }) => (
@@ -66,7 +67,7 @@ const FileUploadSection = ({ onFileUpload, loading, error, uploadedFile }) => (
     <div className="relative">
       <input
         type="file"
-        accept=".pdf"
+        accept=".pdf,.jpg,.jpeg,.png,.gif,.bmp,.webp"
         onChange={onFileUpload}
         className="hidden"
         id="file-upload"
@@ -76,11 +77,14 @@ const FileUploadSection = ({ onFileUpload, loading, error, uploadedFile }) => (
         className="flex flex-col items-center justify-center p-8 border-2 border-dashed border-gray-600 rounded-lg cursor-pointer
                  hover:border-blue-500 transition-colors duration-300"
       >
-        <FaFileUpload className="text-4xl text-blue-400 mb-4" />
+        <div className="flex flex-row items-center justify-center mb-4 space-x-4">
+          <FaFileUpload className="text-4xl text-blue-400" />
+          <FaImage className="text-4xl text-purple-400" />
+        </div>
         <span className="text-gray-300 text-lg mb-2">
           Drop your medical report here or click to browse
         </span>
-        <span className="text-gray-500 text-sm">Supports PDF files only</span>
+        <span className="text-gray-500 text-sm">Supports PDF and image files (JPEG, PNG, GIF, BMP, WebP)</span>
       </label>
     </div>
 
@@ -226,8 +230,13 @@ const MedicalReports = () => {
     const file = event.target.files[0];
     if (!file) return;
 
-    if (!file.type.includes("pdf")) {
-      setError("Please upload a PDF file");
+    // Check if file is a PDF or supported image type
+    const validImageTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/bmp', 'image/webp'];
+    const isPdf = file.type === 'application/pdf';
+    const isImage = validImageTypes.includes(file.type);
+
+    if (!isPdf && !isImage) {
+      setError("Please upload a PDF or supported image file (JPEG, PNG, GIF, BMP, WebP)");
       return;
     }
 
@@ -298,4 +307,4 @@ const MedicalReports = () => {
   );
 };
 
-export default MedicalReports;
+export default MedicalReports; 

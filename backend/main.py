@@ -4,7 +4,7 @@ from pathlib import Path
 import PyPDF2
 import io
 import logging
-from llm import query_gemini
+from llm import query_gemini, extract_text_from_image
 import re, json
 from medical_recommender import AdvancedMedicalPredictor
 from medical_predictor import MedicalPredictor, load_training_data
@@ -16,10 +16,13 @@ logger = logging.getLogger(__name__)
 UPLOAD_DIR = Path() / 'uploads'
 UPLOAD_DIR.mkdir(exist_ok=True)
 
+# Supported image file extensions
+SUPPORTED_IMAGE_EXTENSIONS = ('.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp')
+
 app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "http://127.0.0.1:5173", "https://health-vault-3lre.onrender.com"],
+    allow_origins=["http://localhost:5173", "http://127.0.0.1:5173", "https://health-vault-3lre.onrender.com", "https://health-vault-1.onrender.com/"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -163,13 +166,21 @@ async def upload_excel(file: UploadFile):
         
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
 @app.post("/upload")
 async def upload_report(file_upload: UploadFile):
     try:
         logger.info(f"Received file: {file_upload.filename}")
         
-        if not file_upload.filename.endswith('.pdf'):
-            raise HTTPException(status_code=400, detail="Only PDF files are accepted")
+        # Get file extension (lowercase) for type checking
+        file_ext = Path(file_upload.filename).suffix.lower()
+        
+        # Check if file type is supported
+        if not (file_ext == '.pdf' or file_ext in SUPPORTED_IMAGE_EXTENSIONS):
+            raise HTTPException(
+                status_code=400, 
+                detail=f"Only PDF and image files ({', '.join(SUPPORTED_IMAGE_EXTENSIONS)}) are accepted"
+            )
         
         data = await file_upload.read()
         logger.info(f"File size: {len(data)} bytes")
@@ -179,17 +190,27 @@ async def upload_report(file_upload: UploadFile):
             f.write(data)
         logger.info(f"File saved to {save_to}")
 
-        pdf_reader = PyPDF2.PdfReader(io.BytesIO(data))
-        
-        if pdf_reader.is_encrypted:
-            raise HTTPException(status_code=400, detail="Cannot process encrypted PDF")
-
+        # Extract text based on file type
         text_content = ""
-        for page in pdf_reader.pages:
-            text_content += page.extract_text()
+        if file_ext == '.pdf':
+            # Process PDF file
+            pdf_reader = PyPDF2.PdfReader(io.BytesIO(data))
+            
+            if pdf_reader.is_encrypted:
+                raise HTTPException(status_code=400, detail="Cannot process encrypted PDF")
+
+            for page in pdf_reader.pages:
+                text_content += page.extract_text()
+            
+            logger.info("Successfully extracted text from PDF")
+        else:
+            # Process image file
+            logger.info(f"Processing image file: {file_ext}")
+            text_content = extract_text_from_image(str(save_to), 
+                                                  "Extract all text from this medical report image in detail")
+            logger.info("Successfully extracted text from image")
         
-        logger.info("Successfully extracted text from PDF")
-        
+        # Analyze the extracted text
         analysis = await analyze_medical_text(text_content)
         
         return {
@@ -200,4 +221,4 @@ async def upload_report(file_upload: UploadFile):
 
     except Exception as e:
         logger.error(f"Error processing file: {str(e)}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) 
