@@ -174,7 +174,7 @@ const MedicalRecommendation = () => {
     setExcelError(null);
 
     try {
-      const response = await fetch("http://https://health-vault-3lre.onrender.com/upload-excel", {
+      const response = await fetch("https://health-vault-3lre.onrender.com/upload-excel", {
         method: "POST",
         body: formData,
       });
