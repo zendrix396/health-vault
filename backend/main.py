@@ -22,7 +22,7 @@ SUPPORTED_IMAGE_EXTENSIONS = ('.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp')
 app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "http://127.0.0.1:5173", "https://health-vault-3lre.onrender.com", "https://health-vault-1.onrender.com/"],
+    allow_origins=["http://localhost:5173", "http://127.0.0.1:5173", "https://health-vault-3lre.onrender.com", "https://health-vault-1.onrender.com"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -221,4 +221,5 @@ async def upload_report(file_upload: UploadFile):
 
     except Exception as e:
         logger.error(f"Error processing file: {str(e)}")
-        raise HTTPException(status_code=500, detail=str(e)) 
+        raise HTTPException(status_code=500, detail=str(e))
+
