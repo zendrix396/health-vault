@@ -1,7 +1,7 @@
 # MediAI - Medical Report Analysis & Prediction System
 
 ## Live Demo (frontend)
-[MediAI Website]([https://healthhackverse.netlify.app](https://health-vault-1.onrender.com/))
+[MediAI Website](https://health-vault-1.onrender.com/)
 [Demo Video](https://youtu.be/_UvV3BKg62E)
 
 ## Overview
