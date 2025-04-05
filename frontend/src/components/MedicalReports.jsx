@@ -247,7 +247,7 @@ const MedicalReports = () => {
     setError(null);
 
     try {
-      const response = await fetch("http://health-vault-3lre.onrender.com/upload", {
+      const response = await fetch("https://health-vault-3lre.onrender.com/upload", {
         method: "POST",
         body: formData,
       });
