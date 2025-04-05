@@ -4,7 +4,7 @@ from pathlib import Path
 import PyPDF2
 import io
 import logging
-from llm import query_claude
+from llm import query_gemini
 import re, json
 from medical_recommender import AdvancedMedicalPredictor
 from medical_predictor import MedicalPredictor, load_training_data
@@ -43,7 +43,7 @@ async def analyze_medical_text(text):
     query = f"Analyze this medical report and return only the JSON response:\n\n{text}"
     
     try:
-        raw_analysis = query_claude(query, system_prompt)
+        raw_analysis = query_gemini(query, system_prompt)
         logger.info(f"Raw LLM response: {raw_analysis}")  # Log the raw response
         
         # Try different regex patterns
