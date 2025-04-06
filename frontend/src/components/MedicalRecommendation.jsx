@@ -166,7 +166,9 @@ const MedicalRecommendation = () => {
 
     try {
 
+
         const response = await fetch('https://health-vault-3lre.onrender.com/predict-medical', {
+
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -211,7 +213,9 @@ const MedicalRecommendation = () => {
 
     try {
 
+
         const response = await fetch("https://health-vault-3lre.onrender.com/upload-excel", {
+
         method: "POST",
         body: formData,
       });
