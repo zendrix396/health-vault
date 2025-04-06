@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   FaHeartbeat,
@@ -9,18 +9,69 @@ import {
   FaSpinner,
   FaTimesCircle,
   FaFileAlt,
-  FaArrowRight
+  FaImage,
 } from "react-icons/fa";
 
+// Add manga-style CSS classes
+const mangaStyles = `
+  .manga-border {
+    border: 2px solid black !important;
+    box-shadow: 4px 4px 0 rgba(0,0,0,0.9) !important;
+  }
+  
+  .manga-text {
+    font-family: 'Comic Sans MS', 'Bangers', sans-serif !important;
+    letter-spacing: 0.5px !important;
+    transform: rotate(-1deg) !important;
+  }
+  
+  .manga-fade-in {
+    animation: fadeIn 0.5s ease-in-out !important;
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  @media (max-width: 768px) {
+    .manga-text {
+      font-size: 0.95em !important;
+    }
+    
+    .report-section-title {
+      font-size: 1.5rem !important;
+    }
+    
+    .report-section {
+      padding-left: 0.5rem !important;
+      padding-right: 0.5rem !important;
+    }
+  }
+  
+  /* For smoother scrolling */
+  .smooth-scroll {
+    scroll-behavior: smooth;
+    scroll-padding-top: 6rem;
+  }
+`;
+
+// Add styling to head
+if (typeof document !== 'undefined') {
+  const styleElement = document.createElement('style');
+  styleElement.textContent = mangaStyles;
+  document.head.appendChild(styleElement);
+}
+
 const GlassCard = ({ children, className = "" }) => (
-  <div className={`backdrop-blur-lg bg-black/40 rounded-xl shadow-lg ${className}`}>
+  <div className={`backdrop-blur-lg bg-white/90 rounded-none shadow-lg manga-border ${className}`}>
     {children}
   </div>
 );
 
 const BlurryBackground = () => (
   <div className="fixed inset-0 -z-10 overflow-hidden">
-    <div className="absolute inset-0 bg-gradient-to-br from-gray-950 via-gray-900 to-black"></div>
+    <div className="absolute inset-0 bg-gray-100"></div>
     <motion.div
       animate={{
         scale: [1, 1.2, 1],
@@ -44,43 +95,57 @@ const BlurryBackground = () => (
   </div>
 );
 
-const ReportSection = ({ title, icon, children }) => (
-  <motion.div
-    className="min-h-screen snap-start p-8"
-    initial={{ opacity: 0, y: 50 }}
-    whileInView={{ opacity: 1, y: 0 }}
-    viewport={{ once: true }}
-  >
-    <GlassCard className="p-6">
-      <div className="flex items-center mb-6">
-        {icon}
-        <h2 className="text-2xl font-bold ml-4 text-white">{title}</h2>
-      </div>
-      {children}
-    </GlassCard>
-  </motion.div>
-);
+const ReportSection = ({ title, icon, children, id }) => {
+  // Track if this section has been seen
+  const [hasAnimated, setHasAnimated] = useState(false);
+  const sectionRef = useRef(null);
+
+  return (
+    <motion.div
+      id={id}
+      ref={sectionRef}
+      className="min-h-screen snap-start p-4 md:p-8 report-section mt-16"
+      initial={{ opacity: 0, y: 50 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      onAnimationComplete={() => setHasAnimated(true)}
+    >
+      <GlassCard className="p-4 md:p-6 manga-fade-in">
+        <div className="sticky top-20 bg-white/90 z-10 py-4 -mt-4 -mx-4 px-4 flex items-center mb-6 manga-border border-t-0 border-x-0">
+          {icon}
+          <h2 className="text-xl md:text-2xl font-black ml-4 text-black manga-text transform -rotate-2 report-section-title">{title}</h2>
+        </div>
+        <div className="mt-8">
+          {children}
+        </div>
+      </GlassCard>
+    </motion.div>
+  );
+};
 
 const FileUploadSection = ({ onFileUpload, loading, error, uploadedFile }) => (
-  <GlassCard className="p-6 mb-8">
+  <GlassCard className="p-4 md:p-6 mb-8 manga-fade-in">
     <div className="relative">
       <input
         type="file"
-        accept=".pdf"
+        accept=".pdf,.jpg,.jpeg,.png,.gif,.bmp,.webp"
         onChange={onFileUpload}
         className="hidden"
         id="file-upload"
       />
       <label
         htmlFor="file-upload"
-        className="flex flex-col items-center justify-center p-8 border-2 border-dashed border-gray-600 rounded-lg cursor-pointer
-                 hover:border-blue-500 transition-colors duration-300"
+        className="flex flex-col items-center justify-center p-4 md:p-8 border-2 border-dashed border-black rounded-none cursor-pointer
+                 hover:border-blue-500 transition-colors duration-300 manga-border"
       >
-        <FaFileUpload className="text-4xl text-blue-400 mb-4" />
-        <span className="text-gray-300 text-lg mb-2">
+        <div className="flex flex-row items-center justify-center mb-4 space-x-4">
+          <FaFileUpload className="text-3xl md:text-4xl text-black transform -rotate-6" />
+          <FaImage className="text-3xl md:text-4xl text-black transform rotate-6" />
+        </div>
+        <span className="text-black text-base md:text-lg mb-2 manga-text font-bold text-center">
           Drop your medical report here or click to browse
         </span>
-        <span className="text-gray-500 text-sm">Supports PDF files only</span>
+        <span className="text-gray-700 text-xs md:text-sm manga-text text-center">Supports PDF and image files (JPEG, PNG, GIF, BMP, WebP)</span>
       </label>
     </div>
 
@@ -90,10 +155,10 @@ const FileUploadSection = ({ onFileUpload, loading, error, uploadedFile }) => (
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0 }}
-          className="mt-4 p-4 bg-red-500/20 border border-red-500/50 rounded-lg flex items-center text-red-400"
+          className="mt-4 p-4 bg-red-100 manga-border flex items-center text-red-600 manga-text font-bold"
         >
-          <FaTimesCircle className="mr-2" />
-          {error}
+          <FaTimesCircle className="mr-2 flex-shrink-0" />
+          <span className="text-sm md:text-base">{error}</span>
         </motion.div>
       )}
 
@@ -102,10 +167,10 @@ const FileUploadSection = ({ onFileUpload, loading, error, uploadedFile }) => (
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="mt-4 p-4 bg-blue-500/20 border border-blue-500/50 rounded-lg flex items-center justify-center text-blue-400"
+          className="mt-4 p-4 bg-blue-100 manga-border flex items-center justify-center text-black manga-text font-bold"
         >
-          <FaSpinner className="animate-spin mr-2" />
-          Processing your document...
+          <FaSpinner className="animate-spin mr-2 flex-shrink-0" />
+          <span className="text-sm md:text-base">Processing your document...</span>
         </motion.div>
       )}
 
@@ -114,97 +179,120 @@ const FileUploadSection = ({ onFileUpload, loading, error, uploadedFile }) => (
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="mt-4 p-4 bg-green-500/20 border border-green-500/50 rounded-lg flex items-center text-green-400"
+          className="mt-4 p-4 bg-green-100 manga-border flex items-center text-black manga-text font-bold"
         >
-          <FaFileAlt className="mr-2" />
-          Successfully uploaded: {uploadedFile}
+          <FaFileAlt className="mr-2 flex-shrink-0" />
+          <span className="text-sm md:text-base truncate">Successfully uploaded: {uploadedFile}</span>
         </motion.div>
       )}
     </AnimatePresence>
   </GlassCard>
 );
+
 const MedicalReport = ({ analysis }) => {
   const analysisData = typeof analysis === 'string' ? JSON.parse(analysis) : analysis;
+  const [animatedSections, setAnimatedSections] = useState({
+    findings: false,
+    terms: false,
+    recommendations: false
+  });
 
   return (
-    <div className="snap-y snap-mandatory h-screen overflow-y-scroll">
+    <div className="snap-y snap-mandatory h-screen overflow-y-scroll smooth-scroll">
       <ReportSection
+        id="summary-section"
         title="Summary"
-        icon={<FaClipboardList className="text-3xl text-blue-400" />}
+        icon={<FaClipboardList className="text-2xl md:text-3xl text-black transform -rotate-12" />}
       >
         <motion.div
-          className="bg-blue-500/10 border border-blue-500/20 rounded-lg p-6"
+          className="bg-blue-100 manga-border p-4 md:p-6 w-full"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.2 }}
         >
-          <p className="text-lg leading-relaxed text-gray-300">
+          <p className="text-base md:text-lg leading-relaxed text-black manga-text font-bold">
             {analysisData.summary}
           </p>
         </motion.div>
       </ReportSection>
 
       <ReportSection
+        id="findings-section"
         title="Key Findings"
-        icon={<FaHeartbeat className="text-3xl text-red-400" />}
+        icon={<FaHeartbeat className="text-2xl md:text-3xl text-black transform -rotate-12" />}
       >
-        <div className="space-y-4">
+        <div className="space-y-3 md:space-y-4">
           {analysisData.findings.map((finding, index) => (
             <motion.div
               key={index}
-              className="flex items-start p-4 bg-red-500/10 border border-red-500/20 rounded-lg"
+              className="flex items-start p-3 md:p-4 bg-red-100 manga-border"
               initial={{ x: -50, opacity: 0 }}
               whileInView={{ x: 0, opacity: 1 }}
+              viewport={{ once: true }}
               transition={{ delay: index * 0.1 }}
             >
-              <span className="text-2xl mr-4">{finding.emoji}</span>
-              <p className="text-gray-300">{finding.text}</p>
+              <span className="text-xl md:text-2xl mr-3 md:mr-4 transform -rotate-6 flex-shrink-0">{finding.emoji}</span>
+              <p className="text-black manga-text font-bold text-sm md:text-base">
+                {finding.text}
+              </p>
             </motion.div>
           ))}
         </div>
       </ReportSection>
 
       <ReportSection
+        id="terms-section"
         title="Medical Terms"
-        icon={<FaBookMedical className="text-3xl text-green-400" />}
+        icon={<FaBookMedical className="text-2xl md:text-3xl text-black transform -rotate-12" />}
       >
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
           {analysisData.terms.map((term, index) => (
             <motion.div
               key={index}
-              className="p-4 bg-green-500/10 border border-green-500/20 rounded-lg"
+              className="p-3 md:p-4 bg-green-100 manga-border"
               initial={{ scale: 0.9, opacity: 0 }}
               whileInView={{ scale: 1, opacity: 1 }}
+              viewport={{ once: true }}
               transition={{ delay: index * 0.1 }}
-              whileHover={{ scale: 1.02 }}
+              whileHover={{ scale: 1.02, rotate: -1 }}
             >
-              <h3 className="font-bold text-lg text-green-400 mb-2">{term.term}</h3>
-              <p className="text-gray-300">{term.explanation}</p>
+              <h3 className="font-black text-base md:text-lg text-black mb-1 md:mb-2 manga-text transform -rotate-2">
+                {term.term}
+              </h3>
+              <p className="text-black manga-text font-bold text-sm md:text-base">
+                {term.explanation}
+              </p>
             </motion.div>
           ))}
         </div>
       </ReportSection>
 
       <ReportSection
+        id="recommendations-section"
         title="Recommendations"
-        icon={<FaCheckCircle className="text-3xl text-purple-400" />}
+        icon={<FaCheckCircle className="text-2xl md:text-3xl text-black transform -rotate-12" />}
       >
-        <div className="space-y-4">
+        <div className="space-y-3 md:space-y-4">
           {analysisData.recommendations.map((rec, index) => (
             <motion.div
               key={index}
-              className="flex items-start p-4 bg-purple-500/10 border border-purple-500/20 rounded-lg"
+              className="flex items-start p-3 md:p-4 bg-purple-100 manga-border"
               initial={{ y: 50, opacity: 0 }}
               whileInView={{ y: 0, opacity: 1 }}
+              viewport={{ once: true }}
               transition={{ delay: index * 0.1 }}
-              whileHover={{ scale: 1.02 }}
+              whileHover={{ scale: 1.01, rotate: -1 }}
             >
-              <div className="flex-shrink-0 w-12 h-12 bg-purple-500/20 rounded-full flex items-center justify-center mr-4">
-                <span className="text-2xl">{rec.emoji}</span>
+              <div className="flex-shrink-0 w-10 h-10 md:w-12 md:h-12 manga-border rounded-none flex items-center justify-center mr-3 md:mr-4 bg-white">
+                <span className="text-xl md:text-2xl transform -rotate-6">{rec.emoji}</span>
               </div>
               <div>
-                <h4 className="font-bold text-purple-400 mb-1">{rec.title}</h4>
-                <p className="text-gray-300">{rec.description}</p>
+                <h4 className="font-black text-base md:text-lg text-black mb-1 manga-text transform -rotate-2">
+                  {rec.title}
+                </h4>
+                <p className="text-black manga-text font-bold text-sm md:text-base">
+                  {rec.description}
+                </p>
               </div>
             </motion.div>
           ))}
@@ -226,8 +314,13 @@ const MedicalReports = () => {
     const file = event.target.files[0];
     if (!file) return;
 
-    if (!file.type.includes("pdf")) {
-      setError("Please upload a PDF file");
+    // Check if file is a PDF or supported image type
+    const validImageTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/bmp', 'image/webp'];
+    const isPdf = file.type === 'application/pdf';
+    const isImage = validImageTypes.includes(file.type);
+
+    if (!isPdf && !isImage) {
+      setError("Please upload a PDF or supported image file (JPEG, PNG, GIF, BMP, WebP)");
       return;
     }
 
@@ -238,7 +331,7 @@ const MedicalReports = () => {
     setError(null);
 
     try {
-      const response = await fetch("http://localhost:8000/upload", {
+      const response = await fetch("https://health-vault-3lre.onrender.com/upload", {
         method: "POST",
         body: formData,
       });
@@ -265,14 +358,21 @@ const MedicalReports = () => {
   };
 
   return (
-    <div className="min-h-screen text-white relative snap-y snap-mandatory h-screen overflow-y-scroll scroll-styled">
+    <div className="min-h-screen text-black relative snap-y snap-mandatory h-screen overflow-y-scroll scroll-styled bg-gray-100">
       <BlurryBackground />
       
-      <div className="max-w-4xl mx-auto p-6">
+      <div className="w-full max-w-4xl mx-auto p-3 md:p-6 pt-16 md:pt-16">
+        <div className="flex items-center justify-center mb-6 md:mb-8">
+          <FaBookMedical className="h-12 w-12 md:h-16 md:w-16 text-black transform -rotate-12" />
+        </div>
+        <h2 className="manga-text text-2xl md:text-3xl font-black text-center text-black mb-6 md:mb-8 transform -rotate-2">
+          Medical Report Analyzer
+        </h2>
+        
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="space-y-6"
+          className="space-y-4 md:space-y-6"
         >
           <FileUploadSection
             onFileUpload={handleFileUpload}
@@ -287,6 +387,7 @@ const MedicalReports = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
+                className="manga-fade-in"
               >
                 <MedicalReport analysis={analysis} />
               </motion.div>
@@ -294,7 +395,8 @@ const MedicalReports = () => {
           </AnimatePresence>
         </motion.div>
       </div>
-    </div>
+
+   </div>
   );
 };
 
