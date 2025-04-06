@@ -47,12 +47,29 @@ const mangaStyles = `
       padding-left: 0.5rem !important;
       padding-right: 0.5rem !important;
     }
+    
+    /* Disable smooth scrolling on mobile */
+    .mobile-scroll {
+      scroll-behavior: auto !important;
+    }
+    
+    /* Non-sticky section headers on mobile */
+    .section-header {
+      position: relative !important;
+      top: auto !important;
+      margin-top: 0 !important;
+      margin-bottom: 1.5rem !important;
+      padding-top: 1rem !important;
+      padding-bottom: 1rem !important;
+    }
   }
   
-  /* For smoother scrolling */
-  .smooth-scroll {
-    scroll-behavior: smooth;
-    scroll-padding-top: 6rem;
+  /* For smoother scrolling on desktop only */
+  @media (min-width: 769px) {
+    .desktop-scroll {
+      scroll-behavior: smooth;
+      scroll-padding-top: 6rem;
+    }
   }
 `;
 
@@ -99,23 +116,24 @@ const ReportSection = ({ title, icon, children, id }) => {
   // Track if this section has been seen
   const [hasAnimated, setHasAnimated] = useState(false);
   const sectionRef = useRef(null);
+  const isMobile = typeof window !== 'undefined' ? window.innerWidth <= 768 : false;
 
   return (
     <motion.div
       id={id}
       ref={sectionRef}
-      className="min-h-screen snap-start p-4 md:p-8 report-section mt-16"
+      className={`min-h-screen p-4 md:p-8 report-section mt-8 md:mt-16 ${isMobile ? "snap-start" : ""}`}
       initial={{ opacity: 0, y: 50 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       onAnimationComplete={() => setHasAnimated(true)}
     >
       <GlassCard className="p-4 md:p-6 manga-fade-in">
-        <div className="sticky top-20 bg-white/90 z-10 py-4 -mt-4 -mx-4 px-4 flex items-center mb-6 manga-border border-t-0 border-x-0">
+        <div className="md:sticky section-header bg-white/90 z-10 py-4 px-4 flex items-center mb-6 manga-border border-t-0 border-x-0 md:-mt-4 md:-mx-4">
           {icon}
           <h2 className="text-xl md:text-2xl font-black ml-4 text-black manga-text transform -rotate-2 report-section-title">{title}</h2>
         </div>
-        <div className="mt-8">
+        <div className="mt-4 md:mt-8">
           {children}
         </div>
       </GlassCard>
@@ -196,9 +214,10 @@ const MedicalReport = ({ analysis }) => {
     terms: false,
     recommendations: false
   });
+  const isMobile = typeof window !== 'undefined' ? window.innerWidth <= 768 : false;
 
   return (
-    <div className="snap-y snap-mandatory h-screen overflow-y-scroll smooth-scroll">
+    <div className={`h-screen overflow-y-scroll ${isMobile ? "mobile-scroll" : "desktop-scroll md:snap-y md:snap-mandatory"}`}>
       <ReportSection
         id="summary-section"
         title="Summary"
@@ -309,6 +328,28 @@ const MedicalReports = () => {
   const [uploadedFile, setUploadedFile] = useState(null);
   const [pdfText, setPdfText] = useState("");
   const [analysis, setAnalysis] = useState(null);
+  const scrollContainerRef = useRef(null);
+  const summaryRef = useRef(null);
+
+  // Handle auto-scrolling when analysis is complete
+  useEffect(() => {
+    if (analysis && !loading) {
+      setTimeout(() => {
+        const summarySection = document.getElementById('summary-section');
+        if (summarySection) {
+          const isMobile = window.innerWidth <= 768;
+          // Use different scrolling methods based on device
+          if (isMobile) {
+            // Simple scrolling for mobile
+            summarySection.scrollIntoView();
+          } else {
+            // Smooth scrolling for desktop
+            summarySection.scrollIntoView({ behavior: 'smooth' });
+          }
+        }
+      }, 500); // Short delay to allow rendering
+    }
+  }, [analysis, loading]);
 
   const handleFileUpload = async (event) => {
     const file = event.target.files[0];
@@ -358,7 +399,7 @@ const MedicalReports = () => {
   };
 
   return (
-    <div className="min-h-screen text-black relative snap-y snap-mandatory h-screen overflow-y-scroll scroll-styled bg-gray-100">
+    <div className="min-h-screen text-black relative h-screen overflow-y-scroll bg-gray-100" ref={scrollContainerRef}>
       <BlurryBackground />
       
       <div className="w-full max-w-4xl mx-auto p-3 md:p-6 pt-16 md:pt-16">
@@ -388,6 +429,7 @@ const MedicalReports = () => {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
                 className="manga-fade-in"
+                ref={summaryRef}
               >
                 <MedicalReport analysis={analysis} />
               </motion.div>
@@ -400,4 +442,4 @@ const MedicalReports = () => {
   );
 };
 
-export default MedicalReports;
+export default MedicalReports; 
