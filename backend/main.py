@@ -6,10 +6,9 @@ import io
 import logging
 
 import sys
-from llm import query_gemini
+from llm import query_gemini, extract_text_from_image 
 
 import re, json
-import joblib
 import os
 from data_cleaner import clean_excel_data, update_json_data
 import pandas as pd
