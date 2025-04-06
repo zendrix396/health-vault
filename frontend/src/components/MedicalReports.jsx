@@ -9,7 +9,9 @@ import {
   FaSpinner,
   FaTimesCircle,
   FaFileAlt,
-  FaImage,
+
+  FaArrowRight,
+  FaImage
 } from "react-icons/fa";
 
 // Add manga-style CSS classes
@@ -157,6 +159,7 @@ const FileUploadSection = ({ onFileUpload, loading, error, uploadedFile }) => (
                  hover:border-blue-500 transition-colors duration-300 manga-border"
       >
         <div className="flex flex-row items-center justify-center mb-4 space-x-4">
+
           <FaFileUpload className="text-3xl md:text-4xl text-black transform -rotate-6" />
           <FaImage className="text-3xl md:text-4xl text-black transform rotate-6" />
         </div>
@@ -164,6 +167,7 @@ const FileUploadSection = ({ onFileUpload, loading, error, uploadedFile }) => (
           Drop your medical report here or click to browse
         </span>
         <span className="text-gray-700 text-xs md:text-sm manga-text text-center">Supports PDF and image files (JPEG, PNG, GIF, BMP, WebP)</span>
+
       </label>
     </div>
 
@@ -441,5 +445,6 @@ const MedicalReports = () => {
    </div>
   );
 };
+
 
 export default MedicalReports; 
