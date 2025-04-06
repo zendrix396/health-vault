@@ -1,44 +1,75 @@
 import { motion } from "framer-motion";
-import { FaUserMd, FaLock, FaClock, FaTools } from "react-icons/fa";
+import { FaUserMd, FaLock, FaClock, FaTools, FaMoon } from "react-icons/fa";
+
+// Add manga-style CSS classes
+const mangaStyles = `
+  .manga-border {
+    border: 2px solid black !important;
+    box-shadow: 4px 4px 0 rgba(0,0,0,0.9) !important;
+  }
+  
+  .manga-text {
+    font-family: 'Comic Sans MS', 'Bangers', sans-serif !important;
+    letter-spacing: 0.5px !important;
+    transform: rotate(-1deg) !important;
+  }
+  
+  .manga-fade-in {
+    animation: fadeIn 0.5s ease-in-out !important;
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+`;
+
+// Add styling to head
+if (typeof document !== 'undefined') {
+  const styleElement = document.createElement('style');
+  styleElement.textContent = mangaStyles;
+  document.head.appendChild(styleElement);
+}
 
 const FeatureCard = ({ icon, title, description }) => (
   <motion.div
     initial={{ opacity: 0, y: 20 }}
     animate={{ opacity: 1, y: 0 }}
-    className="bg-[#0A0F1C]/80 border border-white/10 rounded-xl p-6 shadow-lg"
+    className="bg-white/90 border-black rounded-none p-6 shadow-lg manga-border manga-fade-in"
   >
     <div className="flex items-center mb-4">
       {icon}
-      <h3 className="text-xl font-semibold ml-3 text-gray-200">{title}</h3>
+      <h3 className="text-xl font-black ml-3 text-black manga-text transform -rotate-2">{title}</h3>
+      <FaMoon className="h-4 w-4 text-black absolute translate-x-32 -translate-y-4" />
     </div>
-    <p className="text-gray-400">{description}</p>
+    <p className="text-black manga-text font-bold">{description}</p>
   </motion.div>
 );
 
 const DoctorPortal = () => {
   const features = [
     {
-      icon: <FaLock className="text-3xl text-purple-400" />,
+      icon: <FaLock className="text-3xl text-black transform -rotate-12" />,
       title: "Secure Access",
       description: "Protected healthcare professional portal with encrypted data transmission"
     },
     {
-      icon: <FaTools className="text-3xl text-blue-400" />,
+      icon: <FaTools className="text-3xl text-black transform -rotate-12" />,
       title: "Advanced Tools",
       description: "Specialized diagnostic and analysis tools for medical professionals"
     },
     {
-      icon: <FaClock className="text-3xl text-green-400" />,
+      icon: <FaClock className="text-3xl text-black transform -rotate-12" />,
       title: "Coming Soon",
       description: "We're working on bringing you more powerful features for patient care"
     }
   ];
 
   return (
-    <div className="min-h-screen bg-[#0A0F1C] text-white relative overflow-hidden">
+    <div className="min-h-screen bg-gray-100 text-black relative overflow-hidden">
       {/* Background with reduced blur */}
       <div className="fixed inset-0 -z-10 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-[#0A0F1C] via-[#0A0F1C] to-[#0A0F1C]"></div>
+        <div className="absolute inset-0 bg-gray-100"></div>
         <motion.div
           animate={{
             scale: [1, 1.2, 1],
@@ -49,7 +80,7 @@ const DoctorPortal = () => {
             repeat: Infinity,
             ease: "linear"
           }}
-          className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full bg-purple-500/5 blur-[80px]"
+          className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full bg-purple-500/10 blur-[80px]"
         />
         <motion.div
           animate={{
@@ -61,7 +92,7 @@ const DoctorPortal = () => {
             repeat: Infinity,
             ease: "linear"
           }}
-          className="absolute bottom-1/4 right-1/4 w-96 h-96 rounded-full bg-blue-500/5 blur-[80px]"
+          className="absolute bottom-1/4 right-1/4 w-96 h-96 rounded-full bg-blue-500/10 blur-[80px]"
         />
       </div>
 
@@ -74,13 +105,14 @@ const DoctorPortal = () => {
           className="text-center mb-16"
         >
           <div className="flex items-center justify-center mb-6">
-            <FaUserMd className="text-6xl text-purple-400 mr-4" />
-            <h1 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-blue-400">
+            <FaUserMd className="text-6xl text-black transform -rotate-12 mr-4" />
+            <FaMoon className="h-8 w-8 text-black absolute translate-x-8 -translate-y-8" />
+            <h1 className="text-4xl font-black text-black manga-text transform -rotate-2">
               Doctor Portal
             </h1>
           </div>
           
-          <p className="text-xl text-gray-300 max-w-2xl mx-auto">
+          <p className="text-xl text-black max-w-2xl mx-auto manga-text font-bold">
             A specialized platform for healthcare professionals with advanced tools and insights
           </p>
         </motion.div>
@@ -90,12 +122,13 @@ const DoctorPortal = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.3 }}
-          className="bg-[#0A0F1C]/80 border border-white/10 rounded-xl p-8 shadow-lg max-w-3xl mx-auto mb-16"
+          className="bg-white/90 border-black rounded-none p-8 shadow-lg max-w-3xl mx-auto mb-16 manga-border manga-fade-in"
         >
-          <h2 className="text-2xl font-semibold mb-4 text-purple-400">
+          <h2 className="text-2xl font-black mb-4 text-black manga-text transform -rotate-2">
             Portal Access Coming Soon
           </h2>
-          <p className="text-gray-300 text-lg">
+          <FaMoon className="h-6 w-6 text-black absolute right-8 top-8" />
+          <p className="text-black text-lg manga-text font-bold">
             We're currently developing a comprehensive suite of tools for medical professionals. 
             Register your interest to be notified when we launch.
           </p>
@@ -120,19 +153,20 @@ const DoctorPortal = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.6 }}
-          className="mt-16 max-w-md mx-auto"
+          className="mt-16 max-w-md mx-auto manga-fade-in"
         >
-          <div className="bg-[#0A0F1C]/80 border border-white/10 rounded-xl p-8 shadow-lg">
-            <h3 className="text-xl font-semibold mb-6 text-center text-gray-200">
+          <div className="bg-white/90 border-black rounded-none p-8 shadow-lg manga-border">
+            <h3 className="text-xl font-black mb-6 text-center text-black manga-text transform -rotate-2">
               Register Your Interest
             </h3>
+            <FaMoon className="h-6 w-6 text-black absolute right-8 top-8" />
             <form className="space-y-4">
               <input
                 type="email"
                 placeholder="Professional Email"
-                className="w-full p-3 rounded-lg bg-black/20 border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:border-purple-400"
+                className="w-full p-3 rounded-none bg-white manga-border text-black placeholder-gray-500 focus:outline-none focus:border-black"
               />
-              <select className="w-full p-3 rounded-lg bg-black/20 border border-white/10 text-gray-400 focus:outline-none focus:border-purple-400">
+              <select className="w-full p-3 rounded-none bg-white manga-border text-black focus:outline-none focus:border-black manga-text font-bold">
                 <option value="">Select Specialization</option>
                 <option value="general">General Practice</option>
                 <option value="cardiology">Cardiology</option>
@@ -140,9 +174,9 @@ const DoctorPortal = () => {
                 <option value="other">Other</option>
               </select>
               <motion.button
-                whileHover={{ scale: 1.02 }}
+                whileHover={{ scale: 1.02, rotate: -2 }}
                 whileTap={{ scale: 0.98 }}
-                className="w-full py-3 rounded-lg bg-gradient-to-r from-purple-500 to-blue-500 text-white font-semibold hover:from-purple-600 hover:to-blue-600 transition-all duration-300"
+                className="w-full py-3 rounded-none bg-black text-white font-black manga-border manga-text transition-all duration-300"
               >
                 Notify Me
               </motion.button>
