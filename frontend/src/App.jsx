@@ -4,8 +4,6 @@ import Navbar from "./components/Navbar";
 import HomePage from "./components/HomePage";
 import MedicalReports from "./components/MedicalReports";
 import MedicalRecommendation from './components/MedicalRecommendation';
-import PatientCare from './components/PatientCare';
-import DoctorPortal from "./components/DoctorPortal"
 function App() {
   const [currentPage, setCurrentPage] = useState("home");
   const [isDarkMode, setIsDarkMode] = useState(true);
@@ -16,10 +14,6 @@ function App() {
         return <MedicalReports />;
       case "Medicine Recommendations":
         return <MedicalRecommendation />;
-      case "Doctor Portal":
-        return <DoctorPortal/>
-      case "Patient Care":
-        return <PatientCare/>
       case "home":
       default:
         return <HomePage setCurrentPage={setCurrentPage} />;
