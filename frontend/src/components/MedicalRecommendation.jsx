@@ -167,7 +167,7 @@ const MedicalRecommendation = () => {
     try {
 
 
-        const response = await fetch('https://health-vault-3lre.onrender.com/predict-medical', {
+        const response = await fetch('http://localhost:8000/predict-medical', {
 
         method: 'POST',
         headers: {

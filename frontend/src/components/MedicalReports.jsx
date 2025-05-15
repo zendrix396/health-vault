@@ -413,7 +413,7 @@ const MedicalReports = () => {
       // Store the file name before sending to server
       setUploadedFile(file.name);
       
-      const response = await fetch("https://health-vault-3lre.onrender.com/upload", {
+      const response = await fetch("http://localhost:8000/upload", {
         method: "POST",
         body: formData,
       });
