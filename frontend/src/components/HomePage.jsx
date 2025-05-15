@@ -144,7 +144,7 @@ const HomePage = ({ setCurrentPage }) => {
             <FaStethoscope className="h-16 w-16 text-black transform -rotate-12" />
           </motion.div>
           <motion.h1 className="text-6xl font-black text-center mb-6 text-black manga-text transform -rotate-2">
-            Welcome to MediAI
+            Welcome to MedMosaic
           </motion.h1>
           <motion.p className="text-xl text-center mb-12 text-black manga-text font-bold">
             Your AI-powered medical assistant for smarter healthcare decisions
@@ -196,7 +196,7 @@ const HomePage = ({ setCurrentPage }) => {
             >
               <GlassCard className="p-8 max-w-md w-full">
                 <h2 className="text-2xl font-black mb-6 manga-text transform -rotate-2">
-                  Login to MediAI
+                  Login to MedMosaic
                 </h2>
                 <input
                   type="email"

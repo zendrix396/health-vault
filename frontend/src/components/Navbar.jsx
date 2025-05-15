@@ -81,7 +81,7 @@ const LoginModal = ({ isOpen, onClose }) => (
         >
           <GlassCard className="p-8">
             <div className="flex justify-between items-center mb-6">
-              <h2 className="text-2xl font-black text-black manga-text">Login to MediAI</h2>
+              <h2 className="text-2xl font-black text-black manga-text">Login to MedMosaic</h2>
               <motion.button
                 whileHover={{ scale: 1.1, rotate: 10 }}
                 whileTap={{ scale: 0.9 }}
@@ -173,7 +173,7 @@ const Navbar = ({ currentPage, setCurrentPage, isDarkMode, setIsDarkMode }) => {
               onClick={() => setCurrentPage('home')}
             >
               <FaStethoscope className="text-black text-3xl transform -rotate-12" />
-              <span className="ml-2 text-xl font-black text-black manga-text">MediAI</span>
+              <span className="ml-2 text-xl font-black text-black manga-text">MedMosaic</span>
             </motion.div>
 
             {/* Navigation Links */}
