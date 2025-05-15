@@ -29,10 +29,11 @@ try:
                 ),
             ]
             
+            # Remove response_mime_type parameter as it's causing errors
             response = client.models.generate_content(
                 model=model,
                 contents=contents,
-                response_mime_type="application/json",
+                # Don't use response_mime_type parameter as it's not supported in all versions
             )
             
             response_text = response.text
@@ -88,7 +89,9 @@ try:
             return f"Error processing image: {str(e)}"
 
 # If the new client isn't available, fall back to the older library
-except ImportError:
+except (ImportError, AttributeError) as e:
+    # Print debug info about the import error
+    print(f"Falling back to older Google Generative AI library: {str(e)}")
     import google.generativeai as genai
     
     # Flag to indicate which API version we're using
