@@ -107,27 +107,29 @@ async def analyze_medical_text(text):
     
     try:
         raw_analysis = query_gemini(query, system_prompt)
-        logger.info(f"Raw LLM response: {raw_analysis}")  # Log the raw response
-        
-        # Try different regex patterns
-        json_match = re.search(r'({[\s\S]*})', raw_analysis)
-        if json_match:
-            json_str = json_match.group(1)
-            # Validate JSON
-            try:
-                json.loads(json_str)  # Test if it's valid JSON
-                logger.debug("Valid JSON found in response")
-                return json_str
-            except json.JSONDecodeError as e:
-                logger.error(f"Invalid JSON: {e}")
-                return raw_analysis  # Return raw response if JSON is invalid
-        else:
-            logger.error("No JSON found in response")
-            return raw_analysis  # Return raw response if no JSON found
+        logger.info(f"Raw LLM response: {raw_analysis}")
+
+        if raw_analysis.startswith("Error:"):
+            logger.error(f"LLM query failed: {raw_analysis}")
+            raise ValueError(f"LLM query failed: {raw_analysis}")
+
+        # The improved query_gemini should return valid JSON directly
+        try:
+            # Validate that it's proper JSON
+            json.loads(raw_analysis)
+            logger.debug("Valid JSON received from LLM")
+            return raw_analysis
+        except json.JSONDecodeError as e:
+            # If somehow we still get invalid JSON despite our improvements
+            logger.error(f"LLM response was not valid JSON: {e}")
+            raise ValueError("The AI returned a response that wasn't valid JSON format.")
             
+    except ValueError:
+        raise
     except Exception as e:
-        logger.error(f"Error in LLM analysis: {str(e)}")
-        return str(e)
+        logger.error(f"Unexpected error in LLM analysis: {str(e)}")
+        logger.error(traceback.format_exc())
+        raise ValueError(f"Unexpected error during analysis: {str(e)}")
 
 @app.post("/predict-medical")
 async def predict_medical(data: dict):
@@ -370,17 +372,13 @@ async def upload_report(file_upload: UploadFile):
     try:
         logger.info(f"Received file: {file_upload.filename}")
         
-
-        # Get file extension (lowercase) for type checking
         file_ext = Path(file_upload.filename).suffix.lower()
         
-        # Check if file type is supported
         if not (file_ext == '.pdf' or file_ext in SUPPORTED_IMAGE_EXTENSIONS):
             raise HTTPException(
                 status_code=400, 
                 detail=f"Only PDF and image files ({', '.join(SUPPORTED_IMAGE_EXTENSIONS)}) are accepted"
             )
-
         
         data = await file_upload.read()
         logger.info(f"File size: {len(data)} bytes")
@@ -390,42 +388,51 @@ async def upload_report(file_upload: UploadFile):
             f.write(data)
         logger.info(f"File saved to {save_to}")
 
-
-        # Extract text based on file type
         text_content = ""
         if file_ext == '.pdf':
-            # Process PDF file
             pdf_reader = PyPDF2.PdfReader(io.BytesIO(data))
-            
             if pdf_reader.is_encrypted:
                 raise HTTPException(status_code=400, detail="Cannot process encrypted PDF")
-
             for page in pdf_reader.pages:
-                text_content += page.extract_text()
-            
+                text_content += page.extract_text() if page.extract_text() else ""
             logger.info("Successfully extracted text from PDF")
         else:
-            # Process image file
             logger.info(f"Processing image file: {file_ext}")
-            text_content = extract_text_from_image(str(save_to), 
-                                                  "Extract all text from this medical report image in detail")
-            logger.info("Successfully extracted text from image")
+            try:
+                extracted_text = extract_text_from_image(str(save_to), "Extract all text from this medical report image in detail")
+                if extracted_text.startswith("Error processing image:") or extracted_text.startswith("Error:"):
+                    logger.error(f"Failed to extract text from image: {extracted_text}")
+                    raise HTTPException(status_code=500, detail=f"Failed to extract text from image: {extracted_text}")
+                text_content = extracted_text
+                logger.info("Successfully extracted text from image")
+            except Exception as img_extract_err:
+                logger.error(f"Exception during image text extraction: {img_extract_err}")
+                logger.error(traceback.format_exc())
+                raise HTTPException(status_code=500, detail=f"Error extracting text from image: {str(img_extract_err)}")
 
+        if not text_content.strip():
+            logger.warning("Extracted text content is empty.")
+            raise HTTPException(status_code=400, detail="Extracted text content is empty, cannot analyze.")
         
-        # Analyze the extracted text
-        analysis = await analyze_medical_text(text_content)
+        analysis_json_string = await analyze_medical_text(text_content)
         
         return {
             "filename": file_upload.filename,
             "text_content": text_content,
-            "analysis": analysis
+            "analysis": analysis_json_string
         }
 
+    except ValueError as ve:
+        logger.error(f"ValueError during report processing: {str(ve)}")
+        # ValueErrors from analyze_medical_text usually mean client-side correctable issues or LLM processing issues
+        raise HTTPException(status_code=400, detail=str(ve))
+    except HTTPException as he:
+        # Re-raise HTTPExceptions directly
+        raise he
     except Exception as e:
-        logger.error(f"Error processing file: {str(e)}")
-
+        logger.error(f"Unexpected error processing file: {str(e)}")
         logger.error(traceback.format_exc())
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=f"An unexpected server error occurred: {str(e)}")
 
 # Debug route to check model existence
 @app.get("/model-status")

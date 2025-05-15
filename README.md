@@ -1,11 +1,11 @@
-# MediAI - Medical Report Analysis & Prediction System
+# MedMosaic - Medical Report Analysis & Prediction System
 
 ## Live Demo (frontend)
-[MediAI Website](https://health-vault-1.onrender.com/)
+[MedMosaic Website](https://health-vault-1.onrender.com/)
 [Demo Video](https://youtu.be/_UvV3BKg62E)
 
 ## Overview
-MediAI is an advanced medical analysis system that combines machine learning, natural language processing, and data analytics to provide medical report analysis and disease/medicine predictions. The system uses ensemble learning methods and Claude AI for comprehensive medical insights.
+MedMosaic is an advanced medical analysis system that combines machine learning, natural language processing, and data analytics to provide medical report analysis and disease/medicine predictions. The system uses ensemble learning methods and Claude AI for comprehensive medical insights.
 
 ## Features
 

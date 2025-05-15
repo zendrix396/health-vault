@@ -171,9 +171,10 @@ const FileUploadSection = ({ onFileUpload, loading, error, uploadedFile }) => (
       </label>
     </div>
 
-    <AnimatePresence>
+    <AnimatePresence mode="wait">
       {error && (
         <motion.div
+          key="error-message"
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0 }}
@@ -186,6 +187,7 @@ const FileUploadSection = ({ onFileUpload, loading, error, uploadedFile }) => (
 
       {loading && (
         <motion.div
+          key="loading-message"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -196,8 +198,9 @@ const FileUploadSection = ({ onFileUpload, loading, error, uploadedFile }) => (
         </motion.div>
       )}
 
-      {uploadedFile && (
+      {uploadedFile && !loading && !error && (
         <motion.div
+          key="success-message"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -212,7 +215,37 @@ const FileUploadSection = ({ onFileUpload, loading, error, uploadedFile }) => (
 );
 
 const MedicalReport = ({ analysis }) => {
-  const analysisData = typeof analysis === 'string' ? JSON.parse(analysis) : analysis;
+  let analysisData;
+  try {
+    analysisData = typeof analysis === 'string' ? JSON.parse(analysis) : analysis;
+  } catch (error) {
+    // Handle JSON parsing error gracefully
+    return (
+      <div className="p-6 bg-red-100 manga-border">
+        <h3 className="text-lg font-bold text-black manga-text">Error Processing Report</h3>
+        <p className="text-black manga-text font-bold mt-2">
+          There was an error processing the medical report. The server returned an invalid response.
+        </p>
+        <p className="text-black manga-text mt-2">
+          Error details: {typeof analysis === 'string' ? analysis : "Unknown error"}
+        </p>
+      </div>
+    );
+  }
+
+  // Only continue if we have valid analysisData with required structure
+  if (!analysisData || !analysisData.summary || !analysisData.findings || 
+      !analysisData.terms || !analysisData.recommendations) {
+    return (
+      <div className="p-6 bg-yellow-100 manga-border">
+        <h3 className="text-lg font-bold text-black manga-text">Incomplete Analysis</h3>
+        <p className="text-black manga-text font-bold mt-2">
+          The medical report analysis is incomplete or in an unexpected format.
+        </p>
+      </div>
+    );
+  }
+
   const [animatedSections, setAnimatedSections] = useState({
     findings: false,
     terms: false,
@@ -374,29 +407,42 @@ const MedicalReports = () => {
 
     setLoading(true);
     setError(null);
+    setAnalysis(null); // Clear previous analysis
 
     try {
+      // Store the file name before sending to server
+      setUploadedFile(file.name);
+      
       const response = await fetch("https://health-vault-3lre.onrender.com/upload", {
         method: "POST",
         body: formData,
       });
 
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.detail || "Upload failed");
+      let data;
+      try {
+        // Try to parse the response as JSON
+        data = await response.json();
+      } catch (jsonError) {
+        // If parsing fails, throw a meaningful error
+        throw new Error("Failed to parse server response as JSON");
       }
 
-      setUploadedFile(data.filename);
+      if (!response.ok) {
+        // If server returned an error status code
+        throw new Error(data.detail || `Error ${response.status}: ${response.statusText}`);
+      }
+
+      // Check if the data has the expected structure
+      if (!data.analysis) {
+        throw new Error("The server response is missing the analysis data");
+      }
+
       setPdfText(data.text_content);
       setAnalysis(data.analysis);
-      setError(null);
     } catch (error) {
-      console.error("Error uploading file:", error);
-      setError(error.message || "Failed to upload file");
-      setUploadedFile(null);
-      setPdfText("");
-      setAnalysis(null);
+      console.error("Upload error:", error);
+      setError(error.message || "Failed to process your document");
+      setUploadedFile(null); // Clear the uploaded file name on error
     } finally {
       setLoading(false);
     }
@@ -426,9 +472,10 @@ const MedicalReports = () => {
             uploadedFile={uploadedFile}
           />
 
-          <AnimatePresence>
+          <AnimatePresence mode="wait">
             {pdfText && analysis && (
-            <motion.div
+              <motion.div
+                key="analysis-results"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
