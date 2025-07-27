@@ -2,7 +2,7 @@ from google import generativeai as genai
 import base64
 def query_gemini(query, system_prompt="You are Gemini, an AI assistant."):
     # Initialize the Gemini API client
-    genai.configure(api_key="AIzaSyBQsI-tqZ1vsCMJwMKaM1TEQi5czD438Z4")
+    genai.configure(api_key="your api)
     
     # Format the messages
     prompt = f"{system_prompt}\n\n{query}"
@@ -19,7 +19,7 @@ def query_gemini(query, system_prompt="You are Gemini, an AI assistant."):
 
 def extract_text_from_image(image_path, prompt="Extract all text from this image"):
     # Initialize the Gemini API client
-    genai.configure(api_key="AIzaSyBQsI-tqZ1vsCMJwMKaM1TEQi5czD438Z4")
+    genai.configure(api_key="your api")
     
     # Read the image file and convert to base64
     with open(image_path, "rb") as image_file:
