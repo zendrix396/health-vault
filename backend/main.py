@@ -105,29 +105,83 @@ async def analyze_medical_text(text):
 
     query = f"Analyze this medical report and return only the JSON response:\n\n{text}"
     
+    # Default fallback response
+    fallback_response = {
+        "summary": "Unable to analyze the medical report due to processing error. This may be due to missing API configuration or network issues.",
+        "findings": [{"emoji": "⚠️", "text": "Analysis failed - please try again"}],
+        "terms": [{"term": "Error", "explanation": "Unable to process the document"}],
+        "recommendations": [{"emoji": "🔄", "title": "Retry", "description": "Please try uploading the document again"}]
+    }
+    
+    # Mock analysis for testing when API key is not available
+    mock_response = {
+        "summary": f"This appears to be a medical document containing {len(text.split())} words. The document has been successfully processed and uploaded to the system. Please note that detailed analysis requires proper API configuration.",
+        "findings": [
+            {"emoji": "📄", "text": "Document successfully processed"},
+            {"emoji": "📊", "text": f"Document contains approximately {len(text.split())} words"},
+            {"emoji": "✅", "text": "File upload completed successfully"}
+        ],
+        "terms": [
+            {"term": "Document Processing", "explanation": "The file has been successfully uploaded and processed by the system"},
+            {"term": "Text Extraction", "explanation": "Text content has been extracted from the uploaded document"}
+        ],
+        "recommendations": [
+            {"emoji": "🔧", "title": "API Configuration", "description": "For detailed medical analysis, please configure the GEMINI_API_KEY environment variable"},
+            {"emoji": "📋", "title": "Document Review", "description": "Review the extracted text content for any important medical information"},
+            {"emoji": "🔄", "title": "Retry Analysis", "description": "Try uploading again after configuring the API key for full analysis"}
+        ]
+    }
+    
     try:
+        logger.info("Calling LLM for medical text analysis")
         raw_analysis = query_gemini(query, system_prompt)
-        logger.info(f"Raw LLM response: {raw_analysis}")  # Log the raw response
+        logger.info(f"Raw LLM response length: {len(raw_analysis)} characters")
+        logger.info(f"Raw LLM response preview: {raw_analysis[:200]}...")
         
-        # Try different regex patterns
-        json_match = re.search(r'({[\s\S]*})', raw_analysis)
-        if json_match:
-            json_str = json_match.group(1)
+        # Check if the response indicates missing API key
+        if "Missing GEMINI_API_KEY" in raw_analysis or "Error:" in raw_analysis:
+            logger.warning("API key not configured, using mock response")
+            return json.dumps(mock_response)
+        
+        # Try different regex patterns to extract JSON
+        json_patterns = [
+            r'({[\s\S]*})',  # Standard JSON object
+            r'```json\s*({[\s\S]*?})\s*```',  # JSON in code blocks
+            r'```\s*({[\s\S]*?})\s*```',  # JSON in generic code blocks
+        ]
+        
+        json_str = None
+        for pattern in json_patterns:
+            json_match = re.search(pattern, raw_analysis, re.DOTALL)
+            if json_match:
+                json_str = json_match.group(1)
+                logger.info(f"Found JSON with pattern: {pattern}")
+                break
+        
+        if json_str:
+            # Clean up the JSON string
+            json_str = json_str.strip()
+            logger.info(f"Extracted JSON string length: {len(json_str)}")
+            logger.info(f"JSON preview: {json_str[:200]}...")
+            
             # Validate JSON
             try:
-                json.loads(json_str)  # Test if it's valid JSON
-                logger.debug("Valid JSON found in response")
-                return json_str
+                parsed_json = json.loads(json_str)
+                logger.info("Successfully parsed JSON from LLM response")
+                return json.dumps(parsed_json)  # Return as JSON string
             except json.JSONDecodeError as e:
-                logger.error(f"Invalid JSON: {e}")
-                return raw_analysis  # Return raw response if JSON is invalid
+                logger.error(f"Invalid JSON from LLM: {e}")
+                logger.error(f"Problematic JSON: {json_str}")
+                return json.dumps(fallback_response)
         else:
-            logger.error("No JSON found in response")
-            return raw_analysis  # Return raw response if no JSON found
+            logger.error("No JSON found in LLM response")
+            logger.error(f"Full response: {raw_analysis}")
+            return json.dumps(fallback_response)
             
     except Exception as e:
         logger.error(f"Error in LLM analysis: {str(e)}")
-        return str(e)
+        logger.error(traceback.format_exc())
+        return json.dumps(fallback_response)
 
 @app.post("/predict-medical")
 async def predict_medical(data: dict):
@@ -368,64 +422,238 @@ async def upload_excel(file: UploadFile):
 @app.post("/upload")
 async def upload_report(file_upload: UploadFile):
     try:
+        logger.info("=" * 50)
+        logger.info("UPLOAD ENDPOINT CALLED")
+        logger.info("=" * 50)
         logger.info(f"Received file: {file_upload.filename}")
+        logger.info(f"File content type: {file_upload.content_type}")
+        logger.info(f"File size: {file_upload.size if hasattr(file_upload, 'size') else 'Unknown'}")
         
 
         # Get file extension (lowercase) for type checking
         file_ext = Path(file_upload.filename).suffix.lower()
+        logger.info(f"File extension: {file_ext}")
         
         # Check if file type is supported
         if not (file_ext == '.pdf' or file_ext in SUPPORTED_IMAGE_EXTENSIONS):
+            logger.error(f"Unsupported file type: {file_ext}")
             raise HTTPException(
                 status_code=400, 
                 detail=f"Only PDF and image files ({', '.join(SUPPORTED_IMAGE_EXTENSIONS)}) are accepted"
             )
 
+        logger.info("File type validation passed")
         
         data = await file_upload.read()
-        logger.info(f"File size: {len(data)} bytes")
+        logger.info(f"File data read successfully. Size: {len(data)} bytes")
 
         save_to = UPLOAD_DIR / file_upload.filename
+        logger.info(f"Saving file to: {save_to}")
+        
         with open(save_to, 'wb') as f:
             f.write(data)
-        logger.info(f"File saved to {save_to}")
+        logger.info(f"File saved successfully to {save_to}")
 
+        # Verify file was saved
+        if os.path.exists(save_to):
+            logger.info(f"File verification: File exists at {save_to}")
+            logger.info(f"Saved file size: {os.path.getsize(save_to)} bytes")
+        else:
+            logger.error(f"File verification failed: File not found at {save_to}")
 
         # Extract text based on file type
         text_content = ""
+        logger.info(f"Starting text extraction for file type: {file_ext}")
+        
         if file_ext == '.pdf':
             # Process PDF file
+            logger.info("Processing PDF file")
             pdf_reader = PyPDF2.PdfReader(io.BytesIO(data))
+            logger.info(f"PDF has {len(pdf_reader.pages)} pages")
             
             if pdf_reader.is_encrypted:
+                logger.error("PDF is encrypted, cannot process")
                 raise HTTPException(status_code=400, detail="Cannot process encrypted PDF")
 
-            for page in pdf_reader.pages:
-                text_content += page.extract_text()
+            for i, page in enumerate(pdf_reader.pages):
+                page_text = page.extract_text()
+                text_content += page_text
+                logger.info(f"Extracted text from page {i+1}: {len(page_text)} characters")
             
-            logger.info("Successfully extracted text from PDF")
+            logger.info(f"Successfully extracted text from PDF. Total length: {len(text_content)} characters")
         else:
             # Process image file
             logger.info(f"Processing image file: {file_ext}")
-            text_content = extract_text_from_image(str(save_to), 
-                                                  "Extract all text from this medical report image in detail")
-            logger.info("Successfully extracted text from image")
+            logger.info(f"Calling extract_text_from_image with file: {str(save_to)}")
+            
+            try:
+                text_content = extract_text_from_image(str(save_to), 
+                                                      "Extract all text from this medical report image in detail")
+                logger.info(f"Successfully extracted text from image. Length: {len(text_content)} characters")
+            except Exception as img_error:
+                logger.error(f"Error extracting text from image: {img_error}")
+                raise HTTPException(status_code=500, detail=f"Failed to extract text from image: {str(img_error)}")
 
-        
+        logger.info(f"Text extraction completed. Content preview: {text_content[:200]}...")
+
         # Analyze the extracted text
-        analysis = await analyze_medical_text(text_content)
+        logger.info("Starting medical text analysis")
+        if not text_content.strip():
+            logger.warning("No text content extracted from file")
+            analysis = json.dumps({
+                "summary": "No text content was extracted from the uploaded file. Please ensure the file contains readable text.",
+                "findings": [{"emoji": "⚠️", "text": "No text content found"}],
+                "terms": [{"term": "Empty Document", "explanation": "The uploaded file appears to be empty or unreadable"}],
+                "recommendations": [{"emoji": "📄", "title": "Check File", "description": "Please verify the file contains readable text and try again"}]
+            })
+        else:
+            analysis = await analyze_medical_text(text_content)
+        logger.info(f"Analysis completed. Analysis type: {type(analysis)}")
+        logger.info(f"Analysis preview: {str(analysis)[:200]}...")
         
-        return {
+        response_data = {
             "filename": file_upload.filename,
             "text_content": text_content,
             "analysis": analysis
         }
+        
+        logger.info("Returning successful response")
+        logger.info("=" * 50)
+        logger.info("UPLOAD ENDPOINT COMPLETED SUCCESSFULLY")
+        logger.info("=" * 50)
+        
+        return response_data
 
     except Exception as e:
+        logger.error("=" * 50)
+        logger.error("UPLOAD ENDPOINT ERROR")
+        logger.error("=" * 50)
         logger.error(f"Error processing file: {str(e)}")
-
+        logger.error(f"Error type: {type(e)}")
         logger.error(traceback.format_exc())
+        logger.error("=" * 50)
         raise HTTPException(status_code=500, detail=str(e))
+
+# Simple test endpoint to verify backend connectivity
+@app.get("/test")
+async def test_endpoint():
+    logger.info("Test endpoint called")
+    return {
+        "status": "success",
+        "message": "Backend is running and accessible",
+        "timestamp": "2024-01-01T00:00:00Z"
+    }
+
+@app.get("/available-terms")
+async def get_available_terms():
+    """Get available terms from uploaded documents for auto-complete suggestions"""
+    try:
+        logger.info("Fetching available terms for auto-complete")
+        
+        # Read the training data to extract unique terms
+        try:
+            training_data = load_training_data('output.json')
+            logger.info(f"Loaded {len(training_data)} training records")
+        except Exception as e:
+            logger.error(f"Error loading training data: {e}")
+            training_data = []
+        
+        # Extract unique symptoms, causes, diseases, and medicines
+        symptoms = set()
+        causes = set()
+        diseases = set()
+        medicines = set()
+        
+        def clean_and_split_text(text_field):
+            """Enhanced text cleaning and splitting function"""
+            if not text_field:
+                return []
+            
+            text = str(text_field).strip()
+            if not text or len(text) < 2:
+                return []
+            
+            # Split by common separators: comma, semicolon, pipe, newline
+            items = []
+            for separator in [',', ';', '|', '\n', '\r\n']:
+                if separator in text:
+                    items.extend([item.strip() for item in text.split(separator) if item.strip()])
+                    break
+            else:
+                # If no separator found, treat as single item
+                items = [text]
+            
+            # Clean each item
+            cleaned_items = []
+            for item in items:
+                # Remove common prefixes and suffixes
+                item = item.strip()
+                if item.startswith('e '):
+                    item = item[2:]
+                if item.startswith('+ '):
+                    item = item[2:]
+                if item.endswith('...'):
+                    item = item[:-3]
+                
+                # Filter out very short or invalid entries
+                if len(item) > 2 and not item.startswith('e ') and item not in ['...', 'etc', 'etc.']:
+                    cleaned_items.append(item)
+            
+            return cleaned_items
+
+        for record in training_data:
+            if isinstance(record, dict):
+                # Extract symptoms (check both capitalized and lowercase field names)
+                symptoms_field = record.get('Symptoms') or record.get('symptoms')
+                if symptoms_field:
+                    symptom_list = clean_and_split_text(symptoms_field)
+                    symptoms.update(symptom_list)
+                
+                # Extract causes (check both capitalized and lowercase field names)
+                causes_field = record.get('Causes') or record.get('cause')
+                if causes_field:
+                    cause_list = clean_and_split_text(causes_field)
+                    causes.update(cause_list)
+                
+                # Extract diseases (check both capitalized and lowercase field names)
+                disease_field = record.get('Disease') or record.get('disease')
+                if disease_field:
+                    disease_list = clean_and_split_text(disease_field)
+                    diseases.update(disease_list)
+                
+                # Extract medicines (check both capitalized and lowercase field names)
+                medicine_field = record.get('Medicine') or record.get('medicine')
+                if medicine_field:
+                    medicine_list = clean_and_split_text(medicine_field)
+                    medicines.update(medicine_list)
+        
+        # Convert sets to sorted lists
+        symptoms_list = sorted(list(symptoms))
+        causes_list = sorted(list(causes))
+        diseases_list = sorted(list(diseases))
+        medicines_list = sorted(list(medicines))
+        
+        logger.info(f"Extracted terms - Symptoms: {len(symptoms_list)}, Causes: {len(causes_list)}, Diseases: {len(diseases_list)}, Medicines: {len(medicines_list)}")
+        
+        return {
+            "symptoms": symptoms_list,
+            "causes": causes_list,
+            "diseases": diseases_list,
+            "medicines": medicines_list,
+            "total_terms": len(symptoms_list) + len(causes_list) + len(diseases_list) + len(medicines_list)
+        }
+        
+    except Exception as e:
+        logger.error(f"Error fetching available terms: {str(e)}")
+        logger.error(traceback.format_exc())
+        return {
+            "symptoms": [],
+            "causes": [],
+            "diseases": [],
+            "medicines": [],
+            "total_terms": 0,
+            "error": str(e)
+        }
 
 # Debug route to check model existence
 @app.get("/model-status")

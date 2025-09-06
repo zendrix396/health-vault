@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
   FaHeartbeat, 
@@ -17,6 +17,7 @@ import {
   FaFile,
   FaCheck
 } from "react-icons/fa";
+import AutoCompleteWithBadges from './AutoCompleteWithBadges';
 
 // Add manga-style CSS classes
 const mangaStyles = `
@@ -149,8 +150,8 @@ const MedicalRecommendation = () => {
   const [formData, setFormData] = useState({
     age: "",
     gender: "",
-    symptoms: "",
-    cause: "",
+    symptoms: [],
+    cause: [],
   });
   const [prediction, setPrediction] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -158,6 +159,50 @@ const MedicalRecommendation = () => {
   const [excelLoading, setExcelLoading] = useState(false);
   const [excelError, setExcelError] = useState(null);
   const [uploadedExcel, setUploadedExcel] = useState(null);
+  
+  // State for auto-complete suggestions
+  const [availableTerms, setAvailableTerms] = useState({
+    symptoms: [],
+    causes: [],
+    diseases: [],
+    medicines: []
+  });
+  const [termsLoading, setTermsLoading] = useState(true);
+
+  // Fetch available terms on component mount
+  useEffect(() => {
+    const fetchAvailableTerms = async () => {
+      try {
+        console.log("Fetching available terms from backend");
+        const response = await fetch('http://localhost:8000/available-terms');
+        const data = await response.json();
+        
+        console.log("Response status:", response.status);
+        console.log("Response ok:", response.ok);
+        console.log("Raw data received:", data);
+        
+        if (response.ok) {
+          console.log("Available terms loaded successfully:");
+          console.log("- Symptoms count:", data.symptoms?.length || 0);
+          console.log("- Causes count:", data.causes?.length || 0);
+          console.log("- Diseases count:", data.diseases?.length || 0);
+          console.log("- Medicines count:", data.medicines?.length || 0);
+          console.log("- Total terms:", data.total_terms || 0);
+          
+          setAvailableTerms(data);
+        } else {
+          console.error("Error fetching terms:", data);
+        }
+      } catch (error) {
+        console.error("Error fetching available terms:", error);
+        console.error("Error details:", error.message);
+      } finally {
+        setTermsLoading(false);
+      }
+    };
+
+    fetchAvailableTerms();
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -165,35 +210,60 @@ const MedicalRecommendation = () => {
     setError(null);
 
     try {
+      // Convert arrays to comma-separated strings for backend
+      const submitData = {
+        ...formData,
+        symptoms: formData.symptoms.join(', '),
+        cause: formData.cause.join(', ')
+      };
 
+      console.log("Starting medical prediction request to:", "http://localhost:8000/predict-medical");
+      console.log("Request data:", submitData);
+      
+      const response = await fetch('http://localhost:8000/predict-medical', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(submitData),
+    });
+    
+    console.log("Prediction response status:", response.status);
+    console.log("Prediction response ok:", response.ok);
 
-        const response = await fetch('https://health-vault-3lre.onrender.com/predict-medical', {
-
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
-
-      const data = await response.json();
-      if (!response.ok) {
-        throw new Error(data.detail || 'Prediction failed');
-      }
-
-      setPrediction(data);
-    } catch (err) {
-      console.error('Error:', err);
-      setError(err.message);
-    } finally {
-      setLoading(false);
+    const data = await response.json();
+    if (!response.ok) {
+      throw new Error(data.detail || 'Prediction failed');
     }
-  };
+
+    setPrediction(data);
+  } catch (err) {
+    console.error('Error:', err);
+    setError(err.message);
+  } finally {
+    setLoading(false);
+  }
+};
 
   const handleChange = (e) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
+    });
+  };
+
+  // Handlers for auto-complete components
+  const handleSymptomsChange = (newSymptoms) => {
+    setFormData({
+      ...formData,
+      symptoms: newSymptoms
+    });
+  };
+
+  const handleCauseChange = (newCauses) => {
+    setFormData({
+      ...formData,
+      cause: newCauses
     });
   };
   const handleExcelUpload = async (event) => {
@@ -214,11 +284,20 @@ const MedicalRecommendation = () => {
     try {
 
 
-        const response = await fetch("https://health-vault-3lre.onrender.com/upload-excel", {
-
+        console.log("Starting Excel upload to:", "http://localhost:8000/upload-excel");
+        console.log("Excel file details:", {
+          name: file.name,
+          type: file.type,
+          size: file.size
+        });
+        
+        const response = await fetch("http://localhost:8000/upload-excel", {
         method: "POST",
         body: formData,
       });
+      
+      console.log("Excel upload response status:", response.status);
+      console.log("Excel upload response ok:", response.ok);
 
       const data = await response.json();
 
@@ -302,27 +381,34 @@ const MedicalRecommendation = () => {
                 </div>
               </div>
 
-              <InputField
-                icon={<FaThermometerHalf className="text-black" />}
-                label="Symptoms"
-                type="text"
-                name="symptoms"
-                value={formData.symptoms}
-                onChange={handleChange}
-                placeholder="e.g., Fever, Cough, Headache"
-                required
-              />
+              {termsLoading ? (
+                <div className="flex items-center justify-center py-8">
+                  <FaSpinner className="animate-spin mr-2 text-black" />
+                  <span className="manga-text font-bold text-black">Loading available terms...</span>
+                </div>
+              ) : (
+                <>
+                  <AutoCompleteWithBadges
+                    label="Symptoms"
+                    icon={FaThermometerHalf}
+                    placeholder="Type to search symptoms..."
+                    suggestions={availableTerms.symptoms}
+                    selectedItems={formData.symptoms}
+                    onSelectionChange={handleSymptomsChange}
+                    maxItems={8}
+                  />
 
-              <InputField
-                icon={<FaStethoscope className="text-black" />}
-                label="Cause"
-                type="text"
-                name="cause"
-                value={formData.cause}
-                onChange={handleChange}
-                placeholder="e.g., Viral Infection"
-                required
-              />
+                  <AutoCompleteWithBadges
+                    label="Cause"
+                    icon={FaStethoscope}
+                    placeholder="Type to search causes..."
+                    suggestions={availableTerms.causes}
+                    selectedItems={formData.cause}
+                    onSelectionChange={handleCauseChange}
+                    maxItems={8}
+                  />
+                </>
+              )}
 
               <motion.button
                 type="submit"

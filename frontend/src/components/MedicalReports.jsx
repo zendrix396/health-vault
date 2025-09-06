@@ -212,7 +212,23 @@ const FileUploadSection = ({ onFileUpload, loading, error, uploadedFile }) => (
 );
 
 const MedicalReport = ({ analysis }) => {
-  const analysisData = typeof analysis === 'string' ? JSON.parse(analysis) : analysis;
+  let analysisData;
+  try {
+    analysisData = typeof analysis === 'string' ? JSON.parse(analysis) : analysis;
+  } catch (error) {
+    console.error("Error parsing analysis JSON:", error);
+    console.error("Raw analysis data:", analysis);
+    // Return a fallback component for invalid JSON
+    return (
+      <div className="mt-4 p-4 bg-red-100 manga-border text-red-600 manga-text font-bold">
+        <h3 className="text-lg font-bold mb-2">Analysis Error</h3>
+        <p className="text-sm">Unable to parse the analysis data. Raw response:</p>
+        <pre className="mt-2 text-xs bg-white p-2 rounded overflow-auto max-h-40">
+          {typeof analysis === 'string' ? analysis : JSON.stringify(analysis, null, 2)}
+        </pre>
+      </div>
+    );
+  }
   const [animatedSections, setAnimatedSections] = useState({
     findings: false,
     terms: false,
@@ -356,48 +372,91 @@ const MedicalReports = () => {
   }, [analysis, loading]);
 
   const handleFileUpload = async (event) => {
+    console.log("File upload handler called");
     const file = event.target.files[0];
-    if (!file) return;
+    if (!file) {
+      console.log("No file selected");
+      return;
+    }
+
+    console.log("File selected:", {
+      name: file.name,
+      type: file.type,
+      size: file.size,
+      lastModified: file.lastModified
+    });
 
     // Check if file is a PDF or supported image type
     const validImageTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/bmp', 'image/webp'];
     const isPdf = file.type === 'application/pdf';
     const isImage = validImageTypes.includes(file.type);
 
+    console.log("File validation:", {
+      isPdf,
+      isImage,
+      fileType: file.type,
+      validImageTypes
+    });
+
     if (!isPdf && !isImage) {
+      console.error("Invalid file type:", file.type);
       setError("Please upload a PDF or supported image file (JPEG, PNG, GIF, BMP, WebP)");
       return;
     }
 
+    console.log("File validation passed, creating FormData");
     const formData = new FormData();
     formData.append("file_upload", file);
+    console.log("FormData created, file appended");
 
+    console.log("Setting loading state to true");
     setLoading(true);
     setError(null);
 
     try {
-      const response = await fetch("https://health-vault-3lre.onrender.com/upload", {
+      console.log("Starting file upload to:", "http://localhost:8000/upload");
+      console.log("File details:", {
+        name: file.name,
+        type: file.type,
+        size: file.size
+      });
+      
+      const response = await fetch("http://localhost:8000/upload", {
         method: "POST",
         body: formData,
       });
+      
+      console.log("Upload response status:", response.status);
+      console.log("Upload response ok:", response.ok);
 
       const data = await response.json();
+      console.log("Upload response data:", data);
 
       if (!response.ok) {
+        console.error("Upload failed with status:", response.status);
+        console.error("Error data:", data);
         throw new Error(data.detail || "Upload failed");
       }
 
+      console.log("Upload successful! Setting state...");
       setUploadedFile(data.filename);
       setPdfText(data.text_content);
       setAnalysis(data.analysis);
       setError(null);
+      console.log("State updated successfully");
     } catch (error) {
       console.error("Error uploading file:", error);
+      console.error("Error details:", {
+        message: error.message,
+        stack: error.stack,
+        name: error.name
+      });
       setError(error.message || "Failed to upload file");
       setUploadedFile(null);
       setPdfText("");
       setAnalysis(null);
     } finally {
+      console.log("Upload process completed, setting loading to false");
       setLoading(false);
     }
   };
