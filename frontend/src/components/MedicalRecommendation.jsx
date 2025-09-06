@@ -173,29 +173,14 @@ const MedicalRecommendation = () => {
   useEffect(() => {
     const fetchAvailableTerms = async () => {
       try {
-        console.log("Fetching available terms from backend");
-        const response = await fetch('http://localhost:8000/available-terms');
+        const response = await fetch('https://healthvault.zendrix.dev/available-terms');
         const data = await response.json();
         
-        console.log("Response status:", response.status);
-        console.log("Response ok:", response.ok);
-        console.log("Raw data received:", data);
-        
         if (response.ok) {
-          console.log("Available terms loaded successfully:");
-          console.log("- Symptoms count:", data.symptoms?.length || 0);
-          console.log("- Causes count:", data.causes?.length || 0);
-          console.log("- Diseases count:", data.diseases?.length || 0);
-          console.log("- Medicines count:", data.medicines?.length || 0);
-          console.log("- Total terms:", data.total_terms || 0);
-          
           setAvailableTerms(data);
-        } else {
-          console.error("Error fetching terms:", data);
         }
       } catch (error) {
-        console.error("Error fetching available terms:", error);
-        console.error("Error details:", error.message);
+        // Handle error silently in production
       } finally {
         setTermsLoading(false);
       }
@@ -217,19 +202,13 @@ const MedicalRecommendation = () => {
         cause: formData.cause.join(', ')
       };
 
-      console.log("Starting medical prediction request to:", "http://localhost:8000/predict-medical");
-      console.log("Request data:", submitData);
-      
-      const response = await fetch('http://localhost:8000/predict-medical', {
+      const response = await fetch('https://healthvault.zendrix.dev/predict-medical', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(submitData),
     });
-    
-    console.log("Prediction response status:", response.status);
-    console.log("Prediction response ok:", response.ok);
 
     const data = await response.json();
     if (!response.ok) {
@@ -238,7 +217,6 @@ const MedicalRecommendation = () => {
 
     setPrediction(data);
   } catch (err) {
-    console.error('Error:', err);
     setError(err.message);
   } finally {
     setLoading(false);
@@ -282,22 +260,10 @@ const MedicalRecommendation = () => {
     setExcelError(null);
 
     try {
-
-
-        console.log("Starting Excel upload to:", "http://localhost:8000/upload-excel");
-        console.log("Excel file details:", {
-          name: file.name,
-          type: file.type,
-          size: file.size
-        });
-        
-        const response = await fetch("http://localhost:8000/upload-excel", {
+        const response = await fetch("https://healthvault.zendrix.dev/upload-excel", {
         method: "POST",
         body: formData,
       });
-      
-      console.log("Excel upload response status:", response.status);
-      console.log("Excel upload response ok:", response.ok);
 
       const data = await response.json();
 
@@ -309,7 +275,6 @@ const MedicalRecommendation = () => {
       // Optional: Show success message with number of records added
       alert(`Successfully added ${data.records_added} records to the training data`);
     } catch (error) {
-      console.error("Error uploading Excel file:", error);
       setExcelError(error.message || "Failed to upload Excel file");
       setUploadedExcel(null);
     } finally {

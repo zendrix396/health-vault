@@ -69,13 +69,8 @@ const AutoCompleteWithBadges = ({
 
   // Filter suggestions based on input and exclude already selected items
   useEffect(() => {
-    console.log(`AutoComplete ${label} - Input value: "${inputValue}"`);
-    console.log(`AutoComplete ${label} - Suggestions count: ${suggestions?.length || 0}`);
-    console.log(`AutoComplete ${label} - Selected items:`, selectedItems);
-    
     if (inputValue.trim()) {
       const filtered = getFilteredSuggestions(inputValue, suggestions, selectedItems);
-      console.log(`AutoComplete ${label} - Filtered suggestions:`, filtered);
       setFilteredSuggestions(filtered);
       setIsOpen(filtered.length > 0);
     } else {

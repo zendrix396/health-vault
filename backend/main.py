@@ -87,6 +87,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+@app.get('/')
+async def root():
+    return {"message": "Hello World"}
 
 async def analyze_medical_text(text):
     system_prompt = """You are a medical report analyzer. Analyze the given medical report text and provide a JSON response in this format:
@@ -144,6 +147,7 @@ async def analyze_medical_text(text):
             return json.dumps(mock_response)
         
         # Try different regex patterns to extract JSON
+        import re
         json_patterns = [
             r'({[\s\S]*})',  # Standard JSON object
             r'```json\s*({[\s\S]*?})\s*```',  # JSON in code blocks
@@ -164,15 +168,45 @@ async def analyze_medical_text(text):
             logger.info(f"Extracted JSON string length: {len(json_str)}")
             logger.info(f"JSON preview: {json_str[:200]}...")
             
+            # Clean up control characters and escape sequences
+            # Simple and effective JSON cleaning
+            def clean_json_string(json_str):
+                # Remove only problematic control characters, keep valid JSON whitespace
+                json_str = re.sub(r'[\x00-\x08\x0b\x0c\x0e-\x1f\x7f-\x9f]', '', json_str)
+                
+                # Fix common issues without breaking the structure
+                # Replace actual newlines in string values with escaped newlines
+                json_str = re.sub(r'(?<!\\)\n(?!\s*[}\]])', '\\n', json_str)
+                
+                return json_str
+            
+            cleaned_json = clean_json_string(json_str)
+            
             # Validate JSON
             try:
-                parsed_json = json.loads(json_str)
+                parsed_json = json.loads(cleaned_json)
                 logger.info("Successfully parsed JSON from LLM response")
                 return json.dumps(parsed_json)  # Return as JSON string
             except json.JSONDecodeError as e:
                 logger.error(f"Invalid JSON from LLM: {e}")
-                logger.error(f"Problematic JSON: {json_str}")
-                return json.dumps(fallback_response)
+                logger.error(f"Error at position: {e.pos}")
+                logger.error(f"Problematic JSON around error: {cleaned_json[max(0, e.pos-50):e.pos+50]}")
+                
+                # Try a different approach - use a more lenient JSON parser
+                try:
+                    # Try to fix the specific issue at the error position
+                    if e.pos < len(cleaned_json):
+                        char_at_error = cleaned_json[e.pos]
+                        logger.error(f"Character at error position: '{char_at_error}' (ord: {ord(char_at_error)})")
+                        
+                        # Replace the problematic character
+                        fixed_json = cleaned_json[:e.pos] + ' ' + cleaned_json[e.pos+1:]
+                        parsed_json = json.loads(fixed_json)
+                        logger.info("Successfully parsed JSON after fixing character at error position")
+                        return json.dumps(parsed_json)
+                except:
+                    logger.error("Failed to fix JSON, using fallback response")
+                    return json.dumps(fallback_response)
         else:
             logger.error("No JSON found in LLM response")
             logger.error(f"Full response: {raw_analysis}")
