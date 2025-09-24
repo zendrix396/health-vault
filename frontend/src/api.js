@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-    baseURL: 'https://healthvault.zendrix.dev',
+    baseURL: 'https://unu5hmdhgh.execute-api.ap-south-1.amazonaws.com',
     headers: {
         'Accept': 'application/json',
     }

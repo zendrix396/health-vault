@@ -1,0 +1,17 @@
+# health-vault/backend/serverless.yml
+
+service: health-vault-docker
+
+provider:
+  name: aws
+  region: ap-south-1 # Or your preferred region
+
+functions:
+  api:
+    # We will build and push the image manually, then fill in this URI
+    image: 315836106509.dkr.ecr.ap-south-1.amazonaws.com/health-vault:latest
+    events:
+      - httpApi: '*'
+    # Give it more time and memory for the ML models
+    timeout: 30
+    memorySize: 2048

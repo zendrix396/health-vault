@@ -394,7 +394,7 @@ const MedicalReports = () => {
     setError(null);
 
     try {
-      const response = await fetch("https://healthvault.zendrix.dev/upload", {
+      const response = await fetch("https://unu5hmdhgh.execute-api.ap-south-1.amazonaws.com/upload", {
         method: "POST",
         body: formData,
       });

@@ -173,7 +173,7 @@ const MedicalRecommendation = () => {
   useEffect(() => {
     const fetchAvailableTerms = async () => {
       try {
-        const response = await fetch('https://healthvault.zendrix.dev/available-terms');
+        const response = await fetch('https://unu5hmdhgh.execute-api.ap-south-1.amazonaws.com/available-terms');
         const data = await response.json();
         
         if (response.ok) {
@@ -202,7 +202,7 @@ const MedicalRecommendation = () => {
         cause: formData.cause.join(', ')
       };
 
-      const response = await fetch('https://healthvault.zendrix.dev/predict-medical', {
+      const response = await fetch('https://unu5hmdhgh.execute-api.ap-south-1.amazonaws.com/predict-medical', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -260,7 +260,7 @@ const MedicalRecommendation = () => {
     setExcelError(null);
 
     try {
-        const response = await fetch("https://healthvault.zendrix.dev/upload-excel", {
+        const response = await fetch("https://unu5hmdhgh.execute-api.ap-south-1.amazonaws.com/healthvault.zendrix.dev/upload-excel", {
         method: "POST",
         body: formData,
       });

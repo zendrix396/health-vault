@@ -1,7 +1,7 @@
 import asyncio
 from medical_recommender import AdvancedMedicalPredictor
 from medical_predictor import MedicalPredictor, load_training_data
-
+from mangum import Mangum
 async def run_advanced_predictor():
     predictor2 = AdvancedMedicalPredictor('output.json')
     prediction = predictor2.predict_single(
@@ -38,6 +38,4 @@ async def main():
         run_basic_predictor()
     )
 
-if __name__ == "__main__":
-    # Run the async main function
-    asyncio.run(main())
+handler = Mangum(app)
