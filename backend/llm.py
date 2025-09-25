@@ -2,13 +2,12 @@ from google import genai
 from google.genai import types
 import os
 import logging
-
 logger = logging.getLogger(__name__)
 
 def query_gemini(query, system_prompt="You are Gemini, an AI assistant."):
     # Get API key from environment
     #
-    api_key = "AIzaSyDFHO_xdD3o8qVKr9iNKflxeQHxVGistPA"
+    api_key = os.getenv("GEMINI_API_KEY")
     if not api_key:
         logger.error("GEMINI_API_KEY environment variable not set")
         return "Error: Missing GEMINI_API_KEY environment variable"
@@ -34,7 +33,7 @@ def query_gemini(query, system_prompt="You are Gemini, an AI assistant."):
 
 def extract_text_from_image(image_path, prompt="Extract all text from this image"):
     # Get API key from environment
-    api_key ="AIzaSyDFHO_xdD3o8qVKr9iNKflxeQHxVGistPA"
+    api_key = os.getenv("GEMINI_API_KEY")
     if not api_key:
         logger.error("GEMINI_API_KEY environment variable not set")
         return "Error: Missing GEMINI_API_KEY environment variable"
