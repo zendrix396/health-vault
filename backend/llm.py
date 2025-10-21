@@ -2,6 +2,8 @@ from google import genai
 from google.genai import types
 import os
 import logging
+from dotenv import load_dotenv
+load_dotenv()
 logger = logging.getLogger(__name__)
 
 def query_gemini(query, system_prompt="You are Gemini, an AI assistant."):

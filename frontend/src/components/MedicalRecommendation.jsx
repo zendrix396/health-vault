@@ -18,6 +18,7 @@ import {
   FaCheck
 } from "react-icons/fa";
 import AutoCompleteWithBadges from './AutoCompleteWithBadges';
+import api from '../api';
 
 // Add manga-style CSS classes
 const mangaStyles = `
@@ -191,10 +192,10 @@ const MedicalRecommendation = () => {
   useEffect(() => {
     const fetchAvailableTerms = async () => {
       try {
-        const response = await fetch('https://unu5hmdhgh.execute-api.ap-south-1.amazonaws.com/available-terms');
-        const data = await response.json();
+        const response = await api.get('/available-terms');
+        const data = response.data;
         
-        if (response.ok) {
+        if (response.status === 200) {
           setAvailableTerms(data);
         }
       } catch (error) {
@@ -220,16 +221,10 @@ const MedicalRecommendation = () => {
         cause: formData.cause.join(', ')
       };
 
-      const response = await fetch('https://unu5hmdhgh.execute-api.ap-south-1.amazonaws.com/predict-medical', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(submitData),
-    });
+      const response = await api.post('/predict-medical', submitData);
 
-    const data = await response.json();
-    if (!response.ok) {
+    const data = response.data;
+    if (response.status !== 200) {
       throw new Error(data.detail || 'Prediction failed');
     }
 
@@ -278,14 +273,15 @@ const MedicalRecommendation = () => {
     setExcelError(null);
 
     try {
-        const response = await fetch("https://unu5hmdhgh.execute-api.ap-south-1.amazonaws.com/upload-excel", {
-        method: "POST",
-        body: formData,
-      });
+        const response = await api.post("/upload-excel", formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
 
-      const data = await response.json();
+      const data = response.data;
 
-      if (!response.ok) {
+      if (response.status !== 200) {
         throw new Error(data.detail || "Upload failed");
       }
 
@@ -304,22 +300,25 @@ const MedicalRecommendation = () => {
     setExcelLoading(true);
     setExcelError(null);
     try {
-      const resp = await fetch("https://unu5hmdhgh.execute-api.ap-south-1.amazonaws.com/dummy-excel");
-      if (!resp.ok) {
-        const errText = await resp.text();
+      const resp = await api.get("/dummy-excel", {
+        responseType: 'blob'
+      });
+      if (resp.status !== 200) {
+        const errText = resp.data;
         throw new Error(errText || "Failed to fetch dummy data.xlsx");
       }
-      const blob = await resp.blob();
+      const blob = resp.data;
       const file = new File([blob], "data.xlsx", { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
       const fd = new FormData();
       fd.append("file", file);
 
-      const uploadResp = await fetch("https://unu5hmdhgh.execute-api.ap-south-1.amazonaws.com/upload-excel", {
-        method: "POST",
-        body: fd,
+      const uploadResp = await api.post("/upload-excel", fd, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
       });
-      const data = await uploadResp.json();
-      if (!uploadResp.ok) {
+      const data = uploadResp.data;
+      if (uploadResp.status !== 200) {
         throw new Error(data.detail || "Upload failed");
       }
       setUploadedExcel(data.filename || "data.xlsx");
@@ -333,7 +332,7 @@ const MedicalRecommendation = () => {
   };
 
   const handleDownloadDummy = () => {
-    window.open("https://unu5hmdhgh.execute-api.ap-south-1.amazonaws.com/dummy-excel", "_blank");
+    window.open(`${api.defaults.baseURL}/dummy-excel`, "_blank");
   };
 
   return (

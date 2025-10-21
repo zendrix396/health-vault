@@ -306,8 +306,6 @@ class AdvancedMedicalPredictor:
         print(f"Medicine accuracy: {self.medicine_accuracy * 100:.2f}%")
         
         self.is_trained = True
-        
-        self.save_model()
 
     def get_model_accuracies(self):
         """Return the accuracy scores of the models"""

@@ -13,6 +13,7 @@ import {
   FaArrowRight,
   FaImage
 } from "react-icons/fa";
+import api from '../api';
 
 // Add manga-style CSS classes
 const mangaStyles = `
@@ -394,14 +395,15 @@ const MedicalReports = () => {
     setError(null);
 
     try {
-      const response = await fetch("https://unu5hmdhgh.execute-api.ap-south-1.amazonaws.com/upload", {
-        method: "POST",
-        body: formData,
+      const response = await api.post("/upload", formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
       });
 
-      const data = await response.json();
+      const data = response.data;
 
-      if (!response.ok) {
+      if (response.status !== 200) {
         throw new Error(data.detail || "Upload failed");
       }
 

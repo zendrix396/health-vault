@@ -29,8 +29,8 @@ app = FastAPI(title="Health Vault API", version="1.0.0")
 handler = Mangum(app)
 
 app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["http://localhost:5173", "http://127.0.0.1:5173", "https://health-vault-3lre.onrender.com", "https://health-vault-1.onrender.com", "https://healthvaultai.vercel.app"],
+    CORSMiddleware, 
+    allow_origins=["http://localhost:5173","http://localhost:5174", "http://127.0.0.1:5173", "https://health-vault-3lre.onrender.com", "https://health-vault-1.onrender.com", "https://healthvaultai.vercel.app"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

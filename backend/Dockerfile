@@ -20,8 +20,7 @@ COPY model_generator.py ./
 COPY output.json ./
 COPY medical_advanced_predictor.joblib ./
 COPY medical_basic_predictor.joblib ./
-# Add any other .py files your project uses
-
-# Set the command to run when the Lambda function is invoked
-# It tells Lambda your handler is in the 'main.py' file and is named 'handler'
+COPY .env ./
+COPY uploads/ ./uploads/
+COPY data.xlsx ./uploads/data.xlsx
 CMD [ "main.handler" ]

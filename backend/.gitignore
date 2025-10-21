@@ -10,7 +10,7 @@ docker
 # Developer
 *_dev.js
 *.dev.js
-
+.serverless
 # Clewd
 config.js
 cookies.json
