@@ -11,7 +11,6 @@ import os
 import time
 from typing import List, Dict
 
-# Define the model paths
 MEDICAL_PREDICTOR_MODEL_PATH = "medical_predictor_model.joblib"
 ADVANCED_PREDICTOR_MODEL_PATH = "advanced_predictor_model.joblib"
 
@@ -46,18 +45,15 @@ class MedicalPredictor:
 
     def prepare_features(self, data):
         """Prepare features from raw data"""
-        # Extract and validate features
         symptoms = [self.safe_split(record['Symptoms']) for record in data]
         causes = [record['Causes'] for record in data]
         ages = np.array([record['Age'] for record in data]).reshape(-1, 1)
         genders = np.array([1 if record['Gender'].startswith('M') else 0 
                            for record in data]).reshape(-1, 1)
 
-        # Transform features
         X_symptoms = self.symptom_encoder.fit_transform(symptoms)
         X_causes = self.cause_encoder.fit_transform(causes).reshape(-1, 1)
 
-        # Combine features
         X = np.hstack([ages, genders, X_symptoms, X_causes])
         return X
 
@@ -84,16 +80,13 @@ class MedicalPredictor:
         X = self.prepare_features(cleaned_data)
         y_diseases, y_medicines = self.prepare_targets(cleaned_data)
 
-        # Split data
         X_train, X_test, y_disease_train, y_disease_test, y_medicine_train, y_medicine_test = \
             train_test_split(X, y_diseases, y_medicines, test_size=0.2, random_state=42)
 
-        # Train disease classifier
         print("Training disease classifier...")
         self.disease_classifier.fit(X_train, y_disease_train)
         disease_accuracy = self.disease_classifier.score(X_test, y_disease_test)
 
-        # Train medicine classifier
         print("Training medicine classifier...")
         self.medicine_classifier.fit(X_train, y_medicine_train)
         medicine_accuracy = accuracy_score(y_medicine_test, 
@@ -102,10 +95,8 @@ class MedicalPredictor:
         print(f"Disease Classifier Accuracy: {disease_accuracy*100:.2f}%")
         print(f"Medicine Classifier Accuracy: {medicine_accuracy*100:.2f}%")
         
-        # Set the trained flag
         self.is_trained = True
         
-        # Create and return the metrics
         return {
             "disease_accuracy": disease_accuracy * 100,
             "medicine_accuracy": medicine_accuracy * 100
@@ -117,7 +108,6 @@ class MedicalPredictor:
             raise ValueError("Model not trained yet. Call train() first or load a trained model.")
             
         try:
-            # Prepare input features
             symptoms_list = self.safe_split(symptoms)
             if not symptoms_list:
                 raise ValueError("No valid symptoms provided")
@@ -131,14 +121,12 @@ class MedicalPredictor:
                 X_cause
             ])
 
-            # Get disease predictions
             disease_probs = self.disease_classifier.predict_proba(X)[0]
             top_diseases_idx = np.argsort(disease_probs)[-5:][::-1]
             diseases = [(self.disease_encoder.inverse_transform([idx])[0], 
                         float(disease_probs[idx] * 100)) 
                        for idx in top_diseases_idx if disease_probs[idx] > 0.2]
 
-            # Get medicine predictions
             medicine_pred = self.medicine_classifier.predict(X)
             medicine_probs = self.medicine_classifier.predict_proba(X)
             
@@ -202,7 +190,6 @@ class MedicalPredictor:
 class AdvancedMedicalPredictor:
     def __init__(self, json_file=None):
         """Initialize the medical predictor"""
-        # Initialize classifiers and encoders
         self.disease_classifier = GradientBoostingClassifier(n_estimators=100, random_state=42)
         self.medicine_classifier = RandomForestClassifier(n_estimators=100, random_state=42)
         self.symptom_encoder = MultiLabelBinarizer()
@@ -213,7 +200,6 @@ class AdvancedMedicalPredictor:
         self.medicine_accuracy = 0.0
         self.is_trained = False
         
-        # If json_file is provided, train the model
         if json_file:
             self._load_and_train(json_file)
 
@@ -321,7 +307,6 @@ class AdvancedMedicalPredictor:
         
         self.is_trained = True
         
-        # Save the model after training
         self.save_model()
 
     def get_model_accuracies(self):
@@ -446,7 +431,6 @@ def load_training_data(json_path='output.json'):
     try:
         with open(json_path, 'r') as f:
             data = json.load(f)
-        # Extract training records
         training_data = data if isinstance(data, list) else data.get('records', [])
         if not training_data:
             raise ValueError("No training data found in JSON file")
@@ -470,7 +454,6 @@ def main():
     
     print("\n=== GENERATING MEDICAL PREDICTION MODELS ===\n")
     
-    # Check if models already exist
     basic_exists = os.path.exists(MEDICAL_PREDICTOR_MODEL_PATH)
     advanced_exists = os.path.exists(ADVANCED_PREDICTOR_MODEL_PATH)
     
@@ -484,7 +467,6 @@ def main():
             print("Using existing models. Exiting.")
             return
     
-    # Load training data
     print(f"\nLoading training data from {json_path}...")
     training_data = load_training_data(json_path)
     if not training_data:
@@ -493,21 +475,17 @@ def main():
     
     print(f"Loaded {len(training_data)} training records.")
     
-    # Train and save basic predictor
     print("\n=== TRAINING BASIC MEDICAL PREDICTOR ===\n")
     basic_predictor = MedicalPredictor()
     metrics = basic_predictor.train(training_data)
     basic_predictor.save_model()
     
-    # Train and save advanced predictor
     print("\n=== TRAINING ADVANCED MEDICAL PREDICTOR ===\n")
     advanced_predictor = AdvancedMedicalPredictor()
     advanced_predictor._train(training_data)
     
-    # Test the models
     print("\n=== TESTING LOADED MODELS ===\n")
     
-    # Load the models
     test_basic = MedicalPredictor()
     test_basic.load_model()
     
@@ -522,7 +500,6 @@ def main():
     
     print(f"Test prediction with: Age={test_age}, Gender={test_gender}, Symptoms='{test_symptoms}', Cause='{test_cause}'")
     
-    # Test basic predictor
     diseases, medicines = test_basic.predict(test_age, test_gender, test_symptoms, test_cause)
     print("\nBasic predictor results:")
     if diseases:
@@ -532,7 +509,6 @@ def main():
     else:
         print("No diseases predicted")
         
-    # Test advanced predictor
     result = test_advanced.predict_single(test_age, test_gender, test_symptoms, test_cause)
     print("\nAdvanced predictor results:")
     if 'error' not in result:

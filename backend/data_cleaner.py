@@ -25,16 +25,13 @@ def standardize_date(date_str):
     return None
 
 def clean_excel_data(df):
-    # Drop rows with all null values
     df = df.dropna(how='all')
     
-    # Clean each column
     cleaned_data = []
     
     for _, row in df.iterrows():
         cleaned_row = {}
         for col, value in row.items():
-            # Convert to string and strip whitespace
             if pd.notna(value):
                 if col == 'DateOfBirth':
                     cleaned_row[col] = standardize_date(value)
@@ -48,16 +45,13 @@ def clean_excel_data(df):
 
 def update_json_data(new_data, json_file='output.json'):
     try:
-        # Read existing data
         with open(json_file, 'r') as f:
             existing_data = json.load(f)
     except (FileNotFoundError, json.JSONDecodeError):
         existing_data = []
     
-    # Append new data
     existing_data.extend(new_data)
     
-    # Write updated data back to file
     with open(json_file, 'w') as f:
         json.dump(existing_data, f, indent=4)
     

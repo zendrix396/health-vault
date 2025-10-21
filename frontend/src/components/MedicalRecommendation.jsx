@@ -78,7 +78,7 @@ const InputField = ({ icon, label, ...props }) => (
   </div>
 );
 
-const ExcelUploadSection = ({ onExcelUpload, loading, error, uploadedFile }) => (
+const ExcelUploadSection = ({ onExcelUpload, onTryDummy, onDownloadDummy, loading, error, uploadedFile }) => (
   <GlassCard className="p-6 mb-6 manga-fade-in">
     <h3 className="text-xl font-black mb-4 flex items-center text-black manga-text">
       <FaFileExcel className="mr-2" />
@@ -104,6 +104,24 @@ const ExcelUploadSection = ({ onExcelUpload, loading, error, uploadedFile }) => 
         </span>
         <span className="text-gray-700 text-sm manga-text">Supports .xlsx and .xls files</span>
       </label>
+    </div>
+
+    <div className="mt-4 flex flex-col md:flex-row items-start md:items-center gap-3">
+      <button
+        type="button"
+        onClick={onTryDummy}
+        className="bg-black text-white px-4 py-2 rounded-none manga-border manga-text font-black hover:bg-gray-800"
+      >
+        Try with dummy data
+      </button>
+      <button
+        type="button"
+        onClick={onDownloadDummy}
+        className="text-blue-700 underline manga-text font-bold"
+        title="Download sample Excel (data.xlsx)"
+      >
+        data.xlsx
+      </button>
     </div>
 
     <AnimatePresence>
@@ -260,7 +278,7 @@ const MedicalRecommendation = () => {
     setExcelError(null);
 
     try {
-        const response = await fetch("https://unu5hmdhgh.execute-api.ap-south-1.amazonaws.com/healthvault.zendrix.dev/upload-excel", {
+        const response = await fetch("https://unu5hmdhgh.execute-api.ap-south-1.amazonaws.com/upload-excel", {
         method: "POST",
         body: formData,
       });
@@ -282,6 +300,42 @@ const MedicalRecommendation = () => {
     }
   };
 
+  const handleTryDummy = async () => {
+    setExcelLoading(true);
+    setExcelError(null);
+    try {
+      const resp = await fetch("https://unu5hmdhgh.execute-api.ap-south-1.amazonaws.com/dummy-excel");
+      if (!resp.ok) {
+        const errText = await resp.text();
+        throw new Error(errText || "Failed to fetch dummy data.xlsx");
+      }
+      const blob = await resp.blob();
+      const file = new File([blob], "data.xlsx", { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
+      const fd = new FormData();
+      fd.append("file", file);
+
+      const uploadResp = await fetch("https://unu5hmdhgh.execute-api.ap-south-1.amazonaws.com/upload-excel", {
+        method: "POST",
+        body: fd,
+      });
+      const data = await uploadResp.json();
+      if (!uploadResp.ok) {
+        throw new Error(data.detail || "Upload failed");
+      }
+      setUploadedExcel(data.filename || "data.xlsx");
+      alert(`Successfully added ${data.records_added} records to the training data`);
+    } catch (error) {
+      setExcelError(error.message || "Failed to try dummy data");
+      setUploadedExcel(null);
+    } finally {
+      setExcelLoading(false);
+    }
+  };
+
+  const handleDownloadDummy = () => {
+    window.open("https://unu5hmdhgh.execute-api.ap-south-1.amazonaws.com/dummy-excel", "_blank");
+  };
+
   return (
     <div className="min-h-screen bg-gray-100 text-black p-6">
       <div className="max-w-4xl mx-auto">
@@ -300,6 +354,8 @@ const MedicalRecommendation = () => {
           {/* Add Excel Upload Section */}
           <ExcelUploadSection
             onExcelUpload={handleExcelUpload}
+            onTryDummy={handleTryDummy}
+            onDownloadDummy={handleDownloadDummy}
             loading={excelLoading}
             error={excelError}
             uploadedFile={uploadedExcel}

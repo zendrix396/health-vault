@@ -32,7 +32,6 @@ async def run_basic_predictor():
     print(medicines)
 
 async def main():
-    # Run both predictors concurrently
     await asyncio.gather(
         run_advanced_predictor(),
         run_basic_predictor()

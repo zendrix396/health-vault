@@ -1,6 +1,6 @@
 {
   "C:\\Users\\shikhar\\Documents\\Programming\\Dev\\healthvault\\health-vault\\backend\\serverless.yml": {
-    "versionFramework": "4.19.1",
+    "versionFramework": "4.21.1",
     "servicePath": "C:\\Users\\shikhar\\Documents\\Programming\\Dev\\healthvault\\health-vault\\backend\\serverless.yml",
     "serviceConfigFileName": "serverless.yml",
     "service": {
@@ -102,7 +102,7 @@
               "Type": "AWS::Lambda::Function",
               "Properties": {
                 "Code": {
-                  "ImageUri": "315836106509.dkr.ecr.ap-south-1.amazonaws.com/health-vault@sha256:54939f4dbebbaee426a8995a58b4e19069e7dc225152ad1d2e8d0debc860e515"
+                  "ImageUri": "315836106509.dkr.ecr.ap-south-1.amazonaws.com/health-vault@sha256:68045edb331041c832f30d2c239846b6cd548ff7b37f9ee81cad846ce7a44c84"
                 },
                 "PackageType": "Image",
                 "FunctionName": "health-vault-docker-dev-api",
@@ -119,14 +119,14 @@
                 "ApiLogGroup"
               ]
             },
-            "ApiLambdaVersionJvOZtj6fVlIzQPbRcCvYhhXmoeORbPpcDDLBUXLGQm8": {
+            "ApiLambdaVersion2s0HeSe6P0uwN0hzmBB0zEJn7t8d7u86AbPcd4Fw": {
               "Type": "AWS::Lambda::Version",
               "DeletionPolicy": "Retain",
               "Properties": {
                 "FunctionName": {
                   "Ref": "ApiLambdaFunction"
                 },
-                "CodeSha256": "54939f4dbebbaee426a8995a58b4e19069e7dc225152ad1d2e8d0debc860e515"
+                "CodeSha256": "68045edb331041c832f30d2c239846b6cd548ff7b37f9ee81cad846ce7a44c84"
               }
             },
             "HttpApi": {
@@ -235,7 +235,7 @@
             "ApiLambdaFunctionQualifiedArn": {
               "Description": "Current Lambda function version",
               "Value": {
-                "Ref": "ApiLambdaVersionJvOZtj6fVlIzQPbRcCvYhhXmoeORbPpcDDLBUXLGQm8"
+                "Ref": "ApiLambdaVersion2s0HeSe6P0uwN0hzmBB0zEJn7t8d7u86AbPcd4Fw"
               },
               "Export": {
                 "Name": "sls-health-vault-docker-dev-ApiLambdaFunctionQualifiedArn"
@@ -294,7 +294,7 @@
           "package": {},
           "memory": 2048,
           "vpc": {},
-          "versionLogicalId": "ApiLambdaVersionJvOZtj6fVlIzQPbRcCvYhhXmoeORbPpcDDLBUXLGQm8"
+          "versionLogicalId": "ApiLambdaVersion2s0HeSe6P0uwN0hzmBB0zEJn7t8d7u86AbPcd4Fw"
         }
       }
     },
@@ -395,7 +395,7 @@
             "Type": "AWS::Lambda::Function",
             "Properties": {
               "Code": {
-                "ImageUri": "315836106509.dkr.ecr.ap-south-1.amazonaws.com/health-vault@sha256:54939f4dbebbaee426a8995a58b4e19069e7dc225152ad1d2e8d0debc860e515"
+                "ImageUri": "315836106509.dkr.ecr.ap-south-1.amazonaws.com/health-vault@sha256:68045edb331041c832f30d2c239846b6cd548ff7b37f9ee81cad846ce7a44c84"
               },
               "PackageType": "Image",
               "FunctionName": "health-vault-docker-dev-api",
@@ -412,14 +412,14 @@
               "ApiLogGroup"
             ]
           },
-          "ApiLambdaVersionJvOZtj6fVlIzQPbRcCvYhhXmoeORbPpcDDLBUXLGQm8": {
+          "ApiLambdaVersion2s0HeSe6P0uwN0hzmBB0zEJn7t8d7u86AbPcd4Fw": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "ApiLambdaFunction"
               },
-              "CodeSha256": "54939f4dbebbaee426a8995a58b4e19069e7dc225152ad1d2e8d0debc860e515"
+              "CodeSha256": "68045edb331041c832f30d2c239846b6cd548ff7b37f9ee81cad846ce7a44c84"
             }
           },
           "HttpApi": {
@@ -528,7 +528,7 @@
           "ApiLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "ApiLambdaVersionJvOZtj6fVlIzQPbRcCvYhhXmoeORbPpcDDLBUXLGQm8"
+              "Ref": "ApiLambdaVersion2s0HeSe6P0uwN0hzmBB0zEJn7t8d7u86AbPcd4Fw"
             },
             "Export": {
               "Name": "sls-health-vault-docker-dev-ApiLambdaFunctionQualifiedArn"
@@ -594,12 +594,12 @@
     "serviceProviderAwsCfStackName": "health-vault-docker-dev",
     "serviceProviderAwsCfStackId": "arn:aws:cloudformation:ap-south-1:315836106509:stack/health-vault-docker-dev/7bb754b0-996e-11f0-b0d9-067b387229e5",
     "serviceProviderAwsCfStackCreated": "2025-09-24T17:47:05.048Z",
-    "serviceProviderAwsCfStackUpdated": "2025-09-24T18:49:30.444Z",
+    "serviceProviderAwsCfStackUpdated": "2025-09-24T18:59:55.734Z",
     "serviceProviderAwsCfStackStatus": "UPDATE_COMPLETE",
     "serviceProviderAwsCfStackOutputs": [
       {
         "OutputKey": "ApiLambdaFunctionQualifiedArn",
-        "OutputValue": "arn:aws:lambda:ap-south-1:315836106509:function:health-vault-docker-dev-api:3",
+        "OutputValue": "arn:aws:lambda:ap-south-1:315836106509:function:health-vault-docker-dev-api:4",
         "Description": "Current Lambda function version",
         "ExportName": "sls-health-vault-docker-dev-ApiLambdaFunctionQualifiedArn"
       },
@@ -713,7 +713,7 @@
           "Type": "AWS::Lambda::Function",
           "Properties": {
             "Code": {
-              "ImageUri": "315836106509.dkr.ecr.ap-south-1.amazonaws.com/health-vault@sha256:54939f4dbebbaee426a8995a58b4e19069e7dc225152ad1d2e8d0debc860e515"
+              "ImageUri": "315836106509.dkr.ecr.ap-south-1.amazonaws.com/health-vault@sha256:68045edb331041c832f30d2c239846b6cd548ff7b37f9ee81cad846ce7a44c84"
             },
             "PackageType": "Image",
             "FunctionName": "health-vault-docker-dev-api",
@@ -730,14 +730,14 @@
             "ApiLogGroup"
           ]
         },
-        "ApiLambdaVersionJvOZtj6fVlIzQPbRcCvYhhXmoeORbPpcDDLBUXLGQm8": {
+        "ApiLambdaVersion2s0HeSe6P0uwN0hzmBB0zEJn7t8d7u86AbPcd4Fw": {
           "Type": "AWS::Lambda::Version",
           "DeletionPolicy": "Retain",
           "Properties": {
             "FunctionName": {
               "Ref": "ApiLambdaFunction"
             },
-            "CodeSha256": "54939f4dbebbaee426a8995a58b4e19069e7dc225152ad1d2e8d0debc860e515"
+            "CodeSha256": "68045edb331041c832f30d2c239846b6cd548ff7b37f9ee81cad846ce7a44c84"
           }
         },
         "HttpApi": {
@@ -846,7 +846,7 @@
         "ApiLambdaFunctionQualifiedArn": {
           "Description": "Current Lambda function version",
           "Value": {
-            "Ref": "ApiLambdaVersionJvOZtj6fVlIzQPbRcCvYhhXmoeORbPpcDDLBUXLGQm8"
+            "Ref": "ApiLambdaVersion2s0HeSe6P0uwN0hzmBB0zEJn7t8d7u86AbPcd4Fw"
           },
           "Export": {
             "Name": "sls-health-vault-docker-dev-ApiLambdaFunctionQualifiedArn"

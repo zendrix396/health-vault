@@ -1,4 +1,5 @@
 from fastapi import FastAPI, UploadFile, HTTPException
+from fastapi.responses import FileResponse
 from fastapi.middleware.cors import CORSMiddleware
 from pathlib import Path
 import PyPDF2
@@ -11,10 +12,11 @@ import json
 import os
 import pandas as pd
 import traceback
+import tempfile
+from data_cleaner import clean_excel_data, update_json_data
 
-# --- 1. SETUP LOGGING AND APP FIRST ---
 logging.basicConfig(
-    level=logging.INFO, # Use INFO for production, DEBUG for development
+    level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
     handlers=[
         logging.StreamHandler(sys.stdout)
@@ -22,14 +24,10 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-# --- 2. CREATE THE FastAPI APP INSTANCE ---
 app = FastAPI(title="Health Vault API", version="1.0.0")
 
-# --- 3. CREATE THE LAMBDA HANDLER ---
-# This must come AFTER 'app' is defined. This is what Lambda will run.
 handler = Mangum(app)
 
-# --- 4. CONFIGURE MIDDLEWARE ---
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:5173", "http://127.0.0.1:5173", "https://health-vault-3lre.onrender.com", "https://health-vault-1.onrender.com", "https://healthvaultai.vercel.app"],
@@ -38,20 +36,26 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# --- 5. LOAD MODELS AND SETUP GLOBAL VARIABLES ---
-# Import model classes
 try:
     from model_generator import MedicalPredictor, AdvancedMedicalPredictor, load_training_data
     logger.info("Successfully imported model classes")
 except ImportError as e:
     logger.error(f"Failed to import from model_generator: {e}")
-    # In a real app, you might want to exit or handle this gracefully
     MedicalPredictor, AdvancedMedicalPredictor, load_training_data = None, None, None
 
-# Define model paths using absolute paths for robustness in Lambda
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 MEDICAL_PREDICTOR_MODEL_PATH = os.path.join(BASE_DIR, "medical_basic_predictor.joblib")
 ADVANCED_PREDICTOR_MODEL_PATH = os.path.join(BASE_DIR, "medical_advanced_predictor.joblib")
+
+# Also consider alternate packaged filenames produced by model_generator defaults
+ALT_BASIC_MODEL_PATH = os.path.join(BASE_DIR, "medical_predictor_model.joblib")
+ALT_ADVANCED_MODEL_PATH = os.path.join(BASE_DIR, "advanced_predictor_model.joblib")
+
+# Writable runtime locations (AWS Lambda uses /tmp, local dev uses system temp)
+TMP_DIR = "/tmp" if os.name == 'posix' else tempfile.gettempdir()
+TMP_BASIC_MODEL_PATH = os.path.join(TMP_DIR, "medical_basic_predictor.joblib")
+TMP_ADVANCED_MODEL_PATH = os.path.join(TMP_DIR, "medical_advanced_predictor.joblib")
+JSON_DATA_PATH = os.path.join(TMP_DIR, "output.json")
 
 logger.info(f"Expecting basic model at: {MEDICAL_PREDICTOR_MODEL_PATH}")
 logger.info(f"Expecting advanced model at: {ADVANCED_PREDICTOR_MODEL_PATH}")
@@ -59,49 +63,55 @@ logger.info(f"Expecting advanced model at: {ADVANCED_PREDICTOR_MODEL_PATH}")
 basic_predictor = None
 advanced_predictor = None
 
-# Using a startup event is the correct way to load models in FastAPI
 @app.on_event("startup")
 async def load_models_on_startup():
     global basic_predictor, advanced_predictor
     
-    if os.path.exists(MEDICAL_PREDICTOR_MODEL_PATH):
-        try:
-            logger.info(f"Loading basic predictor from {MEDICAL_PREDICTOR_MODEL_PATH}...")
-            basic_predictor = MedicalPredictor()
-            basic_predictor.load_model(MEDICAL_PREDICTOR_MODEL_PATH)
-            logger.info("Basic predictor loaded successfully.")
-        except Exception as e:
-            logger.error(f"Error loading basic predictor: {e}\n{traceback.format_exc()}")
-    else:
-        logger.warning(f"Basic model file not found: {MEDICAL_PREDICTOR_MODEL_PATH}")
+    # Try loading from /tmp then packaged paths (including alternate names)
+    basic_candidates = [TMP_BASIC_MODEL_PATH, MEDICAL_PREDICTOR_MODEL_PATH, ALT_BASIC_MODEL_PATH]
+    advanced_candidates = [TMP_ADVANCED_MODEL_PATH, ADVANCED_PREDICTOR_MODEL_PATH, ALT_ADVANCED_MODEL_PATH]
 
-    if os.path.exists(ADVANCED_PREDICTOR_MODEL_PATH):
-        try:
-            logger.info(f"Loading advanced predictor from {ADVANCED_PREDICTOR_MODEL_PATH}...")
-            advanced_predictor = AdvancedMedicalPredictor()
-            advanced_predictor.load_model(ADVANCED_PREDICTOR_MODEL_PATH)
-            logger.info("Advanced predictor loaded successfully.")
-        except Exception as e:
-            logger.error(f"Error loading advanced predictor: {e}\n{traceback.format_exc()}")
-    else:
-        logger.warning(f"Advanced model file not found: {ADVANCED_PREDICTOR_MODEL_PATH}")
+    basic_loaded = False
+    for path in basic_candidates:
+        if os.path.exists(path):
+            try:
+                logger.info(f"Loading basic predictor from {path}...")
+                basic_predictor = MedicalPredictor()
+                basic_predictor.load_model(path)
+                logger.info("Basic predictor loaded successfully.")
+                basic_loaded = True
+                break
+            except Exception as e:
+                logger.error(f"Error loading basic predictor from {path}: {e}\n{traceback.format_exc()}")
+    if not basic_loaded:
+        logger.warning("No basic model file found in candidates")
 
-# --- THIS IS THE CRITICAL FIX FOR THE FILE SYSTEM ---
-# In AWS Lambda, the only writable directory is /tmp.
-UPLOAD_DIR = Path('/tmp') / 'uploads'
-UPLOAD_DIR.mkdir(exist_ok=True) # Create the directory when the app starts
+    adv_loaded = False
+    for path in advanced_candidates:
+        if os.path.exists(path):
+            try:
+                logger.info(f"Loading advanced predictor from {path}...")
+                advanced_predictor = AdvancedMedicalPredictor()
+                advanced_predictor.load_model(path)
+                logger.info("Advanced predictor loaded successfully.")
+                adv_loaded = True
+                break
+            except Exception as e:
+                logger.error(f"Error loading advanced predictor from {path}: {e}\n{traceback.format_exc()}")
+    if not adv_loaded:
+        logger.warning("No advanced model file found in candidates")
+
+UPLOAD_DIR = Path(tempfile.gettempdir()) / 'uploads'
+UPLOAD_DIR.mkdir(exist_ok=True)
 
 SUPPORTED_IMAGE_EXTENSIONS = ('.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp')
 
 
-# --- 6. DEFINE ALL YOUR API ENDPOINTS ---
 
 @app.get('/')
 async def root():
     return {"message": "Hello World"}
 
-# --- (The rest of your endpoint functions: analyze_medical_text, predict_medical, upload_excel, etc., remain here) ---
-# NOTE: I am including the full code for all endpoints as requested.
 
 async def analyze_medical_text(text):
     system_prompt = """You are a medical report analyzer. Analyze the given medical report text and provide a JSON response in this format:
@@ -128,11 +138,10 @@ async def analyze_medical_text(text):
     }
     
     try:
-        from llm import query_gemini # Import locally to avoid circular dependencies if any
+        from llm import query_gemini
         logger.info("Calling LLM for medical text analysis")
         raw_analysis = query_gemini(query, system_prompt)
         
-        # Extract JSON from the raw response
         json_match = re.search(r'```json\s*({[\s\S]*?})\s*```|({[\s\S]*})', raw_analysis, re.DOTALL)
         if json_match:
             json_str = json_match.group(1) or json_match.group(2)
@@ -149,6 +158,34 @@ async def analyze_medical_text(text):
     except Exception as e:
         logger.error(f"Error in LLM analysis: {str(e)}\n{traceback.format_exc()}")
         return json.dumps(fallback_response)
+
+
+def train_and_save_models():
+    """Train models from JSON_DATA_PATH and save to /tmp, then update loaded instances."""
+    global basic_predictor, advanced_predictor
+    try:
+        training_data = load_training_data(JSON_DATA_PATH)
+        if not training_data:
+            raise ValueError("No training data available to train models")
+
+        # Train and save basic model
+        basic = MedicalPredictor()
+        metrics = basic.train(training_data)
+        os.makedirs(TMP_DIR, exist_ok=True)
+        basic.save_model(TMP_BASIC_MODEL_PATH)
+        basic_predictor = basic
+        logger.info(f"Basic model trained with metrics: {metrics} and saved to {TMP_BASIC_MODEL_PATH}")
+
+        # Train and save advanced model
+        adv = AdvancedMedicalPredictor()
+        adv._train(training_data)
+        adv.save_model(TMP_ADVANCED_MODEL_PATH)
+        advanced_predictor = adv
+        logger.info(f"Advanced model trained and saved to {TMP_ADVANCED_MODEL_PATH}")
+
+    except Exception as e:
+        logger.error(f"Error training models: {str(e)}\n{traceback.format_exc()}")
+        raise
 
 @app.post("/predict-medical")
 async def predict_medical(data: dict):
@@ -202,15 +239,17 @@ async def upload_excel(file: UploadFile):
         
         df = pd.read_excel(file_path)
         cleaned_data = clean_excel_data(df)
-        records_added = update_json_data(cleaned_data)
+        # Persist training data to writable /tmp JSON
+        records_added = update_json_data(cleaned_data, json_file=JSON_DATA_PATH)
         logger.info(f"Added {records_added} records to training data")
         
-        # Trigger model retraining (could be offloaded to a background task in a real app)
-        await load_models_on_startup() 
+        # Retrain models and load them into memory
+        train_and_save_models()
         
         return {
             "message": "Excel file processed and models retrained",
             "records_added": records_added,
+            "filename": file.filename,
         }
         
     except Exception as e:
@@ -250,7 +289,7 @@ async def upload_report(file_upload: UploadFile):
         return {
             "filename": file_upload.filename,
             "text_content": text_content,
-            "analysis": json.loads(analysis) # Return as a JSON object
+            "analysis": json.loads(analysis)
         }
 
     except Exception as e:
@@ -260,7 +299,7 @@ async def upload_report(file_upload: UploadFile):
 @app.get("/available-terms")
 async def get_available_terms():
     try:
-        training_data = load_training_data('output.json')
+        training_data = load_training_data(JSON_DATA_PATH)
         symptoms, causes, diseases, medicines = set(), set(), set(), set()
         
         def clean_and_split_text(text_field):
@@ -289,16 +328,51 @@ async def get_available_terms():
 @app.get("/model-status")
 async def model_status():
     try:
-        basic_exists = os.path.exists(MEDICAL_PREDICTOR_MODEL_PATH)
-        advanced_exists = os.path.exists(ADVANCED_PREDICTOR_MODEL_PATH)
-        
-        return {
+        status = {
             "model_files": {
-                "basic_model": {"path": MEDICAL_PREDICTOR_MODEL_PATH, "exists": basic_exists, "loaded": basic_predictor is not None},
-                "advanced_model": {"path": ADVANCED_PREDICTOR_MODEL_PATH, "exists": advanced_exists, "loaded": advanced_predictor is not None}
+                "basic_model": {
+                    "package_path": MEDICAL_PREDICTOR_MODEL_PATH,
+                    "package_exists": os.path.exists(MEDICAL_PREDICTOR_MODEL_PATH),
+                    "alt_package_path": ALT_BASIC_MODEL_PATH,
+                    "alt_package_exists": os.path.exists(ALT_BASIC_MODEL_PATH),
+                    "tmp_path": TMP_BASIC_MODEL_PATH,
+                    "tmp_exists": os.path.exists(TMP_BASIC_MODEL_PATH),
+                    "loaded": basic_predictor is not None
+                },
+                "advanced_model": {
+                    "package_path": ADVANCED_PREDICTOR_MODEL_PATH,
+                    "package_exists": os.path.exists(ADVANCED_PREDICTOR_MODEL_PATH),
+                    "alt_package_path": ALT_ADVANCED_MODEL_PATH,
+                    "alt_package_exists": os.path.exists(ALT_ADVANCED_MODEL_PATH),
+                    "tmp_path": TMP_ADVANCED_MODEL_PATH,
+                    "tmp_exists": os.path.exists(TMP_ADVANCED_MODEL_PATH),
+                    "loaded": advanced_predictor is not None
+                }
             },
+            "json_data_path": JSON_DATA_PATH,
+            "json_data_exists": os.path.exists(JSON_DATA_PATH),
             "working_directory": os.getcwd()
         }
+        return status
     except Exception as e:
         logger.error(f"Error checking model status: {str(e)}\n{traceback.format_exc()}")
         return {"error": str(e)}
+
+
+@app.get("/dummy-excel")
+async def download_dummy_excel():
+    """Serve a dummy Excel training dataset for download."""
+    try:
+        dummy_path = os.path.join(BASE_DIR, "uploads", "data.xlsx")
+        if not os.path.exists(dummy_path):
+            raise HTTPException(status_code=404, detail="Dummy Excel not found")
+        return FileResponse(
+            dummy_path,
+            filename="data.xlsx",
+            media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        )
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error serving dummy Excel: {str(e)}\n{traceback.format_exc()}")
+        raise HTTPException(status_code=500, detail=str(e))

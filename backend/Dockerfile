@@ -9,18 +9,19 @@ WORKDIR ${LAMBDA_TASK_ROOT}
 # Copy the requirements file first to leverage Docker layer caching
 COPY requirements.txt ./
 
-# Install the Python dependencies (add mangum and pydantic)
-# Ensure your requirements.txt contains fastapi, uvicorn, pandas, scikit-learn, joblib, numpy, pydantic, mangum
+# Install the Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy all your application code and data files into the container
+# Copy all your application code, models, and data files into the container
 COPY main.py ./
-COPY app.py ./
 COPY data_cleaner.py ./
 COPY llm.py ./
 COPY model_generator.py ./
 COPY output.json ./
+COPY medical_advanced_predictor.joblib ./
+COPY medical_basic_predictor.joblib ./
+# Add any other .py files your project uses
 
 # Set the command to run when the Lambda function is invoked
-# It tells Lambda your handler is in 'app.py' and is named 'handler'
+# It tells Lambda your handler is in the 'main.py' file and is named 'handler'
 CMD [ "main.handler" ]
