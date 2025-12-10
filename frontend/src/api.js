@@ -1,10 +1,13 @@
 import axios from 'axios';
 
+const BACKEND_BASE_URL =
+  import.meta.env.VITE_BACKEND_URL || 'https://health-vault-9.onrender.com';
+
 const api = axios.create({
-    baseURL: 'https://unu5hmdhgh.execute-api.ap-south-1.amazonaws.com',
-    headers: {
-        'Accept': 'application/json',
-    }
+  baseURL: BACKEND_BASE_URL,
+  headers: {
+    Accept: 'application/json',
+  },
 });
 
 // Add response interceptor for error handling

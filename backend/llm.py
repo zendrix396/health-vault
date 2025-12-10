@@ -1,15 +1,33 @@
 from google import genai
 from google.genai import types
-import os
 import logging
+import os
 from dotenv import load_dotenv
-load_dotenv()
+
 logger = logging.getLogger(__name__)
+load_dotenv()
+
+# Allow overriding models via env; defaults align with working sample
+MODEL_IMAGE = os.getenv("GEMINI_MODEL_IMAGE", "gemini-2.5-flash")
+MODEL_TEXT = os.getenv("GEMINI_MODEL_TEXT", "gemini-2.5-flash")
+
+def _get_api_key():
+    key = os.getenv("GEMINI_API_KEY")
+    if key:
+        logger.info("Using GEMINI_API_KEY")
+        return key
+
+    alt_key = os.getenv("GOOGLE_API_KEY")
+    if alt_key:
+        logger.info("Using GOOGLE_API_KEY")
+        return alt_key
+
+    logger.error("GEMINI_API_KEY/GOOGLE_API_KEY environment variable not set")
+    return None
 
 def query_gemini(query, system_prompt="You are Gemini, an AI assistant."):
-    api_key = os.getenv("GEMINI_API_KEY")
+    api_key = _get_api_key()
     if not api_key:
-        logger.error("GEMINI_API_KEY environment variable not set")
         return "Error: Missing GEMINI_API_KEY environment variable"
     
     client = genai.Client(api_key=api_key)
@@ -19,7 +37,7 @@ def query_gemini(query, system_prompt="You are Gemini, an AI assistant."):
     try:
         logger.info("Calling Gemini API for text analysis")
         response = client.models.generate_content(
-            model="gemini-2.0-flash",
+            model=MODEL_TEXT,
             contents=prompt
         )
         logger.info("Gemini API call successful")
@@ -29,9 +47,8 @@ def query_gemini(query, system_prompt="You are Gemini, an AI assistant."):
         return f"Error: {str(e)}"
 
 def extract_text_from_image(image_path, prompt="Extract all text from this image"):
-    api_key = os.getenv("GEMINI_API_KEY")
+    api_key = _get_api_key()
     if not api_key:
-        logger.error("GEMINI_API_KEY environment variable not set")
         return "Error: Missing GEMINI_API_KEY environment variable"
     
     client = genai.Client(api_key=api_key)
@@ -59,7 +76,7 @@ def extract_text_from_image(image_path, prompt="Extract all text from this image
     try:
         logger.info("Calling Gemini API for image text extraction")
         response = client.models.generate_content(
-            model='gemini-2.5-flash',
+            model=MODEL_IMAGE,
             contents=[
                 types.Part.from_bytes(
                     data=image_bytes,

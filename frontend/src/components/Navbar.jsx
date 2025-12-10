@@ -1,226 +1,82 @@
-import { motion } from "framer-motion";
-import { AnimatePresence } from "framer-motion";
-import { 
-  FaStethoscope, 
-  FaSun, 
-  FaMoon, 
-  FaUserCircle,
-  FaHome,
-  FaFileMedical,
-  FaPills,
-  FaUserMd,
-  FaTimes,
-} from "react-icons/fa";
-import { useState } from "react";
+import { Activity, FileText, Home, LogIn } from "lucide-react";
 
-// Add manga-style CSS classes
-const mangaStyles = `
-  .manga-border {
-    border: 2px solid black !important;
-    box-shadow: 4px 4px 0 rgba(0,0,0,0.9) !important;
-  }
-  
-  .manga-text {
-    font-family: 'Comic Sans MS', 'Bangers', sans-serif !important;
-    letter-spacing: 0.5px !important;
-    transform: rotate(-1deg) !important;
-  }
-  
-  .manga-fade-in {
-    animation: fadeIn 0.5s ease-in-out !important;
-  }
-  
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-`;
+const navItemClass = (currentPage, page) =>
+  `flex items-center gap-2 px-4 py-1.5 text-sm transition-all duration-200 border border-transparent ${
+    currentPage === page
+      ? "text-white bg-zinc-900 border-zinc-800"
+      : "text-zinc-500 hover:text-zinc-300 hover:bg-zinc-900/50"
+  }`;
 
-// Add styling to head
-if (typeof document !== 'undefined') {
-  const styleElement = document.createElement('style');
-  styleElement.textContent = mangaStyles;
-  document.head.appendChild(styleElement);
-}
-
-const GlassCard = ({ children, className = "" }) => (
-  <div className={`bg-white/90 border-b border-black manga-border shadow-lg ${className}`}>
-    {children}
-  </div>
-);
-
-const NavLink = ({ icon, text, isActive, onClick }) => (
-  <motion.button
-    whileHover={{ scale: 1.05, rotate: -2 }}
-    whileTap={{ scale: 0.95 }}
-    onClick={onClick}
-    className={`flex items-center px-4 py-2 rounded-none transition-all duration-300 manga-text font-bold
-                ${isActive 
-                  ? 'bg-blue-100 text-black manga-border' 
-                  : 'hover:bg-white text-black hover:manga-border'}`}
-  >
-    {icon}
-    <span className="ml-2">{text}</span>
-  </motion.button>
-);
-
-const LoginModal = ({ isOpen, onClose }) => (
-  <AnimatePresence>
-    {isOpen && (
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        className="fixed inset-0 bg-white/50 backdrop-blur-sm flex items-center justify-center p-4 z-50"
-      >
-        <motion.div
-          initial={{ scale: 0.9, opacity: 0, rotate: 0 }}
-          animate={{ scale: 1, opacity: 1, rotate: -1 }}
-          exit={{ scale: 0.9, opacity: 0 }}
-          className="relative w-full max-w-md manga-fade-in"
-        >
-          <GlassCard className="p-8">
-            <div className="flex justify-between items-center mb-6">
-              <h2 className="text-2xl font-black text-black manga-text">Login to MediAI</h2>
-              <motion.button
-                whileHover={{ scale: 1.1, rotate: 10 }}
-                whileTap={{ scale: 0.9 }}
-                onClick={onClose}
-                className="text-black hover:text-red-600"
-              >
-                <FaTimes className="text-xl transform -rotate-6" />
-              </motion.button>
-            </div>
-
-            <form className="space-y-4">
-              <div>
-                <label className="block text-black mb-2 manga-text font-bold">Email</label>
-                <input
-                  type="email"
-                  className="w-full p-3 rounded-none bg-white manga-border
-                           text-black placeholder-gray-500 focus:border-blue-500 
-                           focus:ring-2 focus:ring-blue-500/20 outline-none"
-                  placeholder="Enter your email"
-                />
-              </div>
-
-              <div>
-                <label className="block text-black mb-2 manga-text font-bold">Password</label>
-                <input
-                  type="password"
-                  className="w-full p-3 rounded-none bg-white manga-border
-                           text-black placeholder-gray-500 focus:border-blue-500 
-                           focus:ring-2 focus:ring-blue-500/20 outline-none"
-                  placeholder="Enter your password"
-                />
-              </div>
-
-              <div className="flex items-center justify-between">
-                <label className="flex items-center">
-                  <input
-                    type="checkbox"
-                    className="w-4 h-4 rounded-none border-black bg-white
-                             text-blue-500 focus:ring-blue-500/20"
-                  />
-                  <span className="ml-2 text-black manga-text font-bold">Remember me</span>
-                </label>
-                <a href="#" className="text-blue-600 hover:text-blue-800 manga-text font-bold">
-                  Forgot password?
-                </a>
-              </div>
-
-              <motion.button
-                whileHover={{ scale: 1.02, rotate: -1 }}
-                whileTap={{ scale: 0.98 }}
-                className="w-full py-3 bg-black hover:bg-gray-800 
-                         text-white rounded-none font-black transition-colors manga-border manga-text"
-              >
-                Login
-              </motion.button>
-
-              <div className="text-center text-black manga-text font-bold">
-                Don't have an account?{" "}
-                <a href="#" className="text-blue-600 hover:text-blue-800">
-                  Sign up
-                </a>
-              </div>
-            </form>
-          </GlassCard>
-        </motion.div>
-      </motion.div>
-    )}
-  </AnimatePresence>
-);
-
-const Navbar = ({ currentPage, setCurrentPage, isDarkMode, setIsDarkMode }) => {
-  const [showLogin, setShowLogin] = useState(false);
-
-  const navItems = [
-    { id: 'home', text: 'Home', icon: <FaHome /> },
-    { id: 'Medical Report Analysis', text: 'Medical Reports', icon: <FaFileMedical /> },
-    { id: 'Medicine Recommendations', text: 'Recommendations', icon: <FaPills /> },
-  ];
-
+const Navbar = ({ currentPage, onNavigate }) => {
   return (
-    <>
-      <GlassCard className="fixed top-0 w-full z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            {/* Logo */}
-            <motion.div 
-              className="flex items-center cursor-pointer"
-              whileHover={{ scale: 1.05, rotate: -2 }}
-              onClick={() => setCurrentPage('home')}
+    <nav className="sticky top-0 z-50 w-full nav-tint bg-black/60 backdrop-blur-md border-b border-zinc-900">
+      <div className="max-w-7xl mx-auto px-6">
+        <div className="flex justify-between items-center h-16">
+          <button
+            type="button"
+            className="flex items-center gap-3 cursor-pointer group"
+            onClick={() => onNavigate("home")}
+          >
+            <div className="w-8 h-8 flex items-center justify-center text-white">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 512 512"
+                className="w-6 h-6"
+                fill="currentColor"
+              >
+                <path d="M447.1 112c-34.2.5-62.3 28.4-63 62.6-.5 24.3 12.5 45.6 32 56.8V344c0 57.3-50.2 104-112 104-60 0-109.2-44.1-111.9-99.2C265 333.8 320 269.2 320 192V36.6c0-11.4-8.1-21.3-19.3-23.5L237.8.5c-13-2.6-25.6 5.8-28.2 18.8L206.4 35c-2.6 13 5.8 25.6 18.8 28.2l30.7 6.1v121.4c0 52.9-42.2 96.7-95.1 97.2-53.4.5-96.9-42.7-96.9-96V69.4l30.7-6.1c13-2.6 21.4-15.2 18.8-28.2l-3.1-15.7C107.7 6.4 95.1-2 82.1.6L19.3 13C8.1 15.3 0 25.1 0 36.6V192c0 77.3 55.1 142 128.1 156.8C130.7 439.2 208.6 512 304 512c97 0 176-75.4 176-168V231.4c19.1-11.1 32-31.7 32-55.4 0-35.7-29.2-64.5-64.9-64zm.9 80c-8.8 0-16-7.2-16-16s7.2-16 16-16 16 7.2 16 16-7.2 16-16 16z"></path>
+              </svg>
+            </div>
+            <span className="text-lg font-bold tracking-tight text-white group-hover:text-zinc-300 transition-colors">
+              MediAI
+            </span>
+          </button>
+
+          <div className="hidden md:flex items-center gap-6">
+            <button
+              onClick={() => onNavigate("home")}
+              className={navItemClass(currentPage, "home")}
             >
-              <FaStethoscope className="text-black text-3xl transform -rotate-12" />
-              <span className="ml-2 text-xl font-black text-black manga-text">MediAI</span>
-            </motion.div>
+              <Home className="w-3.5 h-3.5" />
+              <span>Home</span>
+            </button>
+            <button
+              onClick={() => onNavigate("reports")}
+              className={navItemClass(currentPage, "reports")}
+            >
+              <FileText className="w-3.5 h-3.5" />
+              <span>Reports</span>
+            </button>
+            <button
+              onClick={() => onNavigate("recommendations")}
+              className={navItemClass(currentPage, "recommendations")}
+            >
+              <Activity className="w-3.5 h-3.5" />
+              <span>Recommendations</span>
+            </button>
+          </div>
 
-            {/* Navigation Links */}
-            <div className="hidden md:flex items-center space-x-2">
-              {navItems.map((item) => (
-                <NavLink
-                  key={item.id}
-                  icon={item.icon}
-                  text={item.text}
-                  isActive={currentPage === item.id}
-                  onClick={() => setCurrentPage(item.id)}
-                />
-              ))}
-            </div>
+          <button
+            onClick={() => onNavigate("login")}
+            className="hidden md:flex items-center gap-2 text-zinc-400 hover:text-white font-medium text-xs uppercase tracking-wide px-4 py-2 border border-zinc-800 hover:border-zinc-600 transition-all bg-zinc-950"
+          >
+            <span>Login</span>
+            <span className="bg-zinc-800 text-zinc-400 px-1.5 py-0.5 rounded-[1px] text-[10px]">
+              L
+            </span>
+          </button>
 
-            {/* Right Side Controls */}
-            <div className="flex items-center space-x-4">
-              <motion.button
-                whileHover={{ scale: 1.1, rotate: 10 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={() => setIsDarkMode(!isDarkMode)}
-                className="p-2 rounded-none hover:bg-white/5 manga-border"
-              >
-                {isDarkMode ? 
-                  <FaSun className="text-black transform -rotate-6" /> : 
-                  <FaMoon className="text-black transform -rotate-6" />
-                }
-              </motion.button>
-
-              <motion.button
-                whileHover={{ scale: 1.1, rotate: -2 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={() => setShowLogin(true)}
-                className="flex items-center px-4 py-2 rounded-none bg-black hover:bg-gray-800 text-white manga-text font-black manga-border"
-              >
-                <FaUserCircle className="mr-2 transform -rotate-6" />
-                Login
-              </motion.button>
-            </div>
+          <div className="md:hidden">
+            <button
+              onClick={() => onNavigate("home")}
+              className="p-2 text-zinc-400 border border-zinc-800 bg-zinc-900"
+            >
+              <Home className="w-5 h-5" />
+            </button>
           </div>
         </div>
-      </GlassCard>
-      <LoginModal 
-        isOpen={showLogin} 
-        onClose={() => setShowLogin(false)} 
-      />
-    </>
+      </div>
+    </nav>
   );
 };
 
