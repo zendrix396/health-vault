@@ -57,6 +57,7 @@ TMP_DIR = "/tmp" if os.name == 'posix' else tempfile.gettempdir()
 TMP_BASIC_MODEL_PATH = os.path.join(TMP_DIR, "medical_basic_predictor.joblib")
 TMP_ADVANCED_MODEL_PATH = os.path.join(TMP_DIR, "medical_advanced_predictor.joblib")
 JSON_DATA_PATH = os.path.join(TMP_DIR, "output.json")
+DEFAULT_CACHE_FLAG = os.path.join(TMP_DIR, "default_data_cached.flag")
 
 logger.info(f"Expecting basic model at: {MEDICAL_PREDICTOR_MODEL_PATH}")
 logger.info(f"Expecting advanced model at: {ADVANCED_PREDICTOR_MODEL_PATH}")
@@ -216,17 +217,9 @@ async def predict_medical(data: dict):
         logger.debug(f"Received prediction request with data: {data}")
         
         age = int(data.get('age', 0))
-        raw_gender = data.get('gender') or ''
-        gender = str(raw_gender).strip().upper()
-        if gender.startswith('M'):
-            gender = 'M'
-        elif gender.startswith('F'):
-            gender = 'F'
-        else:
-            gender = 'X'
-
-        symptoms = data.get('symptoms') or ''
-        cause = data.get('cause') or ''
+        gender = data.get('gender')
+        symptoms = data.get('symptoms')
+        cause = data.get('cause')
         
         response = {
             "advanced_prediction": {"disease": {"name": "N/A", "confidence": 0}, "medicine": {"name": "N/A", "confidence": 0}},
@@ -262,6 +255,20 @@ async def upload_excel(file: UploadFile):
     try:
         if not file.filename.endswith(('.xlsx', '.xls')):
             raise HTTPException(status_code=400, detail="Only Excel files are accepted")
+
+        # If default data.xlsx has already been trained and models are loaded, reuse cached models.
+        if (
+            file.filename.lower() == "data.xlsx"
+            and os.path.exists(DEFAULT_CACHE_FLAG)
+            and basic_predictor
+            and advanced_predictor
+        ):
+            return {
+                "message": "Default data.xlsx already trained; using cached models.",
+                "records_added": 0,
+                "filename": file.filename,
+                "cached": True,
+            }
         
         contents = await file.read()
         file_path = UPLOAD_DIR / file.filename
@@ -276,6 +283,14 @@ async def upload_excel(file: UploadFile):
         
         # Retrain models and load them into memory
         train_and_save_models()
+
+        # Mark default cache if this was the default dataset
+        if file.filename.lower() == "data.xlsx":
+            try:
+                with open(DEFAULT_CACHE_FLAG, "w") as flagf:
+                    flagf.write("cached")
+            except Exception as e:
+                logger.warning(f"Could not write cache flag: {e}")
         
         return {
             "message": "Excel file processed and models retrained",
@@ -331,18 +346,6 @@ async def upload_report(file_upload: UploadFile, language: str = Form("english")
 async def get_available_terms():
     try:
         training_data = load_training_data(JSON_DATA_PATH)
-        # Fallback: if /tmp/output.json missing or empty, seed from packaged dummy excel
-        if not training_data:
-            fallback_path = os.path.join(BASE_DIR, "uploads", "data.xlsx")
-            if os.path.exists(fallback_path):
-                df = pd.read_excel(fallback_path)
-                cleaned = clean_excel_data(df)
-                training_data = cleaned
-                # Persist to /tmp for later predictions
-                try:
-                    update_json_data(cleaned, json_file=JSON_DATA_PATH)
-                except Exception:
-                    pass
         symptoms, causes, diseases, medicines = set(), set(), set(), set()
         
         def clean_and_split_text(text_field):
@@ -350,32 +353,18 @@ async def get_available_terms():
             items = re.split(r'[,;|]\s*|\s*\n\s*', str(text_field).strip())
             return [item.strip() for item in items if len(item.strip()) > 2]
 
-        def has_comma(field_val: str) -> bool:
-            return isinstance(field_val, str) and ',' in field_val
-
-        symptoms_multi = False
-        causes_multi = False
-
         for record in training_data:
             if isinstance(record, dict):
                 symptoms.update(clean_and_split_text(record.get('Symptoms') or record.get('symptoms')))
                 causes.update(clean_and_split_text(record.get('Causes') or record.get('cause')))
                 diseases.update(clean_and_split_text(record.get('Disease') or record.get('disease')))
                 medicines.update(clean_and_split_text(record.get('Medicine') or record.get('medicine')))
-                if has_comma(record.get('Symptoms') or record.get('symptoms')):
-                    symptoms_multi = True
-                if has_comma(record.get('Causes') or record.get('cause')):
-                    causes_multi = True
         
         return {
             "symptoms": sorted(list(symptoms)),
             "causes": sorted(list(causes)),
             "diseases": sorted(list(diseases)),
             "medicines": sorted(list(medicines)),
-            "multi_allowed": {
-                "symptoms": symptoms_multi,
-                "causes": causes_multi
-            }
         }
         
     except Exception as e:
