@@ -37,6 +37,7 @@ Pygments
 PyPDF2
 python-dateutil
 python-dotenv
+python-decouple
 python-multipart
 pytz
 PyYAML

@@ -1,27 +1,98 @@
 @import "tailwindcss";
 
-/* Add this to your CSS/styles */
+:root {
+  color: #ffffff;
+  background-color: #000000;
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background-color: #09090b;
+  color: #ffffff;
+}
+
+::selection {
+  background-color: #3f3f46;
+  color: #ffffff;
+}
+
+.bg-grid-white {
+  background-size: 50px 50px;
+  background-image: linear-gradient(
+      to right,
+      rgba(255, 255, 255, 0.05) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      to bottom,
+      rgba(255, 255, 255, 0.05) 1px,
+      transparent 1px
+    );
+}
+
 .scroll-styled {
-    scrollbar-width: thin;  /* Firefox */
-    scrollbar-color: rgba(255, 255, 255, 0.2) transparent;  /* Firefox */
-  }
-  
-  .scroll-styled::-webkit-scrollbar {
-    width: 8px;  /* width of the entire scrollbar */
-  }
-  
-  .scroll-styled::-webkit-scrollbar-track {
-    background: transparent;  /* color of the tracking area */
-  }
-  
-  .scroll-styled::-webkit-scrollbar-thumb {
-    background-color: rgba(255, 255, 255, 0.2);  /* color of the scroll thumb */
-    border-radius: 20px;  /* roundness of the scroll thumb */
-    border: 2px solid transparent;  /* creates padding around scroll thumb */
-  }
-  
-  .scroll-styled::-webkit-scrollbar-thumb:hover {
-    background-color: rgba(255, 255, 255, 0.3);
-  }
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+}
+
+.scroll-styled::-webkit-scrollbar {
+  width: 8px;
+}
+
+.scroll-styled::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scroll-styled::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  border: 2px solid transparent;
+}
+
+.scroll-styled::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+/* Subtle blue/purple tint overlay usable on page containers */
+.tint-surface {
+  position: relative;
+  backdrop-filter: blur(6px);
+}
+
+.tint-surface::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(56, 189, 248, 0.08), transparent 40%),
+    radial-gradient(circle at 80% 10%, rgba(139, 92, 246, 0.07), transparent 45%),
+    radial-gradient(circle at 50% 80%, rgba(59, 130, 246, 0.05), transparent 55%);
+}
+
+.nav-tint {
+  position: sticky;
+  top: 0;
+  overflow: hidden;
+}
+
+.nav-tint::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, rgba(56, 189, 248, 0.12), transparent 30%),
+    linear-gradient(270deg, rgba(139, 92, 246, 0.12), transparent 35%);
+  backdrop-filter: blur(8px);
+}
+
+.nav-tint > * {
+  position: relative;
+  z-index: 1;
+}
 
   

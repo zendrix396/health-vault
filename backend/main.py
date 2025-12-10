@@ -1,4 +1,4 @@
-from fastapi import FastAPI, UploadFile, HTTPException
+from fastapi import FastAPI, UploadFile, HTTPException, Form
 from fastapi.responses import FileResponse
 from fastapi.middleware.cors import CORSMiddleware
 from pathlib import Path
@@ -14,6 +14,7 @@ import pandas as pd
 import traceback
 import tempfile
 from data_cleaner import clean_excel_data, update_json_data
+import llm
 
 logging.basicConfig(
     level=logging.INFO,
@@ -113,20 +114,42 @@ async def root():
     return {"message": "Hello World"}
 
 
-async def analyze_medical_text(text):
-    system_prompt = """You are a medical report analyzer. Analyze the given medical report text and provide a JSON response in this format:
-    {
-        "summary": "Very detailed information in layman terms bullet points, about 3 paragraphs 250 words",
+async def analyze_medical_text(text, language: str = "english"):
+    # Map user-facing language to model instruction
+    lang_map = {
+        "english": "English",
+        "hindi": "Hindi",
+        "hinglish": "Romanized Hindi (Hinglish)",
+    }
+    target_lang = lang_map.get(language.lower(), "English")
+
+    system_prompt = f"""You are a medical report analyzer. Respond in {target_lang}. Go with the flow, be to-the-point, avoid AI-ish jargon, and speak in layman language.
+
+    Must fully break down the entire document (not just a short summary):
+    - Summaries: bullet list covering all major sections/points.
+    - Findings: detailed bullets for every notable item; keep concise but complete.
+    - Terms: include all medical terms/acronyms with brief layman explanations.
+    - Recommendations: actionable, clear, concise; include warning/next-step items if present.
+
+    Formatting rules:
+    - Use ****bold**** for emphasis and **italics** sparingly.
+    - Output must be pure text/Markdown-friendly (no HTML).
+    - Summary MUST be bullet points, not a paragraph.
+
+    Return JSON ONLY in this exact shape:
+    {{
+        "summary": ["bullet 1", "bullet 2", "bullet 3"],
         "findings": [
-            {"emoji": "emoji", "text": "detailed finding"}
+            {{"emoji": "emoji", "text": "concise but complete finding"}}
         ],
         "terms": [
-            {"term": "medical term", "explanation": "detailed explanation"}
+            {{"term": "medical term", "explanation": "brief layman explanation"}}
         ],
         "recommendations": [
-            {"emoji": "emoji", "title": "title", "description": "detailed description"}
+            {{"emoji": "emoji", "title": "title", "description": "concise, actionable description"}}
         ]
-    }"""
+    }}
+    Keep bullets tight but cover the whole document."""
 
     query = f"Analyze this medical report and return only the JSON response:\n\n{text}"
     
@@ -193,9 +216,17 @@ async def predict_medical(data: dict):
         logger.debug(f"Received prediction request with data: {data}")
         
         age = int(data.get('age', 0))
-        gender = data.get('gender')
-        symptoms = data.get('symptoms')
-        cause = data.get('cause')
+        raw_gender = data.get('gender') or ''
+        gender = str(raw_gender).strip().upper()
+        if gender.startswith('M'):
+            gender = 'M'
+        elif gender.startswith('F'):
+            gender = 'F'
+        else:
+            gender = 'X'
+
+        symptoms = data.get('symptoms') or ''
+        cause = data.get('cause') or ''
         
         response = {
             "advanced_prediction": {"disease": {"name": "N/A", "confidence": 0}, "medicine": {"name": "N/A", "confidence": 0}},
@@ -257,7 +288,7 @@ async def upload_excel(file: UploadFile):
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.post("/upload")
-async def upload_report(file_upload: UploadFile):
+async def upload_report(file_upload: UploadFile, language: str = Form("english")):
     try:
         logger.info(f"UPLOAD ENDPOINT CALLED for file: {file_upload.filename}")
         
@@ -277,12 +308,12 @@ async def upload_report(file_upload: UploadFile):
             for page in pdf_reader.pages:
                 text_content += page.extract_text()
         else:
-            text_content = extract_text_from_image(str(save_to), "Extract all text from this medical report image in detail")
+            text_content = llm.extract_text_from_image(str(save_to), "Extract all text from this medical report image in detail")
 
         if not text_content.strip():
             analysis = json.dumps({"summary": "No text content was extracted from the file."})
         else:
-            analysis = await analyze_medical_text(text_content)
+            analysis = await analyze_medical_text(text_content, language=language)
         
         logger.info("UPLOAD ENDPOINT COMPLETED SUCCESSFULLY")
         
@@ -300,6 +331,18 @@ async def upload_report(file_upload: UploadFile):
 async def get_available_terms():
     try:
         training_data = load_training_data(JSON_DATA_PATH)
+        # Fallback: if /tmp/output.json missing or empty, seed from packaged dummy excel
+        if not training_data:
+            fallback_path = os.path.join(BASE_DIR, "uploads", "data.xlsx")
+            if os.path.exists(fallback_path):
+                df = pd.read_excel(fallback_path)
+                cleaned = clean_excel_data(df)
+                training_data = cleaned
+                # Persist to /tmp for later predictions
+                try:
+                    update_json_data(cleaned, json_file=JSON_DATA_PATH)
+                except Exception:
+                    pass
         symptoms, causes, diseases, medicines = set(), set(), set(), set()
         
         def clean_and_split_text(text_field):
@@ -307,18 +350,32 @@ async def get_available_terms():
             items = re.split(r'[,;|]\s*|\s*\n\s*', str(text_field).strip())
             return [item.strip() for item in items if len(item.strip()) > 2]
 
+        def has_comma(field_val: str) -> bool:
+            return isinstance(field_val, str) and ',' in field_val
+
+        symptoms_multi = False
+        causes_multi = False
+
         for record in training_data:
             if isinstance(record, dict):
                 symptoms.update(clean_and_split_text(record.get('Symptoms') or record.get('symptoms')))
                 causes.update(clean_and_split_text(record.get('Causes') or record.get('cause')))
                 diseases.update(clean_and_split_text(record.get('Disease') or record.get('disease')))
                 medicines.update(clean_and_split_text(record.get('Medicine') or record.get('medicine')))
+                if has_comma(record.get('Symptoms') or record.get('symptoms')):
+                    symptoms_multi = True
+                if has_comma(record.get('Causes') or record.get('cause')):
+                    causes_multi = True
         
         return {
             "symptoms": sorted(list(symptoms)),
             "causes": sorted(list(causes)),
             "diseases": sorted(list(diseases)),
             "medicines": sorted(list(medicines)),
+            "multi_allowed": {
+                "symptoms": symptoms_multi,
+                "causes": causes_multi
+            }
         }
         
     except Exception as e:

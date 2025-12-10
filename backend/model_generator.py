@@ -113,7 +113,11 @@ class MedicalPredictor:
                 raise ValueError("No valid symptoms provided")
 
             X_symptoms = self.symptom_encoder.transform([symptoms_list])
-            X_cause = self.cause_encoder.transform([cause]).reshape(1, -1)
+            safe_cause = cause
+            if hasattr(self.cause_encoder, "classes_") and cause not in self.cause_encoder.classes_:
+                # fall back to most frequent/first known cause to avoid transform errors on unseen text
+                safe_cause = self.cause_encoder.classes_[0]
+            X_cause = self.cause_encoder.transform([safe_cause]).reshape(1, -1)
             X = np.hstack([
                 np.array([[age]]), 
                 np.array([[1 if gender == 'M' else 0]]), 
@@ -132,7 +136,8 @@ class MedicalPredictor:
             
             medicines = []
             for i, (is_recommended, prob_array) in enumerate(zip(medicine_pred[0], medicine_probs)):
-                if np.any(is_recommended):
+                # lower threshold to surface more medicines; avoid zero-confidence filtering
+                if np.any(is_recommended) or np.max(prob_array) > 0.05:
                     medicine_name = self.medicine_encoder.classes_[i]
                     confidence = float(np.max(prob_array) * 100)
                     medicines.append((str(medicine_name), confidence))
@@ -359,7 +364,10 @@ class AdvancedMedicalPredictor:
         symptoms_list = self._safe_split(symptoms)
         
         X_symptoms = self.symptom_encoder.transform([symptoms_list])
-        X_cause = self.cause_encoder.transform([cause]).reshape(1, -1)
+        safe_cause = cause
+        if hasattr(self.cause_encoder, "classes_") and cause not in self.cause_encoder.classes_:
+            safe_cause = self.cause_encoder.classes_[0]
+        X_cause = self.cause_encoder.transform([safe_cause]).reshape(1, -1)
         X = np.hstack([
             np.array([[age]]),
             np.array([[1 if gender.upper() == 'M' else 0]]),
@@ -377,7 +385,8 @@ class AdvancedMedicalPredictor:
 
         medicines = []
         for i, prob_array in enumerate(medicine_probs):
-            if np.max(prob_array) > 0.3:
+            # lower threshold to surface candidates
+            if np.max(prob_array) > 0.05:
                 medicine_name = self.medicine_encoder.classes_[i]
                 confidence = float(np.max(prob_array) * 100)
                 medicines.append((str(medicine_name), confidence))

@@ -20,7 +20,7 @@ COPY model_generator.py ./
 COPY output.json ./
 COPY medical_advanced_predictor.joblib ./
 COPY medical_basic_predictor.joblib ./
-COPY .env ./
+# COPY .env ./
 COPY uploads/ ./uploads/
 COPY data.xlsx ./uploads/data.xlsx
 CMD [ "main.handler" ]
