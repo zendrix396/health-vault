@@ -8,8 +8,8 @@ logger = logging.getLogger(__name__)
 load_dotenv()
 
 # Allow overriding models via env; defaults align with working sample
-MODEL_IMAGE = os.getenv("GEMINI_MODEL_IMAGE", "gemini-2.5-flash")
-MODEL_TEXT = os.getenv("GEMINI_MODEL_TEXT", "gemini-2.5-flash")
+MODEL_IMAGE = os.getenv("GEMINI_MODEL_IMAGE", "gemini-3-flash-preview")
+MODEL_TEXT = os.getenv("GEMINI_MODEL_TEXT", "gemini-3-flash-preview")
 
 def _get_api_key():
     key = os.getenv("GEMINI_API_KEY")

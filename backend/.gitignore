@@ -78,3 +78,21 @@ typings/
 
 # next.js build output
 .next
+
+# ML model artifacts
+*.joblib
+
+# ChromaDB
+.chromadb/
+
+# Training data
+*.jsonl
+data.csv
+db_small.jsonl
+
+# Uploads
+uploads/
+
+# Python
+venv/
+__pycache__/

@@ -13,8 +13,10 @@ import os
 import pandas as pd
 import traceback
 import tempfile
-from data_cleaner import clean_excel_data, update_json_data
+from data_cleaner import clean_excel_data, update_json_data, convert_csv_to_model_format, convert_jsonl_to_model_format
 import llm
+import rag
+import groq_llm
 
 logging.basicConfig(
     level=logging.INFO,
@@ -103,6 +105,13 @@ async def load_models_on_startup():
     if not adv_loaded:
         logger.warning("No advanced model file found in candidates")
 
+    try:
+        if os.path.exists(JSON_DATA_PATH):
+            logger.info("Ingesting training data into vector store...")
+            rag.ingest_training_data(JSON_DATA_PATH)
+    except Exception as e:
+        logger.warning(f"RAG ingestion skipped: {e}")
+
 UPLOAD_DIR = Path(tempfile.gettempdir()) / 'uploads'
 UPLOAD_DIR.mkdir(exist_ok=True)
 
@@ -115,57 +124,55 @@ async def root():
     return {"message": "Hello World"}
 
 
+@app.post("/rag-query")
+async def rag_query(data: dict):
+    try:
+        query = data.get("query", "")
+        if not query:
+            raise HTTPException(status_code=400, detail="Query is required")
+
+        rag_context = rag.build_rag_context(query, n_results=5)
+        response = groq_llm.generate_response(query, rag_context)
+
+        return {
+            "query": query,
+            "response": response,
+            "context_used": rag_context != "",
+        }
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"RAG query error: {str(e)}\n{traceback.format_exc()}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.post("/rag-ingest")
+async def rag_ingest():
+    try:
+        if not os.path.exists(JSON_DATA_PATH):
+            return {"error": "No training data found"}
+        count = rag.ingest_training_data(JSON_DATA_PATH)
+        return {"message": f"Ingested {count} records into vector store"}
+    except Exception as e:
+        logger.error(f"RAG ingest error: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
 async def analyze_medical_text(text, language: str = "english"):
-    # Map user-facing language to model instruction
-    lang_map = {
-        "english": "English",
-        "hindi": "Hindi",
-        "hinglish": "Romanized Hindi (Hinglish)",
-    }
-    target_lang = lang_map.get(language.lower(), "English")
-
-    system_prompt = f"""You are a medical report analyzer. Respond in {target_lang}. Go with the flow, be to-the-point, avoid AI-ish jargon, and speak in layman language.
-
-    Must fully break down the entire document (not just a short summary):
-    - Summaries: bullet list covering all major sections/points.
-    - Findings: detailed bullets for every notable item; keep concise but complete.
-    - Terms: include all medical terms/acronyms with brief layman explanations.
-    - Recommendations: actionable, clear, concise; include warning/next-step items if present.
-
-    Formatting rules:
-    - Use ****bold**** for emphasis and **italics** sparingly.
-    - Output must be pure text/Markdown-friendly (no HTML).
-    - Summary MUST be bullet points, not a paragraph.
-
-    Return JSON ONLY in this exact shape:
-    {{
-        "summary": ["bullet 1", "bullet 2", "bullet 3"],
-        "findings": [
-            {{"emoji": "emoji", "text": "concise but complete finding"}}
-        ],
-        "terms": [
-            {{"term": "medical term", "explanation": "brief layman explanation"}}
-        ],
-        "recommendations": [
-            {{"emoji": "emoji", "title": "title", "description": "concise, actionable description"}}
-        ]
-    }}
-    Keep bullets tight but cover the whole document."""
-
-    query = f"Analyze this medical report and return only the JSON response:\n\n{text}"
-    
     fallback_response = {
-        "summary": "Unable to analyze the medical report due to processing error. This may be due to missing API configuration or network issues.",
+        "summary": "Unable to analyze the medical report due to processing error.",
         "findings": [{"emoji": "⚠️", "text": "Analysis failed - please try again"}],
         "terms": [{"term": "Error", "explanation": "Unable to process the document"}],
         "recommendations": [{"emoji": "🔄", "title": "Retry", "description": "Please try uploading the document again"}]
     }
-    
+
     try:
-        from llm import query_gemini
-        logger.info("Calling LLM for medical text analysis")
-        raw_analysis = query_gemini(query, system_prompt)
-        
+        logger.info("Building RAG context for medical analysis")
+        rag_context = rag.build_rag_context(text, n_results=5)
+
+        logger.info("Calling Groq LLM for medical text analysis")
+        raw_analysis = groq_llm.analyze_medical_report(text, language=language)
+
         json_match = re.search(r'```json\s*({[\s\S]*?})\s*```|({[\s\S]*})', raw_analysis, re.DOTALL)
         if json_match:
             json_str = json_match.group(1) or json_match.group(2)
@@ -173,12 +180,11 @@ async def analyze_medical_text(text, language: str = "english"):
                 parsed_json = json.loads(json_str)
                 return json.dumps(parsed_json)
             except json.JSONDecodeError:
-                logger.error(f"Invalid JSON received from LLM: {json_str}")
-                return json.dumps(fallback_response)
+                logger.error(f"Invalid JSON from LLM, returning raw text")
+                return json.dumps({**fallback_response, "summary": raw_analysis[:500]})
         else:
-            logger.error(f"No JSON found in LLM response: {raw_analysis}")
-            return json.dumps(fallback_response)
-            
+            return json.dumps({**fallback_response, "summary": raw_analysis[:500]})
+
     except Exception as e:
         logger.error(f"Error in LLM analysis: {str(e)}\n{traceback.format_exc()}")
         return json.dumps(fallback_response)
@@ -192,17 +198,20 @@ def train_and_save_models():
         if not training_data:
             raise ValueError("No training data available to train models")
 
-        # Train and save basic model
+        n = len(training_data)
+        sample = min(n, 50000) if n > 50000 else None
+        if sample:
+            logger.info(f"Large dataset ({n} records), sampling {sample} for training")
+
         basic = MedicalPredictor()
-        metrics = basic.train(training_data)
+        result = basic.train(training_data, sample_size=sample)
         os.makedirs(TMP_DIR, exist_ok=True)
         basic.save_model(TMP_BASIC_MODEL_PATH)
         basic_predictor = basic
-        logger.info(f"Basic model trained with metrics: {metrics} and saved to {TMP_BASIC_MODEL_PATH}")
+        logger.info(f"Basic model trained and saved to {TMP_BASIC_MODEL_PATH}")
 
-        # Train and save advanced model
         adv = AdvancedMedicalPredictor()
-        adv._train(training_data)
+        adv._train(training_data, sample_size=sample)
         adv.save_model(TMP_ADVANCED_MODEL_PATH)
         advanced_predictor = adv
         logger.info(f"Advanced model trained and saved to {TMP_ADVANCED_MODEL_PATH}")
@@ -253,8 +262,12 @@ async def predict_medical(data: dict):
 @app.post("/upload-excel")
 async def upload_excel(file: UploadFile):
     try:
-        if not file.filename.endswith(('.xlsx', '.xls')):
-            raise HTTPException(status_code=400, detail="Only Excel files are accepted")
+        is_csv = file.filename.lower().endswith('.csv')
+        is_excel = file.filename.lower().endswith(('.xlsx', '.xls'))
+        is_jsonl = file.filename.lower().endswith('.jsonl')
+        
+        if not is_csv and not is_excel and not is_jsonl:
+            raise HTTPException(status_code=400, detail="Accepted formats: .xlsx, .xls, .csv, .jsonl")
 
         # If default data.xlsx has already been trained and models are loaded, reuse cached models.
         if (
@@ -275,16 +288,20 @@ async def upload_excel(file: UploadFile):
         with open(file_path, "wb") as f:
             f.write(contents)
         
-        df = pd.read_excel(file_path)
-        cleaned_data = clean_excel_data(df)
-        # Persist training data to writable /tmp JSON
+        if is_jsonl:
+            cleaned_data = convert_jsonl_to_model_format(str(file_path))
+        elif is_csv:
+            df = pd.read_csv(file_path)
+            cleaned_data = convert_csv_to_model_format(df)
+        else:
+            df = pd.read_excel(file_path)
+            cleaned_data = clean_excel_data(df)
+        
         records_added = update_json_data(cleaned_data, json_file=JSON_DATA_PATH)
         logger.info(f"Added {records_added} records to training data")
         
-        # Retrain models and load them into memory
         train_and_save_models()
 
-        # Mark default cache if this was the default dataset
         if file.filename.lower() == "data.xlsx":
             try:
                 with open(DEFAULT_CACHE_FLAG, "w") as flagf:
@@ -292,14 +309,17 @@ async def upload_excel(file: UploadFile):
             except Exception as e:
                 logger.warning(f"Could not write cache flag: {e}")
         
+        fmt = "JSONL" if is_jsonl else ("CSV" if is_csv else "Excel")
         return {
-            "message": "Excel file processed and models retrained",
+            "message": f"{fmt} file processed and models retrained",
             "records_added": records_added,
             "filename": file.filename,
         }
         
+    except HTTPException:
+        raise
     except Exception as e:
-        logger.error(f"Error processing Excel file: {str(e)}\n{traceback.format_exc()}")
+        logger.error(f"Error processing file: {str(e)}\n{traceback.format_exc()}")
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.post("/upload")
@@ -402,6 +422,39 @@ async def model_status():
         return status
     except Exception as e:
         logger.error(f"Error checking model status: {str(e)}\n{traceback.format_exc()}")
+        return {"error": str(e)}
+
+
+import numpy as np
+
+
+def _to_python(obj):
+    if isinstance(obj, (np.integer,)):
+        return int(obj)
+    if isinstance(obj, (np.floating,)):
+        return float(obj)
+    if isinstance(obj, np.ndarray):
+        return obj.tolist()
+    if isinstance(obj, dict):
+        return {k: _to_python(v) for k, v in obj.items()}
+    if isinstance(obj, (list, tuple)):
+        return [_to_python(v) for v in obj]
+    return obj
+
+
+@app.get("/model-evaluation")
+async def model_evaluation():
+    try:
+        eval_data = {}
+        if basic_predictor and hasattr(basic_predictor, 'evaluation'):
+            eval_data['basic_model'] = basic_predictor.evaluation
+        if advanced_predictor and hasattr(advanced_predictor, 'evaluation'):
+            eval_data['advanced_model'] = advanced_predictor.evaluation
+        if not eval_data:
+            return {"error": "No trained models with evaluation data"}
+        return _to_python(eval_data)
+    except Exception as e:
+        logger.error(f"Error fetching evaluation: {str(e)}\n{traceback.format_exc()}")
         return {"error": str(e)}
 
 
